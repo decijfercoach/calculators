@@ -151,6 +151,9 @@ a{color:#2B1622!important;text-decoration:none}
 <section class="week" id="netto">
   <div class="week-head"><span class="when">Week 1 · The Reveal</span><h2>The Enough Number: hoeveel heb je netto nodig?</h2>
   <p class="intro">Het belangrijkste cijfer van je zaak staat niet in je boekhouding. Het is wat je thuis nodig hebt om rustig te leven. Vul per maand in. Komt iets maar één keer per jaar terug, deel het dan door 12.</p></div>
+  <p class="tip"><b>Geen zin om alles zelf op te zoeken? Laat je Money Agent het rekenwerk doen.</b> Download op de website van je bank de verrichtingen van je privérekening van de laatste 12 maanden als csv bestand, met de knop Exporteren of Downloaden. Haal de kolommen met rekeningnummers en namen van personen weg. Voeg het bestand toe in een gesprek met je Money Agent en plak dit bericht erbij. Hij sorteert je uitgaven in dezelfde groepen als hieronder, rekent alles om naar een bedrag per maand en vraagt je wat je vergeten bent. Neem zijn bedragen daarna over in de vakjes hieronder. Is je Money Agent nog niet ingesteld? <a href="#agent">Zo doe je dat.</a></p>
+  <pre class="prompt" id="p0">Start stand 1. In de bijlage staan de verrichtingen van mijn privérekening van de laatste 12 maanden. Namen en rekeningnummers heb ik weggehaald. Sorteer mijn uitgaven in groepen, reken alles om naar een bedrag per maand en vraag me daarna naar wat ik vergeten ben.</pre>
+  <div class="copyrow" style="margin-bottom:18px"><button type="button" data-copy="p0">Kopieer</button><span class="copied" aria-live="polite"></span></div>
   <div class="q"><label for="nPot">Werk je thuis met een gezamenlijke rekening?</label><select id="nPot"><option value="samen">Ja, we werken met een gezamenlijke rekening</option><option value="apart">Nee, ik werk niet met een gezamenlijke rekening</option></select><span class="sub" id="nPotHint"></span></div>
   <div class="example"><span>De bedragen die er nu staan zijn voorbeeldbedragen. Vervang ze door de jouwe.</span><button type="button" id="clearNetto">Alles leegmaken</button></div>
   <div>
@@ -279,8 +282,8 @@ Vraag ik om een van deze standen, werk dan volgens die stand. Weet ik niet waar 
 
   <div class="card">
     <h3>Stand 1 · The Enough Number</h3>
-    <dl class="meta"><dt>Wanneer</dt><dd>Week 1, als eerste</dd><dt>Je hebt nodig</dt><dd>Je laatste 3 maanden privé uitgaven, of gewoon je geheugen</dd><dt>Goed als</dt><dd>Je één bedrag per maand krijgt en elke groep herkent</dd></dl>
-    <pre class="prompt" id="p1">Start stand 1. Ik spreek mijn privé uitgaven in, groep per groep. Vraag me daarna naar wat ik vergeten ben.</pre>
+    <dl class="meta"><dt>Wanneer</dt><dd>Week 1, als eerste</dd><dt>Je hebt nodig</dt><dd>De verrichtingen van je privérekening van de laatste 12 maanden als csv bestand. Lukt dat niet, dan som je je uitgaven zelf op</dd><dt>Goed als</dt><dd>Je één bedrag per maand krijgt en elke groep herkent</dd></dl>
+    <pre class="prompt" id="p1">Start stand 1. In de bijlage staan de verrichtingen van mijn privérekening van de laatste 12 maanden. Namen en rekeningnummers heb ik weggehaald. Sorteer mijn uitgaven in groepen, reken alles om naar een bedrag per maand en vraag me daarna naar wat ik vergeten ben.</pre>
     <div class="copyrow"><button type="button" data-copy="p1">Kopieer</button><span class="copied" aria-live="polite"></span></div>
   </div>
   <div class="card">
