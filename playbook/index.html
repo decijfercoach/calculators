@@ -98,6 +98,17 @@ footer{margin-top:28px;color:var(--muted);font-size:14px;text-align:left}
 }
 @media (prefers-reduced-motion:no-preference){button{transition:background .15s,border-color .15s}}
 </style>
+<style id="printcss">
+@media print{
+:root,:root[data-theme],html,body{--bg:#fff!important;--paper:#fff!important;--ink:#2B1622!important;--muted:#6E5563!important;--line:#DDC6B8!important;--field:#fff!important}
+body{background:#fff!important;color:#2B1622!important}
+.theme,.toc,.pdfbar,.pdfbtn,button{display:none!important}
+section,.week,.row,.wish,.q,.leak,.day,.date{break-inside:avoid;page-break-inside:avoid}
+textarea{overflow:visible!important;resize:none}
+input,textarea{color:#2B1622!important;background:#fff!important}
+a{color:#2B1622!important;text-decoration:none}
+}
+</style>
 </head>
 <body>
 
@@ -117,7 +128,11 @@ footer{margin-top:28px;color:var(--muted);font-size:14px;text-align:left}
 <li>Open je je Playbook op je gsm of op een andere computer, dan begin je daar met een leeg Playbook.</li>
 <li>Wis je je browsergeschiedenis, dan ben je ook je antwoorden kwijt.</li>
 </ul>
-<p style="margin:0">Werk je liever op papier of op meerdere toestellen? Gebruik dan de invulbare pdf die in The Huddle staat. En schrijf je belangrijkste cijfers sowieso ook ergens op.</p>
+<p style="margin:0">Wil je je antwoorden echt houden? Klik dan op <b>Bewaar als pdf</b>. Dat kan nu al en aan het einde nog eens, met alles erin wat je invulde. Werk je liever op papier, gebruik dan de invulbare pdf die in The Huddle staat.</p>
+<div class="pdfbar" style="display:flex;flex-wrap:wrap;align-items:center;gap:12px 16px;margin:14px 0 0">
+<button type="button" class="primary pdfbtn">Bewaar als pdf</button>
+<span style="font-size:.92em;color:var(--muted)">Kies in het venster dat opent bij Bestemming of Printer voor <b>Opslaan als pdf</b>.</span>
+</div>
 </div>
   <nav class="toc" aria-label="Inhoud">
     <a href="#start">Snelle start</a><a href="#netto">Netto nodig</a><a href="#lekken">Geldlekken</a><a href="#verkoop">Verkoopdoel</a><a href="#wensen">13 wensen</a><a href="#ritueel">Ritueel</a><a href="#agent">Je Money Agent</a><a href="#januari">Week 4</a>
@@ -300,6 +315,7 @@ Vraag ik om een van deze standen, werk dan volgens die stand. Weet ik niet waar 
   </div>
 </section>
 
+<div style="text-align:center;margin:30px 0 10px"><button type="button" class="primary pdfbtn">Bewaar je ingevulde Playbook als pdf</button></div>
 <footer>Liefs, Kimberley | De Cijfercoach. Dit playbook geeft richting. Voor fiscale beslissingen kijk je altijd na bij je boekhouder.</footer>
 </div>
 <button class="theme" type="button" id="themeBtn" aria-label="Wissel licht en donker">◐</button>
@@ -412,6 +428,14 @@ document.addEventListener('input', function(){ setTimeout(meldHoogte, 60); });
 window.addEventListener('message', function(e){ if(e.data && e.data.type==='dcc-vraag-hoogte'){ meldHoogte(); } });
 if(document.fonts && document.fonts.ready){ document.fonts.ready.then(meldHoogte); }
 var dccN=0, dccT=setInterval(function(){ meldHoogte(); if(++dccN>20){ clearInterval(dccT); } }, 500);
+</script>
+<script>
+(function(){
+  function fit(){document.querySelectorAll("textarea").forEach(function(t){t.dataset.h=t.style.height||"";t.style.height="auto";t.style.height=(t.scrollHeight+4)+"px"})}
+  function unfit(){document.querySelectorAll("textarea").forEach(function(t){t.style.height=t.dataset.h||""})}
+  window.addEventListener("beforeprint",fit);window.addEventListener("afterprint",unfit);
+  document.querySelectorAll(".pdfbtn").forEach(function(b){b.addEventListener("click",function(){fit();setTimeout(function(){window.print()},50)})});
+})();
 </script>
 </body>
 </html>
