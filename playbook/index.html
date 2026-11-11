@@ -97,6 +97,23 @@ footer{margin-top:28px;color:var(--muted);font-size:14px;text-align:left}
   .date{grid-template-columns:90px 1fr}
 }
 @media (prefers-reduced-motion:no-preference){button{transition:background .15s,border-color .15s}}
+.tl{margin:26px 0 8px;padding:20px 22px 22px;background:var(--paper);border:1px solid var(--line);border-radius:14px}
+.tl h2{font-size:1.05em;font-weight:700;color:var(--accent);margin:0 0 16px;letter-spacing:.3px}
+.tl ol{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(7,1fr);gap:0;position:relative}
+.tl ol::before{content:"";position:absolute;left:7%;right:7%;top:9px;height:3px;background:linear-gradient(90deg,var(--ember),var(--midnight));border-radius:2px}
+.tl li{position:relative;text-align:center;padding:26px 4px 0;font-size:13.5px;line-height:1.35}
+.tl li::before{content:"";position:absolute;top:2px;left:50%;width:17px;height:17px;margin-left:-8.5px;border-radius:50%;background:var(--paper);border:3px solid var(--rouge)}
+.tl li.big::before{background:var(--rouge)}
+.tl b{display:block;color:var(--accent);font-size:14.5px;margin-bottom:3px}
+.tl span{display:block;color:var(--ink)}
+@media (max-width:640px){
+ .tl ol{grid-template-columns:1fr}
+ .tl ol::before{left:8px;right:auto;top:10px;bottom:10px;width:3px;height:auto;background:linear-gradient(180deg,var(--ember),var(--midnight))}
+ .tl li{text-align:left;padding:0 0 14px 34px}
+ .tl li::before{top:2px;left:0;margin-left:0}
+ .tl b{display:inline;margin-right:6px}
+ .tl span{display:inline}
+}
 </style>
 <style id="printcss">
 @media print{
@@ -119,6 +136,18 @@ a{color:#2B1622!important;text-decoration:none}
   <h1>The Money <span>Reset</span> Playbook</h1>
   <p class="lead">Je playbook voor de komende 4 weken. Je rekent uit wat je echt nodig hebt, je zoekt waar je geld weglekt, je schrijft je 13 wensen voor 2027, en na de laatste avond hou je er één over die jij zelf waarmaakt.</p>
   <div class="owner"><label for="owner">Dit playbook is van</label><input type="text" id="owner" placeholder="jouw naam"></div>
+  <section class="tl" aria-label="Je tijdlijn">
+    <h2>Je tijdlijn</h2>
+    <ol>
+      <li class="big"><b>14/12</b><span>Je End of Year Money Journal</span></li>
+      <li><b>16/12</b><span>Je Money Agent aan het werk</span></li>
+      <li><b>17/12</b><span>Mijn persoonlijk antwoord</span></li>
+      <li><b>19/12</b><span>Je 13 briefjes in het zakje</span></li>
+      <li class="big"><b>20/12 tot 1/1</b><span>Je afsluitritueel</span></li>
+      <li><b>4/1 tot 10/1</b><span>The Reset Check In</span></li>
+      <li class="big"><b>13/1 om 10u</b><span>The Reset Table, live</span></li>
+    </ol>
+  </section>
   <div class="bewaar" role="note" style="margin:22px 0 6px;padding:18px 22px;border:2px solid var(--rouge);border-radius:14px;background:var(--paper)">
 <p style="margin:0 0 8px;font-weight:700;color:var(--rouge);font-size:1.08em">Lees dit eerst: zo blijft je werk bewaard</p>
 <p style="margin:0 0 8px">Alles wat je hier invult, bewaart je Playbook vanzelf. Je hoeft niets op te slaan. Maar het blijft alleen bewaard in deze browser, op dit toestel.</p>
