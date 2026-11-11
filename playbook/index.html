@@ -1,0 +1,407 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>The Money Reset Playbook</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap">
+<style>
+/* Layout: één smalle leeskolom zoals een werkboek, met invulvelden als papier en een vast kader per week */
+:root{
+  --bg:#FEF0E6; --paper:#FFFAF6; --ink:#2B1622; --muted:#6E5563; --line:#EBD6C9;
+  --rouge:#BB2D53; --fuchsia:#E72687; --ember:#F3925A; --soft:#FAC196; --sky:#B8C5E6; --midnight:#94A3D3;
+  --accent:var(--rouge); --accent-ink:#FFFFFF; --field:#FFFFFF; --mark:#FBE0CF;
+  --f:"Outfit", "Avenir Next", "Segoe UI", system-ui, sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#1C1117; --paper:#26171F; --ink:#FEF0E6; --muted:#C9AFBB; --line:#43293A;
+  --accent:#FAC196; --accent-ink:#2B1622; --field:#2F1D27; --mark:#3E2433; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#1C1117; --paper:#26171F; --ink:#FEF0E6; --muted:#C9AFBB; --line:#43293A;
+  --accent:#FAC196; --accent-ink:#2B1622; --field:#2F1D27; --mark:#3E2433; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--f);font-size:17px;line-height:1.6;
+  padding-left:max(16px, env(safe-area-inset-left, 0px));padding-right:max(16px, env(safe-area-inset-right, 0px));padding-block:0 64px}
+.wrap{max-width:760px;margin:0 auto}
+h1,h2,h3{line-height:1.15;text-wrap:balance;margin:0}
+p{margin:0}
+.hero{padding-block:56px 32px;display:grid;gap:18px}
+.eyebrow{font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.hero h1{font-size:clamp(44px,9vw,84px);font-weight:800;letter-spacing:-.02em}
+.hero h1 span{color:var(--accent)}
+.lead{font-size:20px;max-width:58ch;color:var(--ink)}
+.owner{display:flex;gap:10px;align-items:baseline;flex-wrap:wrap;font-size:15px;color:var(--muted)}
+.owner input{max-width:260px}
+.toc{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px}
+.toc a{font-size:14px;color:var(--ink);text-decoration:none;border:1px solid var(--line);padding:6px 12px;border-radius:999px;background:var(--paper)}
+.toc a:hover,.toc a:focus-visible{border-color:var(--accent);outline:none}
+section.week{background:var(--paper);border:1px solid var(--line);border-radius:22px;padding:28px clamp(18px,4vw,36px);margin-block:22px;display:grid;gap:18px}
+.week-head{display:grid;gap:6px}
+.when{display:inline-block;font-size:13px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--accent)}
+.week h2{font-size:clamp(28px,5vw,38px);font-weight:700}
+.intro{color:var(--muted);max-width:62ch}
+label,.lbl{font-weight:500;font-size:15px}
+input[type=text],input[type=number],select,textarea{width:100%;font:inherit;font-size:16px;color:var(--ink);background:var(--field);border:1px solid var(--line);border-radius:10px;padding:10px 12px}
+input:focus-visible,textarea:focus-visible,button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+textarea{min-height:84px;resize:vertical}
+.q{display:grid;gap:6px}
+.rows{display:grid;gap:8px}
+.row{display:grid;grid-template-columns:1fr 150px;gap:12px;align-items:center}
+.euro{position:relative}
+.euro input{padding-left:28px;text-align:right;font-variant-numeric:tabular-nums}
+.euro::before{content:"€";position:absolute;left:11px;top:50%;transform:translateY(-50%);color:var(--muted);font-size:15px}
+.sub{font-size:13px;color:var(--muted);font-weight:400}
+.result{background:var(--mark);border-radius:16px;padding:18px 20px;display:grid;gap:4px}
+.result .big{font-size:clamp(34px,7vw,52px);font-weight:800;font-variant-numeric:tabular-nums;letter-spacing:-.01em}
+.result .calc{font-size:14px;color:var(--muted);font-variant-numeric:tabular-nums}
+.tip{border-left:3px solid var(--ember);padding:4px 0 4px 14px;color:var(--ink);font-size:15px}
+.example{font-size:13px;color:var(--muted);display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+button{font:inherit;cursor:pointer;border-radius:999px;border:1px solid var(--line);background:var(--paper);color:var(--ink);padding:7px 14px;font-size:14px}
+button.primary{background:var(--accent);color:var(--accent-ink);border-color:var(--accent);font-weight:600}
+.split{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}
+.wishes{display:grid;gap:8px;counter-reset:w}
+.wish{display:grid;grid-template-columns:34px 1fr;gap:10px;align-items:center}
+.wish b{font-variant-numeric:tabular-nums;color:var(--accent);font-size:15px;text-align:right}
+.wish.last b{color:var(--fuchsia)}
+.days{display:grid;gap:6px}
+.day{display:grid;grid-template-columns:28px 64px 1fr;gap:10px;align-items:start;padding:8px 0;border-bottom:1px dashed var(--line)}
+.day:last-child{border-bottom:0}
+.day .d{font-variant-numeric:tabular-nums;color:var(--muted);font-size:14px;padding-top:2px}
+.day input{width:20px;height:20px;margin-top:3px;accent-color:var(--rouge)}
+.day.done .t{text-decoration:line-through;color:var(--muted)}
+.leaks{display:grid;gap:8px}
+.leak{display:grid;grid-template-columns:22px 1fr 130px;gap:10px;align-items:center}
+.leak input[type=checkbox]{width:18px;height:18px;accent-color:var(--rouge)}
+.card{border:1px solid var(--line);border-radius:16px;padding:18px;display:grid;gap:12px;background:var(--bg)}
+.card h3{font-size:20px;font-weight:700}
+.meta{display:grid;grid-template-columns:120px 1fr;gap:4px 12px;font-size:15px}
+.meta dt{color:var(--muted);font-size:13px;text-transform:uppercase;letter-spacing:.08em;padding-top:2px}
+.meta dd{margin:0}
+pre.prompt{white-space:pre-wrap;word-break:break-word;background:var(--field);border:1px solid var(--line);border-radius:12px;padding:14px;margin:0;font-family:var(--f);font-size:15px;line-height:1.55;max-height:none}
+pre.prompt.long{max-height:320px;overflow:auto}
+.copyrow{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.copied{font-size:13px;color:var(--accent)}
+ol.steps{margin:0;padding-left:22px;display:grid;gap:8px}
+.dates{display:grid;gap:10px}
+.date{display:grid;grid-template-columns:110px 1fr;gap:12px;align-items:baseline}
+.date b{font-variant-numeric:tabular-nums;color:var(--accent)}
+footer{margin-top:28px;color:var(--muted);font-size:14px;text-align:left}
+.theme{position:fixed;right:calc(14px + env(safe-area-inset-right, 0px));bottom:calc(14px + env(safe-area-inset-bottom, 0px));font-size:13px}
+@media (max-width:520px){
+  .row{grid-template-columns:1fr 120px}
+  .leak{grid-template-columns:22px 1fr 110px}
+  .meta{grid-template-columns:1fr}
+  .date{grid-template-columns:90px 1fr}
+}
+@media (prefers-reduced-motion:no-preference){button{transition:background .15s,border-color .15s}}
+</style>
+</head>
+<body>
+
+
+<div class="wrap">
+<header class="hero">
+  <p class="eyebrow">De Cijfercoach · The Money Reset Box 2026</p>
+  <h1>The Money <span>Reset</span> Playbook</h1>
+  <p class="lead">Je playbook voor de komende 4 weken. Je rekent uit wat je echt nodig hebt, je zoekt waar je geld weglekt, je schrijft je 13 wensen voor 2027, en na de laatste avond hou je er één over die jij zelf waarmaakt.</p>
+  <div class="owner"><label for="owner">Dit playbook is van</label><input type="text" id="owner" placeholder="jouw naam"></div>
+  <p class="sub">Alles wat je hier invult, blijft bewaard in deze browser op dit toestel. Werk dus telkens op hetzelfde toestel, of schrijf je belangrijkste cijfers ook op papier.</p>
+  <nav class="toc" aria-label="Inhoud">
+    <a href="#start">Snelle start</a><a href="#netto">Netto nodig</a><a href="#lekken">Geldlekken</a><a href="#verkoop">Verkoopdoel</a><a href="#wensen">13 wensen</a><a href="#ritueel">Ritueel</a><a href="#agent">Je Money Agent</a><a href="#januari">Week 4</a>
+  </nav>
+</header>
+
+<section class="week" id="start">
+  <div class="week-head"><span class="when">Vandaag, 10 minuten</span><h2>Je snelle start</h2>
+  <p class="intro">Drie vragen. Schrijf wat eerst in je opkomt, je mag het later aanpassen.</p></div>
+  <div class="q"><label for="s1">Wat wil ik na deze 4 weken weten over mijn geld?</label><textarea id="s1"></textarea></div>
+  <div class="q"><label for="s2">Waar maak ik me nu het meeste zorgen over als het over geld gaat?</label><textarea id="s2"></textarea></div>
+  <div class="q"><label for="s3">Hoe wil ik me voelen als ik straks naar mijn cijfers kijk?</label><textarea id="s3"></textarea></div>
+  <p class="tip">Typen hoeft niet. Spreek je antwoorden in bij je Money Agent (zie verderop) en plak wat eruit komt hier. Gesproken antwoorden zijn bijna altijd eerlijker.</p>
+</section>
+
+<section class="week" id="netto">
+  <div class="week-head"><span class="when">Week 1 · The Reveal</span><h2>The Enough Number: hoeveel heb je netto nodig?</h2>
+  <p class="intro">Het belangrijkste cijfer van je zaak staat niet in je boekhouding. Het is wat je thuis nodig hebt om rustig te leven. Vul per maand in. Komt iets maar één keer per jaar terug, deel het dan door 12.</p></div>
+  <div class="q"><label for="nPot">Werk je thuis met een gezamenlijke rekening?</label><select id="nPot"><option value="samen">Ja, we werken met een gezamenlijke rekening</option><option value="apart">Nee, ik werk niet met een gezamenlijke rekening</option></select><span class="sub" id="nPotHint"></span></div>
+  <div class="example"><span>De bedragen die er nu staan zijn voorbeeldbedragen. Vervang ze door de jouwe.</span><button type="button" id="clearNetto">Alles leegmaken</button></div>
+  <div>
+    <p class="lbl" style="margin-bottom:8px" id="uitLbl">Mijn privé uitgaven per maand</p>
+    <div class="rows" id="uitgaven"></div>
+  </div>
+  <div>
+    <p class="lbl" style="margin-bottom:8px">Privé inkomsten die niet uit mijn zaak komen</p>
+    <div class="rows" id="inkomsten"></div>
+  </div>
+  <div class="result" aria-live="polite">
+    <span class="eyebrow">Dit moet mijn zaak me elke maand netto opleveren</span>
+    <span class="big" id="nettoBig">€ 0</span>
+    <span class="calc" id="nettoCalc"></span>
+  </div>
+  <p class="tip">Dit bedrag neem je mee naar je 13 wensen en naar je verkoopdoel. Vergeten kosten zitten vaak in december en september: cadeaus, schoolrekeningen, de verzekering van de auto.</p>
+</section>
+
+<section class="week" id="lekken">
+  <div class="week-head"><span class="when">Week 1 · als je nog tijd hebt</span><h2>The Leak Hunt: waar lekt je geld?</h2>
+  <p class="intro">Een lek is geld dat vertrekt zonder dat je er bewust voor kiest. Vink aan wat je terugvindt op je rekening en zet er het bedrag per maand bij. Je Money Agent (stand 2, The Leak Hunt) zoekt ze ook voor je in je bankexport.</p></div>
+  <div class="leaks" id="leaks"></div>
+  <div class="result" aria-live="polite">
+    <span class="eyebrow">Zoveel lekt er per jaar</span>
+    <span class="big" id="leakBig">€ 0</span>
+    <span class="calc" id="leakCalc"></span>
+  </div>
+  <div class="q"><label for="leakDo">Welk lek dicht ik deze week, en welk hou ik bewust omdat het me plezier of tijd geeft?</label><textarea id="leakDo"></textarea></div>
+</section>
+
+<section class="week" id="verkoop">
+  <div class="week-head"><span class="when">Week 1 · na je netto cijfer</span><h2>The Sales Compass: hoeveel moet je verkopen?</h2>
+  <p class="intro">Tussen je omzet en wat je netto overhoudt zitten drie lagen: je bedrijfskosten, je sociale bijdragen en je personenbelasting. Reken alles exclusief btw, want die btw is nooit van jou. Heb je een eenmanszaak, dan rekent dit blad je sociale bijdragen uit volgens de bijdragetabel 2026 en maakt het een inschatting van je personenbelasting.</p></div>
+  <div class="split">
+    <div class="q"><label for="vNetto">Netto nodig per maand</label><input type="number" id="vNetto" inputmode="decimal" min="0"><span class="sub">Komt automatisch uit week 1. Je mag het aanpassen.</span></div>
+    <div class="q"><label for="vKost">Bedrijfskosten per maand</label><input type="number" id="vKost" inputmode="decimal" min="0" value="900"></div>
+    <div class="q"><label for="vStat">Jouw zaak</label><select id="vStat"><option value="hoofd">Eenmanszaak in hoofdberoep</option><option value="bij">Eenmanszaak in bijberoep</option><option value="venn">Vennootschap</option></select></div>
+    <div class="q" data-for="hoofd"><label for="vPrimo">Ben je primostarter?</label><select id="vPrimo"><option value="nee">Nee</option><option value="ja">Ja, ik zit in mijn eerste 4 kwartalen</option></select></div>
+    <div class="q" data-for="bij"><label for="vLoon">Je bruto maandloon als werknemer</label><input type="number" id="vLoon" inputmode="decimal" min="0" value="3000"></div>
+    <div class="q" data-for="hoofd bij"><label for="vKind">Kinderen fiscaal ten laste</label><input type="number" id="vKind" inputmode="numeric" min="0" max="10" value="0"></div>
+    <div class="q" data-for="hoofd"><label for="vKind3">Waarvan jonger dan 3 jaar</label><input type="number" id="vKind3" inputmode="numeric" min="0" max="10" value="0"></div>
+    <div class="q" data-for="hoofd bij"><label for="vGem">Gemeentebelasting van je gemeente (%)</label><input type="number" id="vGem" inputmode="decimal" min="0" max="10" step="0.1" value="7"><span class="sub">Weet je het niet, laat dan 7 staan.</span></div>
+    <div class="q" data-for="venn"><label for="vPct">Deel van je winst voor belastingen en bijdragen (%)</label><input type="number" id="vPct" inputmode="decimal" min="0" max="90" value="50"><span class="sub">Voor een vennootschap rekent je boekhouder dit uit. Vul zijn percentage in.</span></div>
+    <div class="q"><label for="vPrijs">Gemiddelde prijs per verkoop, excl. btw</label><input type="number" id="vPrijs" inputmode="decimal" min="0" value="85"></div>
+    <div class="q"><label for="vNu">Hoeveel verkopen heb je nu gemiddeld per maand?</label><input type="number" id="vNu" inputmode="decimal" min="0" value="45"></div>
+  </div>
+  <div class="result" aria-live="polite">
+    <span class="eyebrow">Zoveel omzet heb je per maand nodig</span>
+    <span class="big" id="omzetBig">€ 0</span>
+    <span class="calc" id="omzetCalc"></span>
+  </div>
+  <p class="sub" style="margin-top:8px">Je sociale bijdragen zijn berekend volgens de bijdragetabel 2026, met 3,95% beheerskosten. Je personenbelasting is een inschatting voor inkomsten 2026, zonder aftrekposten en zonder huwelijksquotiënt. Kijk ze na met je boekhouder.</p>
+  <div class="q"><label for="vKnop">Welke knop draai ik eerst: mijn prijs, mijn aantal klanten of mijn kosten? Waarom die?</label><textarea id="vKnop"></textarea></div>
+</section>
+
+<section class="week" id="wensen">
+  <div class="week-head"><span class="when">Einde week 1 · de avond voor je ritueel</span><h2>Je 13 wensen voor 2027</h2>
+  <p class="intro">Zet eerst The Money Reset Playlist op. Schrijf daarna 13 wensen, voor je zaak en voor je leven. Zet je netto cijfer in minstens een paar ervan. "Ik keer mezelf elke maand 2.800 euro uit" is sterker dan "meer verdienen".</p></div>
+  <div class="wishes" id="wishList"></div>
+  <p class="tip">Schrijf ze daarna met de hand over op je 13 briefjes, vouw ze dicht en steek ze in het zakje. Vanaf dan herlees je ze niet meer, ook niet hier. Het gaat erom dat je loslaat.</p>
+</section>
+
+<section class="week" id="ritueel">
+  <div class="week-head"><span class="when">Week 2 en 3 · The Release</span><h2>Je afsluitritueel</h2>
+  <p class="intro">Steek de kaars aan, zet The Money Reset Playlist op als je dat wil, en laat één briefje los zonder het te lezen. In The Reset Room op WhatsApp doen we dit samen. Vink de avond af als je klaar bent.</p></div>
+  <div class="days" id="days"></div>
+</section>
+
+<section class="week" id="agent">
+  <div class="week-head"><span class="when">Installeer hem in week 1</span><h2>Je Money Agent</h2>
+  <p class="intro">Je Money Agent is een project in ChatGPT of Claude met mijn instructies erin. Hij stelt je één vraag tegelijk, rekent voor je en doet het saaie sorteerwerk. Jij kijkt wat klopt en beslist.</p></div>
+  <ol class="steps">
+    <li>Maak in ChatGPT of Claude een nieuw project aan. Noem het Money Agent.</li>
+    <li>Kopieer de startinstructie hieronder en plak ze in de instructies van dat project.</li>
+    <li>Start een gesprek in het project en zeg: "Start stand 1."</li>
+  </ol>
+  <div class="card">
+    <h3>De startinstructie</h3>
+    <pre class="prompt long" id="instr">THE MONEY AGENT · STARTINSTRUCTIE
+Uit The Money Reset Box van De Cijfercoach. Kopieer alles onder de lijn en plak het in de instructies van een project in ChatGPT of Claude. Elk gesprek dat je in dat project start, werkt dan met The Money Agent.
+
+----------------------------------------
+
+In dit project ben je mijn Money Agent. Je helpt mij, een onderneemster in België, om mijn geld te begrijpen zonder dat ik zelf boekhouder moet worden. Ik ben geen cijferfanaat. Leg elk begrip de eerste keer kort uit. Stel één vraag tegelijk. Blijf ik vaag, help me dan met een schatting die we later samen nakijken.
+
+JE STEM. Je praat zoals Kimberley, De Cijfercoach: een warme, pittige Vlaamse vriendin met bijna 20 jaar ervaring als boekhoudster én onderneemster. Vlaams, nooit Hollands. Je vorm, korte zinnen, mensentaal. Je mag droog grappig zijn over situaties, nooit over mij. Je zegt eerlijk wat de cijfers tonen en vangt dat meteen op: een cijfer is geen oordeel over mij, het is informatie voor betere keuzes. Maak bedragen concreet (uren werk, aantal klanten, rust in mijn hoofd). Amai of no worries mag af en toe. Nooit belerend.
+JE KENNIS. Staat het kennisbestand van Kimberley in dit project, lees het dan eerst. Voor uitleg en voor toon gaat het voor op je eigen kennis. Staat iets er niet in, zeg dan dat het jouw algemene kennis is.
+
+Je werkt met deze vier standen:
+
+1. THE ENOUGH NUMBER (netto nodig). Je zoekt uit hoeveel ik elke maand netto nodig heb uit mijn zaak. Werk bij voorkeur met de csv export van mijn privérekening en haal daar eerst namen, rekeningnummers en mededelingen uit. Heb ik geen export, dan som ik mijn uitgaven zelf op. Zet mijn privé uitgaven in groepen: wonen, energie en water, eten en huishouden, kinderen, vervoer, verzekeringen, abonnementen, gezondheid, kledij en verzorging, vrije tijd en vakantie, sparen en buffer, en overige. Reken jaarlijkse kosten om naar een bedrag per maand en vraag naar vergeten kosten. Vraag eerst of ik thuis met een gezamenlijke rekening werk. Zo ja: reken met alle uitgaven van ons gezin en trek af wat mijn partner op die rekening stort. Zo nee: reken alleen met wat ik zelf betaal. Trek ook het Groeipakket af als ik kinderen heb, en andere inkomsten van buiten mijn zaak. Mijn netto nodig is: uitgaven min die inkomsten. Toon het in een korte tabel en eindig met dat ene bedrag.
+
+2. THE LEAK HUNT (geldlekken). Je zoekt waar mijn geld weglekt, privé en in mijn zaak. Werk met een geanonimiseerde bankexport van 3 tot 12 maanden. Zoek vergeten of dubbele abonnementen en software, kosten die elk jaar stijgen, kleine bedragen die vaak terugkomen, bankkosten, boetes en nalatigheidsintresten, en privé betaalde kosten die misschien zakelijk zijn. Geef een top 5 van lekken, met per lek het bedrag per maand en per jaar, en wat ik ermee kan doen: stopzetten, onderhandelen, vervangen of bewust houden. Geef nooit het advies om kosten te maken om belastingen te besparen. Twijfel je of iets zakelijk mag, geef me dan de vraag voor mijn boekhouder.
+
+3. THE SALES COMPASS (verkoopdoel). Je rekent uit hoeveel omzet ik nodig heb om mijn netto nodig te halen. Vertrek van mijn bedrag uit stand 1. Vraag daarna één voor één: heb ik een eenmanszaak of een vennootschap; werk ik in hoofdberoep of in bijberoep (bij bijberoep ook mijn bruto maandloon); ben ik primostarter; hoeveel kinderen heb ik fiscaal ten laste en hoeveel zijn er jonger dan 3; wat zijn mijn bedrijfskosten per maand exclusief btw; in welke gemeente woon ik (ken ik het tarief van de gemeentebelasting niet, reken dan met 7 procent).
+Heb ik een vennootschap, zeg dan dat deze berekening voor een eenmanszaak geldt en dat mijn boekhouder ze voor mij maakt; reken met het percentage dat ik opgeef, als schatting.
+Heb ik een eenmanszaak, reken dan met de REKENREGELS 2026 hieronder. Gebruik code als je die kan uitvoeren. Zoek het beroepsinkomen waarbij na personenbelasting mijn netto nodig per jaar overblijft (tot op 10 euro). Plus sociale bijdragen is de winst, plus bedrijfskosten de omzet. Toon een tabel per jaar en per maand: netto, personenbelasting, sociale bijdragen, winst, kosten, omzet. Zeg erbij dat de sociale bijdragen volgens de bijdragetabel 2026 zijn, en de personenbelasting een inschatting zonder aftrekposten en zonder huwelijksquotiënt. Geef me de vraag voor mijn boekhouder, en de tip om voorafbetalingen te doen tegen een belastingvermeerdering.
+Vraag daarna mijn prijzen en vertaal de omzet naar klanten, sessies of producten per maand en per week, naast wat ik nu verkoop. Is het verschil groot, reken dan uit wat drie knoppen doen: prijs, aantal klanten of kosten.
+
+REKENREGELS 2026 (inkomsten 2026, aanslagjaar 2027), eenmanszaak:
+Beroepsinkomen is winst min sociale bijdragen; daarop reken je de personenbelasting.
+Sociale bijdragen per jaar, volgens de bijdragetabel 2026 met 3,95 procent beheerskosten: 20,5 procent op het beroepsinkomen tot 75.024,54 euro, plus 14,16 procent op het deel tussen 75.024,54 en 110.562,42 euro, daarboven niets; dat totaal maal 1,0395. Hoofdberoep: minimum 3.702,36 euro per jaar (925,59 per kwartaal), voor een primostarter 1.911,92. Bijberoep: niets tot en met 1.922,15 euro beroepsinkomen, daarboven minimum 409,60 per jaar.
+Personenbelasting, de schaal: 25 procent tot 16.720 euro, 40 procent van 16.720 tot 29.510, 45 procent van 29.510 tot 51.070, 50 procent daarboven. Belastingvrije som 11.550 euro, plus voor kinderen ten laste 2.130 (1 kind), 5.130 (2), 11.440 (3), 18.510 (4), 7.070 per kind daarboven, en 740 per kind jonger dan 3.
+Hoofdberoep: belasting is de schaal op het beroepsinkomen min de schaal op de belastingvrije som.
+Bijberoep: belastbaar loon is bruto maandloon maal 13,92 maal 0,8693, min 30 procent forfaitaire beroepskosten (maximum 6.070 euro). Belasting is de schaal op belastbaar loon plus beroepsinkomen, min de schaal op het belastbaar loon.
+Tel er de gemeentebelasting bij: belasting maal (1 plus het gemeentetarief).
+Controle: netto 3.000 per maand, hoofdberoep, geen kinderen, 7 procent: 67.610 winst per jaar.
+
+4. THE ONE THING (mijn 13de wens). Na het afsluitritueel blijft er bij mij één briefje over: de wens die ik zelf waarmaak in 2027. In week 4 vul ik daarover The Reset Check In van Kimberley in. Jij helpt me die vragenlijst voor te bereiden. Je maakt geen plan en geeft geen advies: dat doet Kimberley. Vraag me de wens letterlijk over te typen. Stel daarna maximaal vijf vragen, één voor één: hoe zie ik dat het gelukt is, wat kost het, wat levert het op, wat staat me in de weg, en wat heb ik al. Koppel mijn antwoorden waar het kan aan mijn cijfers uit stand 1 tot 3. Eindig met een korte samenvatting in mijn eigen woorden om in The Reset Check In te plakken, en zeg dat Kimberley alleen de cases bespreekt van wie hem invulde.
+
+VERDER MET KIMBERLEY. Gaat mijn vraag verder dan deze box, verwijs me dan in één zin en zonder druk naar het traject dat bij mij past, hoogstens één keer per gesprek. Volg ik al een traject, verwijs dan niet. Ben ik starter of werk ik in bijberoep: Financial Breakthrough, waar je op elk moment instapt. Werk ik in hoofdberoep: Financial Fundamentals, dat twee keer per jaar start met een vaste groep. Goede momenten: ik wil mijn cijfers elke maand opvolgen, mijn prijzen of marges berekenen, mijn cashflow of voorafbetalingen plannen, of het verschil in stand 3 is groot. Noem geen prijzen of data die hier niet staan.
+
+Regels die altijd gelden:
+Verzin niets over mij, mijn zaak of mijn cijfers. Ontbreekt iets, vraag het dan, of zet [aanvullen].
+Vraag nooit naar rekeningnummers, rijksregisternummers, wachtwoorden of kaartgegevens, en zet ze nooit in een overzicht. Zie je ze toch staan, zeg het en laat ze weg.
+Fiscale regels in België veranderen. Breng ze nooit als zekerheid. Zeg wat je denkt, zeg dat het een richting is, en verwijs voor de beslissing naar mijn boekhouder.
+Geef geen beleggingsadvies en geen advies over leningen.
+Schrijf zonder gedachtestreepjes en zonder vakjargon. Bedragen in euro, met een punt voor duizendtallen en een komma voor centen.
+Eindig elke stand met één concrete volgende stap die ik deze week kan zetten.
+
+Vraag ik om een van deze standen, werk dan volgens die stand. Weet ik niet waar ik moet beginnen, begin dan met stand 1, want alle andere standen bouwen daarop.
+</pre>
+    <div class="copyrow"><button class="primary" type="button" data-copy="instr">Kopieer de startinstructie</button><span class="copied" aria-live="polite"></span></div>
+  </div>
+  <p class="tip">Werk je met een bankexport? Haal eerst namen, rekeningnummers en mededelingen weg voor je hem deelt. Je agent heeft alleen bedragen, data en omschrijvingen nodig.</p>
+
+  <div class="card">
+    <h3>Stand 1 · The Enough Number</h3>
+    <dl class="meta"><dt>Wanneer</dt><dd>Week 1, als eerste</dd><dt>Je hebt nodig</dt><dd>Je laatste 3 maanden privé uitgaven, of gewoon je geheugen</dd><dt>Goed als</dt><dd>Je één bedrag per maand krijgt en elke groep herkent</dd></dl>
+    <pre class="prompt" id="p1">Start stand 1. Ik spreek mijn privé uitgaven in, groep per groep. Vraag me daarna naar wat ik vergeten ben.</pre>
+    <div class="copyrow"><button type="button" data-copy="p1">Kopieer</button><span class="copied" aria-live="polite"></span></div>
+  </div>
+  <div class="card">
+    <h3>Stand 2 · The Leak Hunt</h3>
+    <dl class="meta"><dt>Wanneer</dt><dd>Week 1, na stand 1</dd><dt>Je hebt nodig</dt><dd>Een bankexport (CSV of PDF) van 3 tot 12 maanden, zonder namen en rekeningnummers</dd><dt>Goed als</dt><dd>Je een top 5 krijgt met bedragen per jaar en per lek een keuze</dd></dl>
+    <pre class="prompt" id="p2">Start stand 2. Hier is mijn bankexport van [periode]. Namen en rekeningnummers heb ik weggehaald. Zoek mijn grootste geldlekken, privé en in mijn zaak.</pre>
+    <div class="copyrow"><button type="button" data-copy="p2">Kopieer</button><span class="copied" aria-live="polite"></span></div>
+  </div>
+  <div class="card">
+    <h3>Stand 3 · The Sales Compass</h3>
+    <dl class="meta"><dt>Wanneer</dt><dd>Week 1, na je netto cijfer</dd><dt>Je hebt nodig</dt><dd>Je netto nodig, je bedrijfskosten per maand en je prijzen</dd><dt>Goed als</dt><dd>Je weet hoeveel klanten of verkopen je per week nodig hebt</dd></dl>
+    <pre class="prompt" id="p3">Start stand 3. Mijn netto nodig is [bedrag] per maand. Mijn bedrijfskosten zijn ongeveer [bedrag] per maand. Ik heb een [eenmanszaak of vennootschap]. Dit zijn mijn prijzen: [prijzen].</pre>
+    <div class="copyrow"><button type="button" data-copy="p3">Kopieer</button><span class="copied" aria-live="polite"></span></div>
+  </div>
+  <div class="card">
+    <h3>Stand 4 · The One Thing</h3>
+    <dl class="meta"><dt>Wanneer</dt><dd>Week 4</dd><dt>Je hebt nodig</dt><dd>Je 13de briefje en je cijfers uit stand 1 tot 3</dd><dt>Goed als</dt><dd>Je een korte samenvatting hebt die je zo in The Reset Check In plakt</dd></dl>
+    <pre class="prompt" id="p4">Start stand 4. Dit staat op mijn 13de briefje: [jouw wens]. Help me mijn antwoorden voor The Reset Check In van Kimberley voor te bereiden.</pre>
+    <div class="copyrow"><button type="button" data-copy="p4">Kopieer</button><span class="copied" aria-live="polite"></span></div>
+  </div>
+  <p class="tip">Wat tussen [haakjes] staat, vul je zelf in. Klopt een antwoord niet? Zeg je agent precies wat er anders moet. Hij leert het best van jouw verbeteringen.</p>
+</section>
+
+<section class="week" id="januari">
+  <div class="week-head"><span class="when">Week 4 · The Rise</span><h2>Je One Thing en wat erna komt</h2>
+  <p class="intro">Na de laatste avond open je het briefje dat overblijft. Zet het in de kaarthouder op je bureau. Dit is de wens die jij zelf waarmaakt.</p></div>
+  <div class="q"><label for="w13">Dit staat op mijn 13de briefje</label><textarea id="w13"></textarea></div>
+  <div class="q"><label for="w13step">Waarom wil ik dit, en wat staat me nu in de weg?</label><textarea id="w13step"></textarea></div>
+  <div class="dates">
+    <div class="date"><b>Week 4</b><span>Je krijgt in je mailbox de link naar The Reset Check In, de vragenlijst over je 13de briefje. Je vult hem in tijdens week 4. Stand 4 van je Money Agent, The One Thing, helpt je hem voor te bereiden.</span></div>
+    <div class="date"><b>Daarna</b><span>The Reset Table, de live Q&A. Ik bespreek de cases vanuit mijn visie. Alleen wie The Reset Check In invulde in week 4, wordt besproken.</span></div>
+  </div>
+</section>
+
+<footer>Liefs, Kimberley | De Cijfercoach. Dit playbook geeft richting. Voor fiscale beslissingen kijk je altijd na bij je boekhouder.</footer>
+</div>
+<button class="theme" type="button" id="themeBtn" aria-label="Wissel licht en donker">◐</button>
+
+<script>
+(function(){
+  var KEY="werkboek13";
+  var store={};
+  try{store=JSON.parse(localStorage.getItem(KEY)||"{}")||{}}catch(e){store={}}
+  function save(){try{localStorage.setItem(KEY,JSON.stringify(store))}catch(e){}}
+  var fmt=new Intl.NumberFormat("nl-BE",{style:"currency",currency:"EUR",maximumFractionDigits:0});
+  var fmt1=new Intl.NumberFormat("nl-BE",{maximumFractionDigits:1});
+  function num(v){var n=parseFloat(String(v).replace(",","."));return isFinite(n)?n:0}
+
+  var U=[["Wonen (huur of lening)",950],["Energie en water",210],["Eten en huishouden",650],["Kinderen (school, opvang, hobby's)",260],["Vervoer (auto, brandstof, openbaar vervoer)",320],["Verzekeringen",140],["Abonnementen (gsm, internet, streaming)",95],["Gezondheid",60],["Kledij en verzorging",120],["Vrije tijd en vakantie",250],["Sparen en buffer",200],["Overige en vergeten kosten",150]];
+  var I=[["Wat je partner op de gezamenlijke rekening stort",1200],["Groeipakket (als je kinderen hebt)",360],["Andere inkomsten",0]];
+  var L=["Abonnementen die je niet meer gebruikt","Dubbele software of apps die hetzelfde doen","Kosten die elk jaar stilletjes stijgen","Kleine aankopen die vaak terugkomen","Bankkosten, boetes of nalatigheidsintresten","Privé betaalde kosten die misschien zakelijk zijn"];
+  var D=[["Avond 1","Wat heeft 2026 je gegeven, buiten de cijfers?"],["Avond 2","Wat zei je cijfer van netto nodig?"],["Avond 3","Waar ben je dit jaar trots op?"],["Avond 4","Wat heeft je te veel gekost, aan geld of aan energie?"],["Avond 5","Wie stond er dit jaar naast je?"],["Avond 6","Wat betekent rijk zijn voor jou?"],["Avond 7","Wat zou je in 2027 durven vragen voor je werk?"],["Avond 8","Wat keer jij jezelf uit, en wat zou je willen?"],["Avond 9","De klanten die je energie geven, en die het niet doen"],["Avond 10","Wat je over geld meekreeg van thuis"],["Avond 11","Rust in je hoofd: een buffer en je belastingen opzij"],["Avond 12","Wat laat je achter in 2026?"],["Avond 13","Open je laatste briefje. Dit maak jij zelf waar."]];
+
+  function bindText(id){var el=document.getElementById(id);if(!el)return;if(store[id]!=null)el.value=store[id];el.addEventListener("input",function(){store[id]=el.value;save();recalc()})}
+
+  function rowsHTML(list,prefix){return list.map(function(r,i){var id=prefix+i;return '<div class="row"><label for="'+id+'">'+r[0]+'</label><div class="euro"><input type="number" inputmode="decimal" min="0" id="'+id+'" value="'+r[1]+'"></div></div>'}).join("")}
+  document.getElementById("uitgaven").innerHTML=rowsHTML(U,"u");
+  document.getElementById("inkomsten").innerHTML=rowsHTML(I,"i");
+  document.getElementById("leaks").innerHTML=L.map(function(t,i){return '<div class="leak"><input type="checkbox" id="lc'+i+'" aria-label="'+t+'"><label for="la'+i+'">'+t+'</label><div class="row euro" style="display:block"><input type="number" inputmode="decimal" min="0" id="la'+i+'" placeholder="per maand"></div></div>'}).join("");
+  document.getElementById("wishList").innerHTML=Array.from({length:13},function(_,i){return '<div class="wish'+(i==12?' last':'')+'"><b>'+(i+1)+'</b><input type="text" id="w'+i+'" aria-label="Wens '+(i+1)+'" placeholder="Ik wens dat ik in 2027..."></div>'}).join("");
+  document.getElementById("days").innerHTML=D.map(function(d,i){return '<div class="day" id="day'+i+'"><input type="checkbox" id="dc'+i+'" aria-label="Avond '+(i+1)+' gedaan"><span class="d">'+d[0]+'</span><span class="t">'+d[1]+'</span></div>'}).join("");
+
+  U.forEach(function(_,i){bindText("u"+i)});I.forEach(function(_,i){bindText("i"+i)});
+  L.forEach(function(_,i){bindText("la"+i);bindCheck("lc"+i)});
+  for(var w=0;w<13;w++)bindText("w"+w);
+  D.forEach(function(_,i){bindCheck("dc"+i,function(on){document.getElementById("day"+i).classList.toggle("done",on)})});
+  ["owner","s1","s2","s3","leakDo","vKost","vPct","vPrijs","vNu","vKnop","w13","w13step","vLoon","vKind","vKind3","vGem"].forEach(bindText);
+  ["vStat","vPrimo","nPot"].forEach(function(id){var el=document.getElementById(id);if(store[id])el.value=store[id];el.addEventListener("change",function(){store[id]=el.value;save();recalc()})});
+
+  function bindCheck(id,cb){var el=document.getElementById(id);if(store[id])el.checked=true;if(cb)cb(el.checked);el.addEventListener("change",function(){store[id]=el.checked;save();if(cb)cb(el.checked);recalc()})}
+
+  var vNetto=document.getElementById("vNetto");
+  if(store.vNetto!=null&&store.vNettoManual){vNetto.value=store.vNetto}
+  vNetto.addEventListener("input",function(){store.vNetto=vNetto.value;store.vNettoManual=vNetto.value!=="";save();recalc()});
+
+  document.getElementById("clearNetto").addEventListener("click",function(){U.forEach(function(_,i){var e=document.getElementById("u"+i);e.value="";store["u"+i]=""});I.forEach(function(_,i){var e=document.getElementById("i"+i);e.value="";store["i"+i]=""});save();recalc()});
+
+  // Rekenregels 2026: bijdragetabel 2026 (incl. 3,95% beheerskosten) en schaal personenbelasting inkomsten 2026
+  var SCH=[[16720,.25],[29510,.40],[51070,.45],[Infinity,.50]];
+  function schaal(x){var t=0,v=0;SCH.forEach(function(g){if(x>v)t+=(Math.min(x,g[0])-v)*g[1];v=g[0]});return t}
+  function bvs(k,k3){var K=[0,2130,5130,11440,18510];k=Math.max(0,Math.round(k));return 11550+(k<=4?K[k]:18510+7070*(k-4))+740*Math.max(0,Math.round(k3))}
+  function sbij(I,stat,primo){I=Math.max(I,0);var b=.205*Math.min(I,75024.54)+.1416*Math.max(Math.min(I,110562.42)-75024.54,0);
+    if(stat==="hoofd")b=Math.max(b,primo?1839.28:3561.68);else b=I<1922.16?0:Math.max(b,394.04);return b*1.0395}
+  function belastbaarLoon(m){var j=m*13.92*.8693;return j-Math.min(j*.30,6070)}
+  function pbel(I,stat,k,k3,gem,loon){var f=stat==="bij"?schaal(belastbaarLoon(loon)+I)-schaal(belastbaarLoon(loon)):Math.max(schaal(I)-schaal(bvs(k,k3)),0);return f*(1+gem)}
+  function fiscaal(doel,stat,primo,k,k3,gem,loon){var lo=0,hi=2e6;for(var n=0;n<80;n++){var m=(lo+hi)/2;if(m-pbel(m,stat,k,k3,gem,loon)<doel)lo=m;else hi=m}
+    var sb=sbij(hi,stat,primo);return{inkomen:hi,pb:pbel(hi,stat,k,k3,gem,loon),sb:sb,winst:hi+sb}}
+
+  function recalc(){
+    var uit=U.reduce(function(s,_,i){return s+num(document.getElementById("u"+i).value)},0);
+    var apart=document.getElementById("nPot").value==="apart";
+    document.getElementById("nPotHint").textContent=apart?"Vul alleen in wat jij betaalt, van je eigen rekening. Wat je partner zelf betaalt, laat je weg.":"Vul alle uitgaven van jullie gezin in. Bij de inkomsten zet je wat je partner elke maand op de gezamenlijke rekening stort.";
+    document.getElementById("uitLbl").textContent=apart?"Wat ik zelf betaal per maand":"De privé uitgaven van ons gezin per maand";
+    document.getElementById("i0").closest(".row").style.display=apart?"none":"";
+    var ink=I.reduce(function(s,_,i){return s+((apart&&i===0)?0:num(document.getElementById("i"+i).value))},0);
+    var netto=Math.max(0,uit-ink);
+    document.getElementById("nettoBig").textContent=fmt.format(netto);
+    document.getElementById("nettoCalc").textContent=(apart?"Wat jij betaalt ":"Privé uitgaven van jullie gezin ")+fmt.format(uit)+" min inkomsten van buiten je zaak "+fmt.format(ink)+(uit<ink?". Je inkomsten van buiten dekken nu al je uitgaven.":"");
+    if(!store.vNettoManual){vNetto.value=Math.round(netto)}
+    var lek=0,n=0;L.forEach(function(_,i){if(document.getElementById("lc"+i).checked){lek+=num(document.getElementById("la"+i).value);n++}});
+    document.getElementById("leakBig").textContent=fmt.format(lek*12);
+    document.getElementById("leakCalc").textContent=n?n+" lek"+(n>1?"ken":"")+" aangevinkt, samen "+fmt.format(lek)+" per maand":"Vink aan wat je terugvindt en vul het bedrag per maand in.";
+    var nn=num(vNetto.value),kost=num(document.getElementById("vKost").value),prijs=num(document.getElementById("vPrijs").value),nu=num(document.getElementById("vNu").value);
+    var stat=document.getElementById("vStat").value;
+    document.querySelectorAll("#verkoop [data-for]").forEach(function(q){q.style.display=q.getAttribute("data-for").split(" ").indexOf(stat)>-1?"":"none"});
+    var winst,t;
+    if(stat==="venn"){
+      var pct=Math.min(90,Math.max(0,num(document.getElementById("vPct").value)))/100;
+      winst=nn/(1-pct);
+      t="Netto "+fmt.format(nn)+", plus "+fmt1.format(pct*100)+"% voor belastingen en bijdragen, is "+fmt.format(winst)+" winst.";
+    }else{
+      var r=fiscaal(nn*12,stat,document.getElementById("vPrimo").value==="ja",num(document.getElementById("vKind").value),num(document.getElementById("vKind3").value),num(document.getElementById("vGem").value)/100,num(document.getElementById("vLoon").value));
+      winst=r.winst/12;
+      t="Netto "+fmt.format(nn)+" per maand. Daarbovenop komt ongeveer "+fmt.format(r.pb/12)+" personenbelasting en "+fmt.format(r.sb/12)+" sociale bijdragen per maand. Dan heb je "+fmt.format(winst)+" winst nodig.";
+    }
+    var omzet=winst+kost;
+    document.getElementById("omzetBig").textContent=fmt.format(omzet);
+    t+=" Plus "+fmt.format(kost)+" kosten is "+fmt.format(omzet)+" omzet.";
+    if(prijs>0){var nodig=omzet/prijs;t+=" Aan "+fmt.format(prijs)+" per verkoop zijn dat "+fmt1.format(Math.ceil(nodig))+" verkopen per maand, of ongeveer "+fmt1.format(Math.ceil(nodig/4.33))+" per week.";
+      if(nu>0){var diff=Math.ceil(nodig)-nu;t+=diff>0?" Dat zijn er "+diff+" meer dan nu.":" Je zit daar nu al boven."}}
+    document.getElementById("omzetCalc").textContent=t;
+  }
+  recalc();
+
+  document.querySelectorAll("[data-copy]").forEach(function(b){b.addEventListener("click",function(){
+    var src=document.getElementById(b.getAttribute("data-copy")),msg=b.parentNode.querySelector(".copied"),txt=src.textContent;
+    function sel(){var r=document.createRange();r.selectNodeContents(src);var s=window.getSelection();s.removeAllRanges();s.addRange(r);msg.textContent="Geselecteerd. Kopieer met je toetsenbord of lang drukken."}
+    try{navigator.clipboard.writeText(txt).then(function(){msg.textContent="Gekopieerd"},sel)}catch(e){sel()}
+  })});
+
+  var tb=document.getElementById("themeBtn");
+  try{var th=localStorage.getItem(KEY+"-theme");if(th)document.documentElement.setAttribute("data-theme",th)}catch(e){}
+  tb.addEventListener("click",function(){var cur=document.documentElement.getAttribute("data-theme")||(matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");var nx=cur==="dark"?"light":"dark";document.documentElement.setAttribute("data-theme",nx);try{localStorage.setItem(KEY+"-theme",nx)}catch(e){}});
+})();
+</script>
+
+<script>
+function meldHoogte(){ try{ var b=document.body, cs=getComputedStyle(b); var h=Math.ceil(b.getBoundingClientRect().height + parseFloat(cs.marginTop) + parseFloat(cs.marginBottom)); window.parent.postMessage({type:'dcc-height', height: h}, '*'); }catch(e){} }
+if(window.ResizeObserver){ new ResizeObserver(meldHoogte).observe(document.body); }
+window.addEventListener('load', meldHoogte);
+window.addEventListener('resize', meldHoogte);
+document.addEventListener('click', function(){ setTimeout(meldHoogte, 60); setTimeout(meldHoogte, 400); });
+document.addEventListener('input', function(){ setTimeout(meldHoogte, 60); });
+window.addEventListener('message', function(e){ if(e.data && e.data.type==='dcc-vraag-hoogte'){ meldHoogte(); } });
+if(document.fonts && document.fonts.ready){ document.fonts.ready.then(meldHoogte); }
+var dccN=0, dccT=setInterval(function(){ meldHoogte(); if(++dccN>20){ clearInterval(dccT); } }, 500);
+</script>
+</body>
+</html>
