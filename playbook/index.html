@@ -108,7 +108,17 @@ footer{margin-top:28px;color:var(--muted);font-size:14px;text-align:left}
   <h1>The Money <span>Reset</span> Playbook</h1>
   <p class="lead">Je playbook voor de komende 4 weken. Je rekent uit wat je echt nodig hebt, je zoekt waar je geld weglekt, je schrijft je 13 wensen voor 2027, en na de laatste avond hou je er één over die jij zelf waarmaakt.</p>
   <div class="owner"><label for="owner">Dit playbook is van</label><input type="text" id="owner" placeholder="jouw naam"></div>
-  <p class="sub">Alles wat je hier invult, blijft bewaard in deze browser op dit toestel. Werk dus telkens op hetzelfde toestel, of schrijf je belangrijkste cijfers ook op papier.</p>
+  <div class="bewaar" role="note" style="margin:22px 0 6px;padding:18px 22px;border:2px solid var(--rouge);border-radius:14px;background:var(--paper)">
+<p style="margin:0 0 8px;font-weight:700;color:var(--rouge);font-size:1.08em">Lees dit eerst: zo blijft je werk bewaard</p>
+<p style="margin:0 0 8px">Alles wat je hier invult, bewaart je Playbook vanzelf. Je hoeft niets op te slaan. Maar het blijft alleen bewaard in deze browser, op dit toestel.</p>
+<ul style="margin:0 0 8px;padding-left:20px">
+<li>Werk altijd op hetzelfde toestel en in dezelfde browser.</li>
+<li>Werk niet in een privévenster, want dan is alles weg zodra je het sluit.</li>
+<li>Open je je Playbook op je gsm of op een andere computer, dan begin je daar met een leeg Playbook.</li>
+<li>Wis je je browsergeschiedenis, dan ben je ook je antwoorden kwijt.</li>
+</ul>
+<p style="margin:0">Werk je liever op papier of op meerdere toestellen? Gebruik dan de invulbare pdf die in The Huddle staat. En schrijf je belangrijkste cijfers sowieso ook ergens op.</p>
+</div>
   <nav class="toc" aria-label="Inhoud">
     <a href="#start">Snelle start</a><a href="#netto">Netto nodig</a><a href="#lekken">Geldlekken</a><a href="#verkoop">Verkoopdoel</a><a href="#wensen">13 wensen</a><a href="#ritueel">Ritueel</a><a href="#agent">Je Money Agent</a><a href="#januari">Week 4</a>
   </nav>
@@ -183,7 +193,7 @@ footer{margin-top:28px;color:var(--muted);font-size:14px;text-align:left}
 
 <section class="week" id="wensen">
   <div class="week-head"><span class="when">Einde week 1 · de avond voor je ritueel</span><h2>Je 13 wensen voor 2027</h2>
-  <p class="intro">Zet eerst The Money Reset Playlist op. Schrijf daarna 13 wensen, voor je zaak en voor je leven. Zet je netto cijfer in minstens een paar ervan. "Ik keer mezelf elke maand 2.800 euro uit" is sterker dan "meer verdienen".</p></div>
+  <p class="intro">Zet eerst The Money Reset Playlist op. Schrijf daarna 13 wensen, voor je zaak en voor je leven. Schrijf ze alsof ze er al zijn: begin met “ik heb” of “ik ben”, nooit met “ik wens”. Zet je netto cijfer in minstens een paar ervan. "Ik keer mezelf elke maand 2.800 euro uit" is sterker dan "meer verdienen".</p></div>
   <div class="wishes" id="wishList"></div>
   <p class="tip">Schrijf ze daarna met de hand over op je 13 briefjes, vouw ze dicht en steek ze in het zakje. Vanaf dan herlees je ze niet meer, ook niet hier. Het gaat erom dat je loslaat.</p>
 </section>
@@ -315,7 +325,7 @@ Vraag ik om een van deze standen, werk dan volgens die stand. Weet ik niet waar 
   document.getElementById("uitgaven").innerHTML=rowsHTML(U,"u");
   document.getElementById("inkomsten").innerHTML=rowsHTML(I,"i");
   document.getElementById("leaks").innerHTML=L.map(function(t,i){return '<div class="leak"><input type="checkbox" id="lc'+i+'" aria-label="'+t+'"><label for="la'+i+'">'+t+'</label><div class="row euro" style="display:block"><input type="number" inputmode="decimal" min="0" id="la'+i+'" placeholder="per maand"></div></div>'}).join("");
-  document.getElementById("wishList").innerHTML=Array.from({length:13},function(_,i){return '<div class="wish'+(i==12?' last':'')+'"><b>'+(i+1)+'</b><input type="text" id="w'+i+'" aria-label="Wens '+(i+1)+'" placeholder="Ik wens dat ik in 2027..."></div>'}).join("");
+  document.getElementById("wishList").innerHTML=Array.from({length:13},function(_,i){return '<div class="wish'+(i==12?' last':'')+'"><b>'+(i+1)+'</b><input type="text" id="w'+i+'" aria-label="Wens '+(i+1)+'" placeholder="'+(i%2?'Ik ben ...':'Ik heb ...')+'"></div>'}).join("");
   document.getElementById("days").innerHTML=D.map(function(d,i){return '<div class="day" id="day'+i+'"><input type="checkbox" id="dc'+i+'" aria-label="Avond '+(i+1)+' gedaan"><span class="d">'+d[0]+'</span><span class="t">'+d[1]+'</span></div>'}).join("");
 
   U.forEach(function(_,i){bindText("u"+i)});I.forEach(function(_,i){bindText("i"+i)});
