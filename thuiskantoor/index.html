@@ -1,0 +1,588 @@
+<!doctype html>
+<html lang="nl-BE">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Huur thuiskantoor | De Cijfercoach</title>
+<meta name="description" content="Bereken hoeveel huur je vennootschap jou mag betalen voor je thuiskantoor, wat je netto overhoudt en of de bureauvergoeding meer oplevert.">
+<!--
+  CALCULATOR HUUR THUISKANTOOR AAN JE VENNOOTSCHAP
+  Alle bedragen en percentages staan in CONFIG bovenaan het script.
+  Jaarlijkse update: voeg in CONFIG.jaren een regel toe voor het nieuwe inkomstenjaar
+  (revalorisatiecoëfficiënt, indexeringscoëfficiënt KI, bureauvergoeding).
+  De calculator kiest zelf het huidige jaar, of het laatste jaar dat in CONFIG staat.
+-->
+<style>
+/* Lettertypes van het merk, lokaal geladen */
+@font-face{font-family:'Glitz';src:url('../fonts/glitz.woff2') format('woff2');font-weight:400;font-style:normal;font-display:swap}
+@font-face{font-family:'Outfit';src:url('../fonts/outfit-400.woff2') format('woff2');font-weight:400;font-style:normal;font-display:swap}
+@font-face{font-family:'Outfit';src:url('../fonts/outfit-500.woff2') format('woff2');font-weight:500;font-style:normal;font-display:swap}
+@font-face{font-family:'Outfit';src:url('../fonts/outfit-600.woff2') format('woff2');font-weight:600;font-style:normal;font-display:swap}
+@font-face{font-family:'Outfit';src:url('../fonts/outfit-700.woff2') format('woff2');font-weight:700;font-style:normal;font-display:swap}
+@font-face{font-family:'Outfit';src:url('../fonts/outfit-800.woff2') format('woff2');font-weight:800;font-style:normal;font-display:swap}
+:root{
+  --creme:#feefe5;--perzik:#f9c195;--lila-licht:#b8c5e7;--bordeaux:#b92c52;--bordeaux-donker:#9a2344;--oranje:#f3925a;--lila:#93a3d4;--roze:#e62987;--roze-donker:#c81f73;
+  --ink:#2b1d22;--muted:#6f565d;--line:#f1dccd;--card:#fff;--shadow:0 10px 30px rgba(185,44,82,.08)
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--creme);color:var(--ink);font-family:'Outfit',system-ui,-apple-system,'Segoe UI',Arial,sans-serif;font-size:16px;line-height:1.55;font-weight:400}
+b,strong{font-weight:700}
+.wrap{max-width:760px;margin:0 auto;padding:20px 16px 36px}
+a:focus-visible,button:focus-visible,summary:focus-visible,select:focus-visible,input:focus-visible{outline:3px solid var(--lila);outline-offset:2px}
+.terug{display:inline-block;color:var(--bordeaux);font-weight:600;font-size:14.5px;text-decoration:none;margin:0 0 12px;padding:4px 0}
+.terug:hover{text-decoration:underline}
+.hero{background:linear-gradient(180deg,var(--lila-licht) 0%,#dcc3c8 55%,var(--perzik) 100%);border-radius:24px;padding:32px 26px 30px;margin-bottom:20px}
+.eyebrow{font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:var(--bordeaux);font-weight:700;margin:0 0 10px}
+h1{font-size:clamp(28px,6vw,42px);line-height:1.05;color:var(--bordeaux);margin:0 0 12px}
+.hero-note{margin:14px 0 0;font-size:13.5px;font-weight:600;color:var(--bordeaux)}
+.intro{margin:0;font-size:16.5px}
+.card{background:var(--card);border-radius:20px;box-shadow:var(--shadow);padding:24px 22px;margin-bottom:18px}
+.card h2{font-size:21px;color:var(--bordeaux);margin:0 0 4px}
+.card .sub{color:var(--muted);font-size:14.5px;margin:0 0 18px}
+label.lbl{display:block;font-weight:600;font-size:15px;margin:0 0 7px}
+.field{margin-bottom:16px}
+.hint{font-size:13.5px;color:var(--muted);margin-top:6px}
+.fout{font-size:13.5px;color:var(--bordeaux);font-weight:700;margin-top:6px}
+.fout:empty{display:none}
+select,input[type=text]{width:100%;font:inherit;color:var(--ink);background:#fffaf6;border:1.5px solid var(--line);border-radius:12px;padding:12px 13px;outline:none;transition:border-color .15s,box-shadow .15s;min-height:48px}
+select:focus,input[type=text]:focus{border-color:var(--lila);box-shadow:0 0 0 3px rgba(147,163,212,.25)}
+input[aria-invalid=true]{border-color:var(--bordeaux);background:#fff1f4}
+.money{position:relative}
+.money span{position:absolute;left:13px;top:50%;transform:translateY(-50%);color:var(--muted);pointer-events:none}
+.money input{padding-left:30px;text-align:right;font-variant-numeric:tabular-nums;font-weight:600}
+.unit{position:relative}
+.unit span{position:absolute;right:13px;top:50%;transform:translateY(-50%);color:var(--muted);pointer-events:none}
+.unit input{padding-right:44px;text-align:right;font-weight:600;font-variant-numeric:tabular-nums}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.btn{display:inline-flex;align-items:center;gap:6px;background:var(--bordeaux);color:var(--creme);border:0;border-radius:999px;font:inherit;font-weight:700;font-size:15px;padding:11px 18px;cursor:pointer;transition:background .15s;min-height:44px}
+.btn:hover{background:var(--bordeaux-donker)}
+.btn.ghost{background:transparent;color:var(--bordeaux);border:1.5px solid var(--bordeaux)}
+.btn.ghost:hover{background:#fff1f4}
+.btn.licht{background:var(--creme);color:var(--bordeaux)}
+.btn.licht:hover{background:#fff}
+.knoppen{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 18px}
+/* resultaat */
+.result{background:var(--bordeaux);color:var(--creme);box-shadow:0 14px 34px rgba(185,44,82,.25)}
+.result h2{color:var(--creme)}
+.result .label{font-size:14px;font-weight:600;color:rgba(254,239,229,.85);margin:0}
+.big{font-size:clamp(34px,8vw,50px);line-height:1.05;margin:6px 0 4px;font-variant-numeric:tabular-nums;color:var(--creme)}
+.lead{font-size:16px;margin:0 0 6px;color:rgba(254,239,229,.92)}
+.advies{background:var(--creme);color:var(--ink);border-radius:14px;padding:14px 16px;margin:16px 0 0;font-size:16px}
+.advies b{color:var(--bordeaux)}
+.kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:14px 0}
+.kpi{background:rgba(255,255,255,.1);border-radius:14px;padding:13px}
+.kpi.win{background:rgba(254,239,229,.22);outline:2px solid var(--creme)}
+.kpi .k{font-size:13px;color:rgba(254,239,229,.85);font-weight:500}
+.kpi .v{font-size:21px;font-weight:800;font-variant-numeric:tabular-nums}
+.kpi .w{font-size:12.5px;font-weight:700}
+.note{border-radius:14px;padding:12px 15px;font-size:14.5px;margin:10px 0 0;background:rgba(249,193,149,.2);border-left:4px solid var(--perzik)}
+.tip{border-radius:14px;padding:12px 15px;font-size:14.5px;margin:10px 0 0;background:rgba(255,255,255,.1);border-left:4px solid var(--lila-licht)}
+.result-knoppen{display:flex;flex-wrap:wrap;gap:8px;margin:16px 0 0}
+.meer{margin:16px 0 0;background:rgba(255,255,255,.08);border-radius:14px;padding:0 15px}
+.meer summary{cursor:pointer;font-weight:700;padding:13px 0;list-style:none;display:flex;justify-content:space-between;align-items:center;gap:10px}
+.meer summary::-webkit-details-marker{display:none}
+.meer summary::after{content:'+';font-size:22px;line-height:1}
+.meer[open] summary::after{content:'−'}
+.meer[open]{padding-bottom:12px}
+.stappen{font-size:14.5px;margin:4px 0 14px}
+.stappen .t{font-weight:700;font-size:15.5px;margin-bottom:4px}
+.stappen .r{display:flex;justify-content:space-between;gap:10px;padding:3px 0}
+.stappen .r b{font-variant-numeric:tabular-nums;white-space:nowrap}
+.stappen .r.tot{border-top:1px solid rgba(254,239,229,.35);margin-top:4px;padding-top:7px;font-weight:700}
+.leeg-staat{font-size:16px;margin:4px 0 0;color:rgba(254,239,229,.92)}
+.foutlijst{background:var(--creme);color:var(--ink);border-radius:14px;padding:12px 16px;margin:12px 0 0;font-size:15px}
+.foutlijst ul{margin:6px 0 0;padding-left:20px}
+.disclaimer{font-size:13px;color:var(--muted);margin-top:18px}
+/* uitleg */
+.uitleg{background:#fff;border-radius:20px;box-shadow:var(--shadow);padding:18px 22px;margin-bottom:14px;border-left:5px solid var(--lila)}
+.uitleg summary{cursor:pointer;font-weight:700;color:var(--bordeaux);font-size:16.5px;list-style:none;display:flex;justify-content:space-between;align-items:center;gap:12px}
+.uitleg summary::-webkit-details-marker{display:none}
+.uitleg summary::after{content:'+';font-size:22px;line-height:1;color:var(--bordeaux)}
+.uitleg[open] summary::after{content:'−'}
+.uitleg ol,.uitleg ul{margin:12px 0 0;padding-left:22px}
+.uitleg li{margin:0 0 8px;font-size:15px}
+.uitleg p{font-size:15px;margin:12px 0 0}
+.uitleg .klein{font-size:13.5px;color:var(--muted)}
+/* trajecten */
+.trajecten{margin:26px 0 8px}
+.trajecten h2{font-size:clamp(24px,5vw,32px);line-height:1.1;color:var(--bordeaux);margin:0 0 8px}
+.trajecten .sub{margin:0 0 16px;font-size:16px}
+.tr-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:14px}
+.tr{display:flex;flex-direction:column;border-radius:20px;padding:22px 20px;color:var(--creme);text-decoration:none;transition:transform .15s}
+.tr:hover{transform:translateY(-3px)}
+.tr.oranje{background:var(--oranje)}
+.tr.bordeaux{background:var(--bordeaux)}
+.tr .voor{display:inline-block;align-self:flex-start;background:rgba(254,239,229,.22);border-radius:999px;padding:3px 11px;font-size:12.5px;font-weight:600;margin-bottom:12px}
+.tr h3{font-size:22px;line-height:1.1;margin:0 0 8px}
+.tr p{margin:0 0 18px;font-size:15px;line-height:1.5;flex:1}
+.tr .go{align-self:flex-start;background:var(--creme);color:var(--bordeaux);font-weight:700;border-radius:999px;padding:9px 16px;font-size:14.5px}
+.vraag{margin-top:22px;padding-top:18px;border-top:1px solid rgba(254,239,229,.25);text-align:center}
+.vraag p{margin:0;font-size:clamp(19px,4.5vw,23px);line-height:1.25;color:var(--creme)}
+.naar-trajecten{display:block;width:100%;text-align:center;background:var(--roze);color:#fff;border:0;font:inherit;font-weight:700;font-style:italic;border-radius:999px;padding:15px 20px;margin-top:14px;cursor:pointer;transition:background .15s}
+.naar-trajecten:hover{background:var(--roze-donker)}
+.brand{display:flex;justify-content:center;margin-top:22px;font-size:13px;color:var(--muted);letter-spacing:.04em}
+.print-only{display:none}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);border:0}
+@media (max-width:560px){.two{grid-template-columns:1fr}.kpis{grid-template-columns:1fr}.card{padding:20px 16px}.hero{padding:26px 20px}.uitleg{padding:16px 16px}.btn{flex:1 1 auto;justify-content:center}}
+h1,h2,h3,.big,.vraag p{font-family:'Glitz','Outfit',system-ui,sans-serif !important;font-weight:400 !important;letter-spacing:.005em !important;word-spacing:.14em}
+/* afdrukken of bewaren als pdf: enkel je gegevens en je resultaat */
+@media print{
+  @page{margin:14mm}
+  html,body{background:#fff;font-size:12pt}
+  .wrap{max-width:none;padding:0}
+  .terug,.knoppen,.result-knoppen,.vraag,.trajecten,#invoer,.uitleg,.hero .intro{display:none !important}
+  .hero{background:none;padding:0;margin:0 0 10px;border-radius:0}
+  .print-only{display:block}
+  .card,.result{box-shadow:none;border:1px solid #ccc;background:#fff !important;color:#000 !important;break-inside:avoid}
+  .result *{color:#000 !important}
+  .result .big{color:#b92c52 !important}
+  .kpi,.meer,.note,.tip,.advies{background:#fff !important;border:1px solid #ddd}
+  .meer summary::after{content:''}
+  .disclaimer{color:#333}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="terug" href="../">← Alle calculators</a>
+  <header class="hero">
+    <p class="eyebrow">De Cijfercoach · Calculator</p>
+    <h1>Hoeveel huur mag je vennootschap jou betalen voor je thuiskantoor?</h1>
+    <p class="intro">Vul je kadastraal inkomen en de oppervlakte van je bureau in. Je ziet meteen hoeveel huur de fiscus aanvaardt, wat je daarvan netto overhoudt en of de bureauvergoeding je niet meer oplevert.</p>
+    <p class="hero-note" id="heroNote"></p>
+  </header>
+
+  <details class="uitleg" id="gebruik">
+    <summary>Zo gebruik je deze calculator</summary>
+    <ol>
+      <li><b>Zoek je kadastraal inkomen op.</b> Het staat op je aanslagbiljet van de onroerende voorheffing. Neem het <b>niet geïndexeerde</b> bedrag van je hele woning. Dat is het kleinere getal.</li>
+      <li><b>Meet je bureau en je woning.</b> De calculator rekent zelf uit welk deel van het kadastraal inkomen bij je bureau hoort.</li>
+      <li><b>Laat de huur leeg</b> om met het maximum te rekenen. Of vul de huur in die je wil vragen.</li>
+      <li><b>Lees het advies.</b> Je kiest voor dezelfde ruimte de huur of de bureauvergoeding, nooit allebei.</li>
+    </ol>
+    <p class="klein">Eerst eens kijken hoe het werkt? Klik op <b>Probeer met een voorbeeld</b>.</p>
+  </details>
+
+  <div id="invoer">
+  <div class="knoppen">
+    <button type="button" class="btn" id="btnVoorbeeld">Probeer met een voorbeeld</button>
+    <button type="button" class="btn ghost" id="btnWis">Alles wissen</button>
+  </div>
+
+  <section class="card" aria-labelledby="h-woning">
+    <h2 id="h-woning">Je woning</h2>
+    <p class="sub">Je vindt alles op je aanslagbiljet van de onroerende voorheffing en op het plan van je woning.</p>
+    <div class="field">
+      <label class="lbl" for="ki">Kadastraal inkomen van je hele woning, niet geïndexeerd</label>
+      <div class="money"><span aria-hidden="true">€</span><input type="text" id="ki" inputmode="decimal" placeholder="bv. 1.500" autocomplete="off" aria-describedby="ki-hint ki-fout"></div>
+      <div class="hint" id="ki-hint">Kort KI genoemd. Op je aanslagbiljet staan twee bedragen: neem het kleinste.</div>
+      <div class="fout" id="ki-fout"</div>
+    </div>
+    <div class="two">
+      <div class="field"><label class="lbl" for="m2b">Oppervlakte bureau</label><div class="unit"><span aria-hidden="true">m²</span><input type="text" id="m2b" inputmode="decimal" placeholder="bv. 15" autocomplete="off" aria-describedby="m2b-fout"></div><div class="fout" id="m2b-fout"</div></div>
+      <div class="field"><label class="lbl" for="m2t">Oppervlakte woning</label><div class="unit"><span aria-hidden="true">m²</span><input type="text" id="m2t" inputmode="decimal" placeholder="bv. 150" autocomplete="off" aria-describedby="m2t-fout"></div><div class="fout" id="m2t-fout"</div></div>
+    </div>
+    <div class="hint" style="margin:-8px 0 16px">Ontvang je thuis klanten? Dan mag je ook een stuk tellen van de ruimtes die zij gebruiken, zoals de inkom of het toilet.</div>
+    <div class="field">
+      <label class="lbl" for="own">Wie is eigenaar van de woning?</label>
+      <select id="own"><option value="1">Ik alleen</option><option value="0.5">Ik en mijn partner, elk de helft</option><option value="x">Ik en mijn partner, een andere verdeling</option></select>
+    </div>
+    <div class="field" id="shareWrap" hidden>
+      <label class="lbl" for="share">Jouw aandeel in de woning</label>
+      <div class="unit"><span aria-hidden="true">%</span><input type="text" id="share" inputmode="decimal" value="50" autocomplete="off" aria-describedby="share-fout"></div>
+      <div class="fout" id="share-fout"</div>
+    </div>
+    <div class="field">
+      <label class="lbl" for="jaar">Inkomstenjaar</label>
+      <select id="jaar"></select>
+    </div>
+  </section>
+
+  <section class="card" aria-labelledby="h-huur">
+    <h2 id="h-huur">De huur</h2>
+    <p class="sub">Laat de huur leeg om met het maximum te rekenen.</p>
+    <div class="field">
+      <label class="lbl" for="huur">Huur voor de ruimte, per maand</label>
+      <div class="money"><span aria-hidden="true">€</span><input type="text" id="huur" inputmode="decimal" placeholder="maximum" autocomplete="off" aria-describedby="huur-hint huur-fout"></div>
+      <div class="hint" id="huur-hint">Het totaal dat je vennootschap betaalt, ook voor het deel van je partner.</div>
+      <div class="fout" id="huur-fout"</div>
+    </div>
+    <div class="field">
+      <label class="lbl" for="meub">Huur voor meubels, per maand (niet verplicht)</label>
+      <div class="money"><span aria-hidden="true">€</span><input type="text" id="meub" inputmode="decimal" placeholder="0" autocomplete="off" aria-describedby="meub-hint meub-fout"></div>
+      <div class="hint" id="meub-hint">Enkel als je eigen meubels mee verhuurt en dat apart in het contract staat, met een lijst van de meubels.</div>
+      <div class="fout" id="meub-fout"</div>
+    </div>
+    <div class="field">
+      <label class="lbl" for="ener">Vergoeding voor energie naast de huur, per maand (niet verplicht)</label>
+      <div class="money"><span aria-hidden="true">€</span><input type="text" id="ener" inputmode="decimal" placeholder="0" autocomplete="off" aria-describedby="ener-hint ener-fout"></div>
+      <div class="hint" id="ener-hint">Het deel van je verwarming, elektriciteit en water dat bij je bureau hoort. Belastingvrij als je de berekening kan tonen.</div>
+      <div class="fout" id="ener-fout"</div>
+    </div>
+  </section>
+
+  <section class="card" aria-labelledby="h-bel">
+    <h2 id="h-bel">Jouw belastingen</h2>
+    <div class="two">
+      <div class="field"><label class="lbl" for="tar">Hoogste belastingschijf</label>
+        <select id="tar" aria-describedby="tar-hint"><option value="0.5">50%</option><option value="0.45">45%</option><option value="0.4">40%</option><option value="0.25">25%</option></select></div>
+      <div class="field"><label class="lbl" for="gem">Gemeentebelasting</label><div class="unit"><span aria-hidden="true">%</span><input type="text" id="gem" inputmode="decimal" value="7" autocomplete="off" aria-describedby="gem-fout"></div><div class="fout" id="gem-fout"</div></div>
+    </div>
+    <div class="hint" id="tar-hint">Keer je jezelf genoeg loon uit voor het verlaagd tarief van je vennootschap? Dan zit je zo goed als zeker in de schijf van 50%.</div>
+  </section>
+  </div>
+
+  <section class="card result" id="out" aria-live="polite" aria-atomic="false"></section>
+
+  <details class="uitleg">
+    <summary>Hoe rekent deze calculator?</summary>
+    <ul id="regels"></ul>
+    <p class="klein">De uitkomst is een schatting voor jou alleen, zonder je andere inkomsten of aftrekken. Leg ze voor aan je boekhouder voor je een huurcontract opmaakt.</p>
+  </details>
+
+  <details class="uitleg">
+    <summary>Wat heb je nodig als je huur vraagt?</summary>
+    <ul>
+      <li>Een <b>schriftelijk huurcontract</b> tussen jou (en je partner als die mee eigenaar is) en je vennootschap. Verhuur je meubels, zet die huur dan apart in het contract, met een lijst van de meubels. Staat er geen verdeling in, dan telt de fiscus 40% van de huur als huur voor meubels.</li>
+      <li><b>Registratie via MyRent</b> binnen 4 maanden. Dat kost 0,2% van de totale huur over de looptijd. Je vennootschap mag dat betalen.</li>
+      <li>Je vennootschap voegt bij haar aangifte het <b>formulier 270 MLH</b> toe, met de betaalde huur. Zonder dat formulier mag ze de huur niet aftrekken.</li>
+      <li>Jij geeft de huur en het KI van het verhuurde deel aan in je <b>personenbelasting</b>.</li>
+      <li>Een <b>marktconforme huur</b>. Vergelijk met wat een coworking vraagt voor een gelijkaardige ruimte.</li>
+      <li>Ben je zelf huurder van je woning? Dan is dit onderverhuur, en moet je verhuurder akkoord gaan.</li>
+    </ul>
+  </details>
+
+  <details class="uitleg">
+    <summary>Wat betekent het voor je woning?</summary>
+    <ul>
+      <li>Je <b>onroerende voorheffing</b> verandert niet. Die blijft gewoon voor jouw rekening.</li>
+      <li>Het verhuurde stuk telt niet meer als je eigen woning. Verkoop je je woning binnen 5 jaar na de aankoop, vraag dan aan je boekhouder of er op dat stuk een <b>meerwaarde</b> belast wordt.</li>
+      <li>Kocht je je woning met een <b>verlaagd tarief registratierechten</b>, of heb je nog een <b>woonbonus</b> voor een oude lening? Laat dan nakijken of de verhuur daar invloed op heeft. De federale woonbonus bestaat niet meer sinds aanslagjaar 2026.</li>
+      <li>Werk je met de <b>bureauvergoeding</b>, dan verandert er niets aan je woning. Je vennootschap huurt dan niets.</li>
+    </ul>
+  </details>
+
+  <section class="trajecten" id="trajecten" aria-labelledby="h-trajecten"></section>
+
+  <p class="disclaimer" id="disclaimer"></p>
+  <div class="brand">de cijfercoach · Kimberley Van Poecke</div>
+</div>
+
+<script>
+/* ======================= CONFIG: hier pas je bedragen aan =======================
+   Laatst gecontroleerd: 13 november 2026.
+   Bronnen:
+   - Revalorisatiecoëfficiënt KI (art. 13 KB/WIB 92), herkwalificatie art. 32 WIB 92:
+     inkomsten 2025: 5,63 / inkomsten 2026: 5,75
+     https://www.securex.be/nl/lex4you/werkgever/nieuws/herwaarderingscoefficient-van-het-kadastraal-inkomen-5,75
+     https://legalnews.be/vennootschappen-verenigingen/een-bureelruimte-verhuren-aan-uw-vennootschap-wat-zijn-de-fiscale-spelregels-lemon-consult/ (2 april 2026)
+     https://billy.tech/nl/herkwalificatie-van-huur-als-bezoldiging/ (5,63 voor 2025)
+   - Indexeringscoëfficiënt KI: inkomsten 2025: 2,2446 / inkomsten 2026: 2,3000 (FOD Financiën, BDO kerncijfers 2026)
+     https://www.bdo.be/en-gb/insights/news-alerts/2026/cadastral-income-indexation
+   - Kostenforfait 40% met plafond 2/3 gerevaloriseerd KI, minimum belastbaar = geïndexeerd KI × 1,40:
+     https://www.dewaele.com/nl/advies/belasting-inkomsten-particuliere-bedrijfsvastgoed-verhuur (27 januari 2026)
+   - Meubels: 50% kostenforfait, 30% tarief, zonder verdeling 40% roerend (Lemon Consult, zie boven)
+   - Bureauvergoeding (circulaire 2021/C/20 en addenda 2026/C/38 en 2026/C/84):
+     154,74 tot feb 2025, 157,83 vanaf 1/3/2025, 160,99 vanaf 1/3/2026, 164,21 vanaf 1/9/2026
+     https://blog.forumforthefuture.be/nl/article/circulaire-2026c84-over-tussenkomsten-van-de-werkgever-voor-thuiswerk/32518
+   - Sociale bijdragen zelfstandige 2026: 20,5% tot € 75.024,54 (zelfde als calculator loonpakket)
+   - Forfaitaire beroepskosten bedrijfsleider: 3% (maximum € 3.200, zelfde als calculator loonpakket)
+   ================================================================================ */
+var CONFIG = {
+  /* per inkomstenjaar (aanslagjaar = jaar + 1, wordt automatisch berekend)
+     coef      = revalorisatiecoëfficiënt van het KI (voor de maximale huur en het plafond van het kostenforfait)
+     kiIndex   = indexeringscoëfficiënt van het KI (voor het minimum belastbaar bedrag)
+     bureauJaar  = bureauvergoeding voor het hele jaar, met de indexeringen in de loop van het jaar
+     bureauMaand = bedrag per maand op het einde van het jaar
+     bureauUitleg = korte zin over de bedragen in de loop van het jaar
+     voorlopig = true zolang een cijfer nog niet zeker is */
+  jaren: [
+    { jaar: 2026, coef: 5.75, kiIndex: 2.3000, bureauJaar: 1938.44, bureauMaand: 164.21, bureauUitleg: '€ 157,83 in januari en februari, € 160,99 van maart tot augustus en € 164,21 sinds september', voorlopig: false },
+    { jaar: 2025, coef: 5.63, kiIndex: 2.2446, bureauJaar: 1887.78, bureauMaand: 157.83, bureauUitleg: '€ 154,74 in januari en februari en € 157,83 vanaf maart', voorlopig: false }
+  ],
+  breuk: 5/3,               /* maximale huur = KI van het verhuurde deel × coef × 5/3 (art. 32 WIB 92) */
+  kostenforfait: 0.40,      /* forfaitaire kosten op huur van een gebouw */
+  plafondForfait: 2/3,      /* plafond van dat forfait: 2/3 van het gerevaloriseerd KI */
+  minimumFactor: 1.40,      /* belastbaar minimum: geïndexeerd KI × 1,40 */
+  meubelForfait: 0.50,      /* kostenforfait op huur van meubels */
+  meubelTarief: 0.30,       /* afzonderlijk tarief op huur van meubels */
+  socialeBijdragen: 0.205,  /* indicatief, op het geherkwalificeerde stuk (berekend op het inkomen na aftrek van de bijdragen zelf) */
+  beroepskostenLoon: 0.03,  /* forfaitaire beroepskosten bedrijfsleider */
+  grensPercentage: 0.15,    /* geen wet: veel boekhouders vinden een groter beroepsgedeelte moeilijk te verdedigen */
+  kleinVerschil: 250,       /* verschil per jaar waaronder de calculator zegt dat het verschil klein is */
+  kiHoog: 6000,             /* boven dit KI vraagt de calculator of je niet het geïndexeerde bedrag nam */
+  /* trajecten: Financial Co-Pilot staat er altijd bij, want deze calculator is voor ondernemers met een vennootschap */
+  trajecten: [
+    { naam: 'Financial Fundamentals', voor: 'Voor vrouwen in hoofdberoep', kleur: 'oranje', url: 'https://decijfercoach.be/financialfundamentals/',
+      tekst: 'Leer je cijfers begrijpen, neem financieel sterke beslissingen en bouw een zaak die niet alleen groeit, maar ook iets oplevert.' },
+    { naam: 'Financial Co-Pilot', voor: 'Voor vrouwen met omzet boven € 200.000', kleur: 'bordeaux', url: 'https://decijfercoach.be/financialcopilot/',
+      tekst: 'Zes maanden 1 op 1, met mij als je financiële rechterhand. Voor gevestigde ondernemers die strategisch willen sturen op hun cijfers.' }
+  ],
+  trajectenTitel: 'Zo word je zelf sterk in je cijfers',
+  trajectenIntro: 'Huur, onkostenvergoeding, loon of dividend: elke keuze heeft een prijs. In mijn trajecten leer je zelf zien wat elke euro uit je vennootschap jou netto oplevert. Mijn trajecten zijn er exclusief voor vrouwelijke ondernemers.',
+  vraagTekst: 'Wil je dit elk jaar zelf kunnen inschatten?',
+  knopTekst: 'Ontdek mijn trajecten',
+  voorbeeld: { ki: '1.500', m2b: '15', m2t: '150', own: '1', share: '50', huur: '', meub: '', ener: '', tar: '0.5', gem: '7' }
+};
+/* ================================================================================ */
+
+var $ = function(id){ return document.getElementById(id); };
+var VELDEN = ['ki','m2b','m2t','share','huur','meub','ener','gem'];
+
+/* leest een bedrag zoals mensen het typen: 1.500 / 1500 / 1.500,50 / 12,5
+   geeft null bij een leeg veld en NaN bij onzin of een negatief getal */
+function leesGetal(v){
+  v = String(v == null ? '' : v).replace(/[€%\s ]/g,'').replace(/m²|m2/gi,'');
+  if(v === '') return null;
+  if(/^-/.test(v)) return NaN;
+  if(!/^[0-9.,]+$/.test(v)) return NaN;
+  if(v.indexOf(',') > -1){ v = v.replace(/\./g,'').replace(',', '.'); }
+  else if((v.match(/\./g)||[]).length > 1 || /\.\d{3}$/.test(v)){ v = v.replace(/\./g,''); }
+  var n = parseFloat(v);
+  return isFinite(n) ? n : NaN;
+}
+function eur(n){ return (n < -0.005 ? '− ' : '') + '€ ' + Math.abs(n||0).toLocaleString('nl-BE',{minimumFractionDigits:2,maximumFractionDigits:2}); }
+function eur0(n){ return (n < -0.5 ? '− ' : '') + '€ ' + Math.abs(Math.round(n||0)).toLocaleString('nl-BE'); }
+function pct(n){ return (n*100).toLocaleString('nl-BE',{maximumFractionDigits:1}) + '%'; }
+function getal(n){ return n.toLocaleString('nl-BE',{maximumFractionDigits:2}); }
+function esc(s){ return String(s).replace(/[&<>"]/g,function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
+
+function meldHoogte(){ try{ window.parent.postMessage({type:'dcc-height', height: document.documentElement.scrollHeight}, '*'); }catch(e){} }
+
+/* jaarkeuze: het huidige jaar, of het laatste jaar dat in CONFIG staat */
+var HUIDIG = new Date().getFullYear();
+(function(){
+  var lijst = CONFIG.jaren.slice().sort(function(a,b){ return b.jaar - a.jaar; }), h = '', gekozen = null;
+  lijst.forEach(function(j){ if(gekozen === null && j.jaar <= HUIDIG) gekozen = j.jaar; });
+  if(gekozen === null) gekozen = lijst[lijst.length-1].jaar;
+  lijst.forEach(function(j){
+    h += '<option value="' + j.jaar + '"' + (j.jaar === gekozen ? ' selected' : '') + '>' + j.jaar + ' (aanslagjaar ' + (j.jaar+1) + ')' + (j.voorlopig ? ', voorlopige cijfers' : '') + '</option>';
+  });
+  $('jaar').innerHTML = h;
+})();
+
+function jaarInfo(){
+  var jaar = parseInt($('jaar').value, 10);
+  return CONFIG.jaren.filter(function(x){ return x.jaar === jaar; })[0];
+}
+
+function zetRegels(j){
+  $('regels').innerHTML =
+    '<li><b>Maximale huur</b> = niet geïndexeerd KI van je bureau × ' + getal(j.coef) + ' × 5/3. Die ' + getal(j.coef) + ' is de revalorisatiecoëfficiënt voor ' + j.jaar + ': een getal van de fiscus dat het oude KI omzet naar vandaag. Het KI van je bureau = KI van je woning × oppervlakte bureau / oppervlakte woning.</li>' +
+    '<li>Huur tot dat maximum is <b>inkomen uit vastgoed</b>. Je betaalt er geen sociale bijdragen op. De fiscus trekt 40% kosten af (met een plafond van 2/3 × KI × ' + getal(j.coef) + ') en belast de rest aan je hoogste schijf plus gemeentebelasting. Er is wel een minimum: je wordt altijd belast op minstens het geïndexeerde KI van je bureau × 1,40 (KI × ' + getal(j.kiIndex) + ' × 1,40).</li>' +
+    '<li>Huur boven het maximum wordt <b>belast als loon</b>. Dat heet herkwalificatie. De calculator rekent daar indicatief ' + pct(CONFIG.socialeBijdragen) + ' sociale bijdragen en ' + pct(CONFIG.beroepskostenLoon) + ' forfaitaire beroepskosten op.</li>' +
+    '<li>Ben je samen eigenaar, dan geldt het maximum voor jouw aandeel. Het deel van je partner wordt niet als loon belast als die geen bestuurder is van je vennootschap.</li>' +
+    '<li><b>Meubels</b> zijn roerend inkomen: ' + pct(CONFIG.meubelForfait) + ' kosten eraf, de rest belast aan ' + pct(CONFIG.meubelTarief) + ' plus gemeentebelasting.</li>' +
+    '<li>De <b>bureauvergoeding</b> is ' + eur(j.bureauMaand) + ' per maand. Voor ' + j.jaar + ' is dat samen ' + eur(j.bureauJaar) + ' (' + j.bureauUitleg + '). Ze is belastingvrij en dekt ook je energie en het gebruik van de ruimte. Voorwaarde: je werkt structureel van thuis uit, gemiddeld minstens één dag per week. Voor dezelfde ruimte kies je de huur of de vergoeding, nooit allebei.</li>';
+}
+
+function zetFout(id, tekst){
+  var el = $(id), f = $(id + '-fout');
+  if(f) f.textContent = tekst || '';
+  if(el){ if(tekst) el.setAttribute('aria-invalid','true'); else el.removeAttribute('aria-invalid'); }
+}
+
+function bereken(){
+  var own = $('own').value;
+  $('shareWrap').hidden = own !== 'x';
+  var j = jaarInfo();
+  zetRegels(j);
+
+  var aj = j.jaar + 1;
+  var nietHuidig = j.jaar < HUIDIG && j === CONFIG.jaren.slice().sort(function(a,b){ return b.jaar - a.jaar; })[0];
+  $('heroNote').textContent = 'Cijfers voor inkomstenjaar ' + j.jaar + ' (aanslagjaar ' + aj + ').' + (nietHuidig ? ' De cijfers voor ' + HUIDIG + ' zijn nog niet bekend.' : '') + ' Deze calculator vervangt geen persoonlijk advies.';
+  $('disclaimer').textContent = 'Deze calculator geeft een indicatieve berekening voor inkomstenjaar ' + j.jaar + ' (aanslagjaar ' + aj + '), met een revalorisatiecoëfficiënt van ' + getal(j.coef) + (j.voorlopig ? ', die nog bevestigd moet worden' : '') + '. Bedragen en regels kunnen wijzigen. De calculator houdt geen rekening met je andere inkomsten, je persoonlijke aftrekken of de belasting van je partner, en vervangt geen persoonlijk advies van je boekhouder. Cijfers laatst nagekeken op 13 november 2026.';
+
+  /* invoer lezen en nakijken */
+  var w = {}, fouten = [];
+  VELDEN.forEach(function(id){ w[id] = leesGetal($(id).value); zetFout(id, ''); });
+  var NAMEN = { ki:'Kadastraal inkomen', m2b:'Oppervlakte bureau', m2t:'Oppervlakte woning', share:'Jouw aandeel', huur:'Huur', meub:'Huur voor meubels', ener:'Vergoeding voor energie', gem:'Gemeentebelasting' };
+  function fout(id, tekst){ zetFout(id, tekst); fouten.push('<a href="#' + id + '" onclick="$(\'' + id + '\').focus();return false" style="color:inherit"><b>' + NAMEN[id] + ':</b></a> ' + esc(tekst)); }
+  ['ki','m2b','m2t','huur','meub','ener','gem'].forEach(function(id){
+    if(w[id] !== null && isNaN(w[id])) fout(id, 'Vul hier een positief getal in, bijvoorbeeld 1.500 of 12,5.');
+  });
+  if(w.m2b === 0) fout('m2b', 'Je bureau moet groter zijn dan 0 m².');
+  if(w.m2t === 0) fout('m2t', 'Je woning moet groter zijn dan 0 m².');
+  if(w.m2b > 0 && w.m2t > 0 && w.m2b > w.m2t) fout('m2b', 'Je bureau kan niet groter zijn dan je hele woning.');
+  if(w.ki === 0) fout('ki', 'Het kadastraal inkomen moet groter zijn dan € 0.');
+  if(w.gem !== null && w.gem > 12) fout('gem', 'Dat lijkt te hoog. De gemeentebelasting ligt meestal tussen 0% en 9%.');
+  var share = 1;
+  if(own === 'x'){
+    if(w.share === null || isNaN(w.share) || w.share <= 0 || w.share > 100){ fout('share', 'Vul je aandeel in als een getal tussen 1 en 100.'); share = NaN; }
+    else share = w.share / 100;
+  } else share = parseFloat(own);
+
+  var ontbreekt = w.ki === null || w.m2b === null || w.m2t === null;
+  if(fouten.length){
+    $('out').innerHTML = '<h2>Jouw resultaat</h2><div class="foutlijst"><b>Kijk dit even na:</b><ul>' + fouten.map(function(f){ return '<li>' + f + '</li>'; }).join('') + '</ul></div>';
+    meldHoogte(); return;
+  }
+  if(ontbreekt){
+    $('out').innerHTML = '<h2>Jouw resultaat</h2><p class="leeg-staat">Vul je kadastraal inkomen en de oppervlakte van je bureau en je woning in. Dan zie je hier meteen je maximale huur en het beste alternatief.</p><div class="result-knoppen"><button type="button" class="btn licht" onclick="vulVoorbeeld()">Probeer met een voorbeeld</button></div>';
+    meldHoogte(); return;
+  }
+
+  var ki = w.ki, m2b = w.m2b, m2t = w.m2t;
+  var gem = (w.gem || 0) / 100, T = parseFloat($('tar').value) * (1 + gem);
+  var partner = share < 1;
+
+  /* maximale huur */
+  var p = m2b / m2t;
+  var kiDeel = ki * p, rki = kiDeel * j.coef;
+  var maxTot = rki * CONFIG.breuk, maxJij = maxTot * share;
+
+  /* huur: leeg = maximum voor de hele ruimte */
+  var leeg = w.huur === null;
+  var huurTot = leeg ? maxTot : w.huur * 12;
+  var huurJij = huurTot * share;
+  var onr = Math.min(huurJij, maxJij), extra = Math.max(0, huurJij - maxJij);
+
+  /* stuk tot het maximum: inkomen uit vastgoed */
+  var kost = Math.min(CONFIG.kostenforfait * onr, CONFIG.plafondForfait * rki * share);
+  var minimum = kiDeel * share * j.kiIndex * CONFIG.minimumFactor;
+  var belastbaar = onr > 0 ? Math.max(onr - kost, minimum) : 0;
+  var opMinimum = onr > 0 && minimum > onr - kost;
+  var belOnr = belastbaar * T;
+
+  /* stuk boven het maximum: belast als loon */
+  var f = (1 - CONFIG.beroepskostenLoon) * CONFIG.socialeBijdragen;
+  var soc = extra * f / (1 + CONFIG.socialeBijdragen);
+  var belExtra = Math.max(0, extra * (1 - CONFIG.beroepskostenLoon) - soc) * T;
+
+  /* meubels en energie */
+  var meubJ = (w.meub || 0) * 12 * share;
+  var belMeub = meubJ * (1 - CONFIG.meubelForfait) * CONFIG.meubelTarief * (1 + gem);
+  var ener = (w.ener || 0) * 12;
+
+  var netto = huurJij - belOnr - soc - belExtra + meubJ - belMeub + ener;
+  var forf = j.bureauJaar;
+  var verschil = netto - forf, huurWint = verschil > 0, klein = Math.abs(verschil) < CONFIG.kleinVerschil;
+
+  /* hoofdgetal en advies */
+  var h = '<h2>Jouw resultaat</h2>';
+  h += '<p class="label">' + (partner ? 'Maximale huur voor jouw deel' : 'Maximale huur voor je bureau') + '</p>';
+  h += '<div class="big">' + eur(maxJij / 12) + ' <span style="font-size:.5em">per maand</span></div>';
+  h += '<p class="lead">Dat is ' + eur0(maxJij) + ' per jaar. Daarboven wordt de huur belast als loon.' + (partner ? ' Voor de hele ruimte, met het deel van je partner erbij: ' + eur(maxTot / 12) + ' per maand.' : '') + '</p>';
+
+  var advies;
+  if(klein) advies = 'Het verschil is klein: ' + eur0(Math.abs(verschil)) + ' per jaar. <b>Kies de bureauvergoeding</b>, want die vraagt veel minder papierwerk.';
+  else if(huurWint) advies = '<b>Kies de huur.</b> Die levert jou ' + eur0(verschil) + ' per jaar meer op dan de bureauvergoeding.';
+  else advies = '<b>Kies de bureauvergoeding.</b> Die levert jou ' + eur0(-verschil) + ' per jaar meer op dan de huur, zonder huurcontract.';
+  h += '<p class="advies">' + advies + '</p>';
+
+  h += '<div class="kpis">' +
+    '<div class="kpi"><div class="k">' + (leeg ? 'Huur aan het maximum' : 'Huur die je vraagt') + (partner ? ', jouw deel' : '') + '</div><div class="v">' + eur0(huurJij) + '</div><div class="k">per jaar, bruto</div></div>' +
+    '<div class="kpi' + (huurWint && !klein ? ' win' : '') + '"><div class="k">Netto voor jou via huur' + (ener > 0 ? ' en energie' : '') + '</div><div class="v">' + eur0(netto) + '</div>' + (huurWint && !klein ? '<div class="w">Levert het meest op</div>' : '<div class="k">per jaar</div>') + '</div>' +
+    '<div class="kpi' + (!huurWint || klein ? ' win' : '') + '"><div class="k">Netto via de bureauvergoeding</div><div class="v">' + eur0(forf) + '</div>' + (!huurWint || klein ? '<div class="w">Jouw beste keuze</div>' : '<div class="k">per jaar, belastingvrij</div>') + '</div>' +
+    '</div>';
+
+  /* belangrijke waarschuwingen blijven zichtbaar */
+  if(extra > 0) h += '<div class="note">Je vraagt ' + eur0(extra) + ' per jaar meer dan het maximum. Dat stuk wordt belast als loon, met sociale bijdragen, en je vennootschap moet er bedrijfsvoorheffing op inhouden: een voorschot op je belastingen.</div>';
+  if(p > CONFIG.grensPercentage) h += '<div class="note">Je bureau is ' + pct(p) + ' van je woning. Veel boekhouders vinden meer dan ' + pct(CONFIG.grensPercentage) + ' moeilijk te verdedigen. Kan je dat uitleggen als de fiscus komt kijken?</div>';
+  if(ki > CONFIG.kiHoog) h += '<div class="note">Een KI van ' + eur0(ki) + ' is hoog voor een woning. Nam je zeker het niet geïndexeerde bedrag? Dat is het kleinste van de twee op je aanslagbiljet.</div>';
+  if(opMinimum) h += '<div class="note">Je huur is zo laag dat de fiscus je belast op een minimum: het geïndexeerde KI van je bureau × 1,40, of ' + eur0(minimum) + ' per jaar.</div>';
+
+  /* lange uitleg inklapbaar */
+  h += '<details class="meer" id="meerUitleg"><summary>Meer uitleg: zo komt de calculator aan deze cijfers</summary>';
+  h += '<div class="stappen"><div class="t">De maximale huur</div>' +
+    '<div class="r"><span>Beroepsgedeelte (' + getal(m2b) + ' m² van ' + getal(m2t) + ' m²)</span><b>' + pct(p) + '</b></div>' +
+    '<div class="r"><span>KI van je bureau</span><b>' + eur(kiDeel) + '</b></div>' +
+    '<div class="r"><span>× revalorisatiecoëfficiënt ' + getal(j.coef) + '</span><b>' + eur(rki) + '</b></div>' +
+    '<div class="r"><span>× 5/3: maximale huur per jaar</span><b>' + eur(maxTot) + '</b></div>' +
+    (partner ? '<div class="r"><span>Jouw aandeel (' + pct(share) + ')</span><b>' + eur(maxJij) + '</b></div>' : '') + '</div>';
+  h += '<div class="stappen"><div class="t">Wat jij netto overhoudt per jaar</div>' +
+    '<div class="r"><span>Huur ' + (leeg ? 'aan het maximum' : 'die je vraagt') + (partner ? ', jouw deel' : '') + '</span><b>' + eur(huurJij) + '</b></div>' +
+    '<div class="r"><span>Waarvan belast als inkomen uit vastgoed</span><b>' + eur(onr) + '</b></div>' +
+    '<div class="r"><span>Kostenforfait van 40%</span><b>' + eur(-kost) + '</b></div>' +
+    '<div class="r"><span>Belastbaar' + (opMinimum ? ' (minimum)' : '') + '</span><b>' + eur(belastbaar) + '</b></div>' +
+    '<div class="r"><span>Belasting daarop (' + pct(T) + ' met gemeentebelasting)</span><b>' + eur(-belOnr) + '</b></div>' +
+    (extra > 0 ? '<div class="r"><span>Sociale bijdragen op het stuk boven het maximum</span><b>' + eur(-soc) + '</b></div><div class="r"><span>Belasting op het stuk boven het maximum</span><b>' + eur(-belExtra) + '</b></div>' : '') +
+    (meubJ > 0 ? '<div class="r"><span>Huur meubels' + (partner ? ', jouw deel' : '') + '</span><b>' + eur(meubJ) + '</b></div><div class="r"><span>Belasting op de meubels</span><b>' + eur(-belMeub) + '</b></div>' : '') +
+    (ener > 0 ? '<div class="r"><span>Energievergoeding (belastingvrij)</span><b>' + eur(ener) + '</b></div>' : '') +
+    '<div class="r tot"><span>Netto voor jou</span><b>' + eur(netto) + '</b></div></div>';
+  h += '<div class="stappen"><div class="t">De bureauvergoeding in ' + j.jaar + '</div>' +
+    '<div class="r"><span>' + j.bureauUitleg.charAt(0).toUpperCase() + j.bureauUitleg.slice(1) + '</span><b>' + eur(forf) + '</b></div></div>';
+  h += '<div class="tip">Voor je vennootschap zijn huur en bureauvergoeding allebei volledig aftrekbaar. De bureauvergoeding dekt ook je energie en het gebruik van de ruimte, dus je laat dan niets extra vergoeden voor dezelfde kosten. Je pc en internet mag je wel apart laten vergoeden.</div>';
+  h += '<div class="tip">Let op: de regels voor de bureauvergoeding zijn officieel geschreven voor werknemers. Voor bedrijfsleiders volgt de fiscus het bedrag in de praktijk meestal. Leg de vergoeding vast in een beslissing van je bestuursorgaan en zorg dat je echt geregeld thuis werkt.</div>';
+  if(partner) h += '<div class="tip">Je partner betaalt zelf belasting op zijn of haar deel van de huur. Dat zit niet in deze berekening.</div>';
+  h += '</details>';
+
+  /* afdrukversie: je gegevens */
+  h += '<div class="print-only stappen" style="margin-top:14px"><div class="t">Jouw gegevens</div>' +
+    '<div class="r"><span>Kadastraal inkomen woning (niet geïndexeerd)</span><b>' + eur(ki) + '</b></div>' +
+    '<div class="r"><span>Oppervlakte bureau en woning</span><b>' + getal(m2b) + ' m² van ' + getal(m2t) + ' m²</b></div>' +
+    '<div class="r"><span>Jouw aandeel in de woning</span><b>' + pct(share) + '</b></div>' +
+    '<div class="r"><span>Huur per maand</span><b>' + (leeg ? 'maximum' : eur(w.huur)) + '</b></div>' +
+    (meubJ > 0 ? '<div class="r"><span>Huur meubels per maand</span><b>' + eur(w.meub) + '</b></div>' : '') +
+    (ener > 0 ? '<div class="r"><span>Energievergoeding per maand</span><b>' + eur(w.ener) + '</b></div>' : '') +
+    '<div class="r"><span>Hoogste schijf en gemeentebelasting</span><b>' + pct(parseFloat($('tar').value)) + ' en ' + pct(gem) + '</b></div>' +
+    '<div class="r"><span>Inkomstenjaar</span><b>' + j.jaar + ' (aanslagjaar ' + aj + ')</b></div></div>';
+
+  h += '<div class="result-knoppen"><button type="button" class="btn licht" onclick="drukAf()">Druk af of bewaar als pdf</button></div>';
+  h += '<div class="vraag"><p>' + CONFIG.vraagTekst + '</p><button type="button" class="naar-trajecten" onclick="naarTrajecten()">' + CONFIG.knopTekst + ' ↓</button></div>';
+
+  var wasOpen = $('meerUitleg') && $('meerUitleg').open;
+  $('out').innerHTML = h;
+  if(wasOpen) $('meerUitleg').open = true;
+  $('meerUitleg').addEventListener('toggle', meldHoogte);
+  meldHoogte();
+}
+
+/* bedragen netjes tonen als je een veld verlaat */
+function formatteer(id){
+  var el = $(id), n = leesGetal(el.value);
+  if(n === null || isNaN(n)) return;
+  var geld = ['ki','huur','meub','ener'].indexOf(id) > -1;
+  el.value = n.toLocaleString('nl-BE', geld && n % 1 !== 0 ? {minimumFractionDigits:2,maximumFractionDigits:2} : {maximumFractionDigits:2});
+}
+
+function vulVoorbeeld(){
+  var v = CONFIG.voorbeeld;
+  Object.keys(v).forEach(function(id){ if($(id)) $(id).value = v[id]; });
+  bereken();
+  $('out').scrollIntoView({behavior:'smooth', block:'start'});
+}
+function wisAlles(){
+  ['ki','m2b','m2t','huur','meub','ener'].forEach(function(id){ $(id).value = ''; });
+  $('own').value = '1'; $('share').value = '50'; $('tar').value = '0.5'; $('gem').value = '7';
+  bereken();
+  $('ki').focus();
+}
+function drukAf(){
+  var m = $('meerUitleg'); if(m) m.open = true;
+  window.print();
+}
+function naarTrajecten(){ $('trajecten').scrollIntoView({behavior:'smooth', block:'start'}); }
+
+['ki','m2b','m2t','own','share','jaar','huur','meub','ener','tar','gem'].forEach(function(id){
+  $(id).addEventListener('input', bereken); $(id).addEventListener('change', bereken);
+});
+VELDEN.forEach(function(id){ $(id).addEventListener('blur', function(){ formatteer(id); }); });
+$('btnVoorbeeld').addEventListener('click', vulVoorbeeld);
+$('btnWis').addEventListener('click', wisAlles);
+Array.prototype.forEach.call(document.querySelectorAll('details'), function(d){ d.addEventListener('toggle', meldHoogte); });
+window.addEventListener('beforeprint', function(){ var m = $('meerUitleg'); if(m) m.open = true; });
+bereken();
+
+(function(){
+  var h = '<p class="eyebrow">The Financial Academy</p><h2 id="h-trajecten">' + CONFIG.trajectenTitel + '</h2><p class="sub">' + CONFIG.trajectenIntro + '</p><div class="tr-grid">';
+  CONFIG.trajecten.forEach(function(t){
+    h += '<a class="tr ' + t.kleur + '" href="' + t.url + '" target="_top"><span class="voor">' + t.voor + '</span><h3>' + t.naam + '</h3><p>' + t.tekst + '</p><span class="go">Ontdek dit traject →</span></a>';
+  });
+  $('trajecten').innerHTML = h + '</div>';
+  meldHoogte();
+})();
+if(window.ResizeObserver){ new ResizeObserver(meldHoogte).observe(document.body); }
+window.addEventListener('load', meldHoogte);
+</script>
+<script>
+/* koppeling met de insluitcode op decijfercoach.be: hoogte op vraag doorgeven en melden dat er een nieuwe pagina geladen is */
+(function(){
+  function hoogte(){ try{ window.parent.postMessage({type:'dcc-height', height: document.documentElement.scrollHeight}, '*'); }catch(e){} }
+  window.addEventListener('message', function(e){ if(e.data && e.data.type === 'dcc-vraag-hoogte') hoogte(); });
+  window.addEventListener('load', function(){ try{ window.parent.postMessage({type:'dcc-nav'}, '*'); }catch(e){} hoogte(); });
+})();
+</script>
+</body>
+</html>
