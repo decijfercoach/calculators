@@ -1,0 +1,855 @@
+<!doctype html>
+<html lang="nl-BE">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Voorafbetalingen vennootschap | De Cijfercoach</title>
+<meta name="description" content="Bereken hoeveel je vennootschap nog vooraf moet betalen om de belastingvermeerdering te vermijden.">
+<!--
+  CALCULATOR VOORAFBETALINGEN VENNOOTSCHAP
+  Boekjaren, aanslagjaren en vervaldagen (met weekends en Belgische feestdagen) worden automatisch berekend
+  op basis van de datum van vandaag. Alle percentages en bedragen staan in CONFIG bovenaan het script.
+  Jaarlijkse update: voeg in CONFIG.percentages en CONFIG.minimumBezoldiging het nieuwe aanslagjaar toe
+  (zodra de FOD Financiën het percentage bekendmaakt, meestal in januari) en pas 'laatstGecontroleerd' aan.
+
+  INSLUITEN MET IFRAME (automatische hoogte):
+  <iframe id="dcc-vab" src="/vab/vennootschap/" style="width:100%;border:0;min-height:900px" title="Calculator voorafbetalingen vennootschap"></iframe>
+  <script>
+  window.addEventListener('message',function(e){
+    if(e.data && e.data.type==='dcc-height'){document.getElementById('dcc-vab').style.height=e.data.height+'px';}
+  });
+  </script>
+-->
+<style>
+/* Lettertypes van het merk, lokaal geladen */
+@font-face{font-family:'Glitz';src:url('../../fonts/glitz.woff2') format('woff2');font-weight:400;font-style:normal;font-display:swap}
+@font-face{font-family:'Outfit';src:url('../../fonts/outfit-400.woff2') format('woff2');font-weight:400;font-style:normal;font-display:swap}
+@font-face{font-family:'Outfit';src:url('../../fonts/outfit-500.woff2') format('woff2');font-weight:500;font-style:normal;font-display:swap}
+@font-face{font-family:'Outfit';src:url('../../fonts/outfit-600.woff2') format('woff2');font-weight:600;font-style:normal;font-display:swap}
+@font-face{font-family:'Outfit';src:url('../../fonts/outfit-700.woff2') format('woff2');font-weight:700;font-style:normal;font-display:swap}
+@font-face{font-family:'Outfit';src:url('../../fonts/outfit-800.woff2') format('woff2');font-weight:800;font-style:normal;font-display:swap}
+:root{
+  /* Merkkleuren De Cijfercoach (studio sa'qia) */
+  --creme:#feefe5;--perzik:#f9c195;--lila-licht:#b8c5e7;--bordeaux:#b92c52;--bordeaux-donker:#9a2344;--oranje:#f3925a;--lila:#93a3d4;--roze:#e62987;--roze-donker:#c81f73;
+  --ink:#2b1d22;--muted:#6e565d;--line:#f1dccd;--card:#fff;--shadow:0 10px 30px rgba(185,44,82,.08)
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--creme);color:var(--ink);font-family:'Outfit',system-ui,-apple-system,'Segoe UI',Arial,sans-serif;font-size:16px;line-height:1.55;font-weight:400}
+b,strong{font-weight:700}
+.wrap{max-width:760px;margin:0 auto;padding:20px 16px 36px}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+.hero{background:linear-gradient(180deg,var(--lila-licht) 0%,#dcc3c8 55%,var(--perzik) 100%);border-radius:24px;padding:32px 26px 30px;margin-bottom:20px}
+.eyebrow{font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:var(--bordeaux);font-weight:700;margin:0 0 10px}
+h1{font-size:clamp(28px,6vw,42px);line-height:1.05;letter-spacing:-.02em;font-weight:800;color:var(--bordeaux);margin:0 0 12px}
+.hero-note{margin:14px 0 0;font-size:13.5px;font-weight:600;color:var(--bordeaux)}
+.intro{color:var(--ink);margin:0;font-size:16.5px}
+.card{background:var(--card);border:0;border-radius:20px;box-shadow:var(--shadow);padding:24px 22px;margin-bottom:18px}
+.card h2{font-size:21px;font-weight:800;letter-spacing:-.01em;color:var(--bordeaux);margin:0 0 4px}
+.card .sub{color:var(--muted);font-size:14.5px;margin:0 0 18px}
+label.lbl{display:block;font-weight:600;font-size:15px;margin:0 0 7px}
+.field{margin-bottom:16px}
+.hint{font-size:13.5px;color:var(--muted);margin-top:6px}
+.fout{font-size:13.5px;color:var(--bordeaux);font-weight:600;margin-top:6px}
+.fout:empty{display:none}
+select,input[type=text]{width:100%;font:inherit;color:var(--ink);background:#fffaf6;border:1.5px solid var(--line);border-radius:12px;padding:12px 13px;outline:none;transition:border-color .15s,box-shadow .15s}
+select:focus,input[type=text]:focus{border-color:var(--lila);box-shadow:0 0 0 3px rgba(147,163,212,.35)}
+input[aria-invalid=true]{border-color:var(--bordeaux);background:#fff5f7}
+a:focus-visible,button:focus-visible,summary:focus-visible,.check input:focus-visible{outline:3px solid var(--lila);outline-offset:2px;border-radius:6px}
+.money{position:relative}
+.money span{position:absolute;left:13px;top:50%;transform:translateY(-50%);color:var(--muted);pointer-events:none}
+.money input{padding-left:30px;text-align:right;font-variant-numeric:tabular-nums;font-weight:600}
+.pctin{position:relative}
+.pctin span{position:absolute;right:13px;top:50%;transform:translateY(-50%);color:var(--muted);pointer-events:none}
+.pctin input{padding-right:32px;text-align:right;font-weight:600}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.check{display:flex;gap:10px;align-items:flex-start;font-size:15px;cursor:pointer;margin-bottom:12px}
+.check input{margin-top:4px;width:18px;height:18px;flex:0 0 18px;accent-color:var(--bordeaux)}
+.toggle{background:none;border:0;color:var(--bordeaux);font:inherit;font-size:14px;font-weight:600;padding:0;cursor:pointer;text-decoration:underline;text-underline-offset:3px;text-align:left}
+.helper{background:#fff6f0;border:1px solid var(--line);border-radius:14px;padding:16px;margin-top:12px}
+.va-row{display:grid;grid-template-columns:1fr 170px;gap:12px;align-items:center;padding:13px 0;border-top:1px solid var(--line)}
+.va-row:first-child{border-top:0}
+.va-name{font-weight:700;display:block}
+.va-meta{font-size:13.5px;color:var(--muted)}
+.tag{display:inline-block;font-size:11.5px;font-weight:600;border-radius:999px;padding:2px 10px;margin-left:6px;vertical-align:1px}
+.tag.past{background:#f3ece8;color:#76646a}
+.tag.open{background:var(--perzik);color:#7a3510}
+.tag.nu{background:var(--roze);color:#fff}
+.knoppen{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
+.btn{display:inline-block;background:var(--bordeaux);color:var(--creme);border:1.5px solid var(--bordeaux);border-radius:999px;font:inherit;font-weight:700;font-size:15px;padding:11px 19px;cursor:pointer;transition:background .15s}
+.btn:hover{background:var(--bordeaux-donker)}
+.btn.ghost{background:transparent;color:var(--bordeaux)}
+.btn.ghost:hover{background:#fff1f4}
+.btn.klein{font-size:14px;padding:8px 15px}
+.vb{margin-top:14px}
+/* resultaat: bordeaux vlak met creme tekst */
+.result{background:var(--bordeaux);color:var(--creme);box-shadow:0 14px 34px rgba(185,44,82,.25)}
+.result h2{color:var(--creme)}
+.result .muted{color:rgba(254,239,229,.82)}
+.result .label{font-weight:600;color:rgba(254,239,229,.85);margin:8px 0 0}
+.result .lead{color:var(--creme)}
+.big{font-size:clamp(36px,9vw,54px);font-weight:800;letter-spacing:-.02em;line-height:1.05;margin:4px 0 8px;font-variant-numeric:tabular-nums;color:var(--creme)}
+.big.bad{color:var(--perzik)}
+.lead{font-size:16.5px;margin:0 0 16px}
+.opt{border:1.5px solid rgba(254,239,229,.3);border-radius:16px;padding:15px 17px;margin:14px 0 0;background:rgba(255,255,255,.06)}
+.opt .t{font-weight:700;margin-bottom:2px}
+.opt .n{font-size:26px;font-weight:800;letter-spacing:-.01em;font-variant-numeric:tabular-nums}
+.opt .d{font-size:14.5px;opacity:.92}
+.pill{display:inline-block;font-size:11.5px;font-weight:700;background:var(--roze);color:#fff;border-radius:999px;padding:2px 10px;margin-left:6px;vertical-align:2px}
+.kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:4px 0 16px}
+.kpi{background:rgba(255,255,255,.1);border-radius:14px;padding:13px}
+.kpi .k{font-size:13px;color:rgba(254,239,229,.85);font-weight:500}
+.kpi .v{font-size:21px;font-weight:800;font-variant-numeric:tabular-nums}
+table{width:100%;border-collapse:collapse;font-size:15px;margin-top:14px}
+th,td{padding:10px 6px;border-bottom:1px solid rgba(254,239,229,.2);text-align:left;vertical-align:top}
+th{font-size:12px;color:rgba(254,239,229,.8);text-transform:uppercase;letter-spacing:.06em;font-weight:600}
+td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
+td.num{white-space:nowrap}
+.note,.tip{border-radius:14px;padding:13px 15px;font-size:14.5px;margin:14px 0 0}
+.note{background:rgba(249,193,149,.18);border-left:4px solid var(--perzik)}
+.tip{background:rgba(255,255,255,.1);border-left:4px solid var(--lila-licht)}
+.tip p,.note p{margin:0 0 8px}.tip p:last-child,.note p:last-child{margin:0}
+.meer{margin-top:6px;border-top:1px solid rgba(254,239,229,.25);padding-top:12px}
+.meer > summary{cursor:pointer;font-weight:700;list-style:none;display:flex;justify-content:space-between;align-items:center;gap:12px;padding:4px 0}
+.meer > summary::-webkit-details-marker{display:none}
+.meer > summary::after{content:'+';font-size:22px;line-height:1}
+.meer[open] > summary::after{content:'\2212'}
+.krediet .meer{border-top-color:var(--line)}
+.krediet .meer > summary{color:var(--bordeaux)}
+.acties{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
+.result .btn{background:var(--creme);color:var(--bordeaux);border-color:var(--creme)}
+.result .btn:hover{background:#fff}
+.disclaimer{font-size:13px;color:var(--muted);margin-top:18px}
+.trajecten{margin:26px 0 8px}
+.trajecten .eyebrow{margin-bottom:6px}
+.trajecten h2{font-size:clamp(24px,5vw,32px);font-weight:800;letter-spacing:-.02em;line-height:1.1;color:var(--bordeaux);margin:0 0 8px}
+.trajecten .sub{color:var(--ink);margin:0 0 16px;font-size:16px}
+.tr-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:14px}
+.tr{display:flex;flex-direction:column;border-radius:20px;padding:22px 20px;color:var(--creme);text-decoration:none;transition:transform .15s}
+.tr:hover{transform:translateY(-3px)}
+.tr.lila{background:var(--lila)}
+.tr.oranje{background:var(--oranje)}
+.tr.bordeaux{background:var(--bordeaux)}
+.tr .voor{display:inline-block;align-self:flex-start;background:rgba(254,239,229,.22);border-radius:999px;padding:3px 11px;font-size:12.5px;font-weight:600;margin-bottom:12px}
+.tr h3{font-size:22px;font-weight:800;letter-spacing:-.01em;line-height:1.1;margin:0 0 8px}
+.tr p{margin:0 0 18px;font-size:15px;line-height:1.5;flex:1}
+.tr .go{align-self:flex-start;background:var(--creme);color:var(--bordeaux);font-weight:700;border-radius:999px;padding:9px 16px;font-size:14.5px}
+.vraag{margin-top:24px;padding-top:20px;border-top:1px solid rgba(254,239,229,.25);text-align:center}
+.vraag p{margin:0;font-size:clamp(19px,4.5vw,23px);font-weight:800;letter-spacing:-.01em;line-height:1.25;color:var(--creme)}
+.vraag .naar-trajecten{margin-top:14px}
+.naar-trajecten{display:block;width:100%;text-align:center;background:var(--roze);color:#fff;border:0;font:inherit;font-weight:700;font-style:italic;border-radius:999px;padding:15px 20px;margin-top:22px;cursor:pointer;transition:background .15s}
+.naar-trajecten:hover{background:var(--roze-donker)}
+.crit{background:#fff6f0;border:1px solid var(--line);border-radius:14px;padding:12px 16px;margin:0 0 14px;font-size:14.5px}
+.crit summary{cursor:pointer;font-weight:600;color:var(--bordeaux)}
+.crit p{margin:10px 0 0}.crit ul{margin:8px 0 0;padding-left:20px}.crit li{margin:2px 0}
+.vs3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:14px 0 4px}
+.vs3 .tile{border-radius:16px;padding:16px;border:2px solid transparent;background:#f6efe9}
+.vs3 .tile.a{background:#e3e9f7}
+.vs3 .tile.b{background:#fde3cf}
+.vs3 .tile.c{background:#f7dfe6}
+.vs3 .tile.win{border-color:var(--bordeaux)}
+.vs3 .tile .t{font-weight:700;font-size:15px;margin-bottom:8px;line-height:1.3}
+.vs3 .tile .r{display:flex;justify-content:space-between;gap:8px;font-size:14px;padding:3px 0}
+.vs3 .tile .r b{font-variant-numeric:tabular-nums;white-space:nowrap}
+.vs3 .tile .tot{border-top:1px solid rgba(43,29,34,.15);margin-top:6px;padding-top:8px;font-size:15.5px}
+.verdict{font-size:clamp(20px,4.5vw,26px);font-weight:800;letter-spacing:-.01em;color:var(--bordeaux);line-height:1.2;margin:14px 0 4px}
+.krediet .tip{background:#f5f7fd;border-left-color:var(--lila)}
+.krediet .note{background:#fff4ea;border-left-color:var(--oranje)}
+.krediet a{color:var(--bordeaux);font-weight:600}
+.uitleg{background:#fff;border-radius:20px;box-shadow:var(--shadow);padding:18px 22px;margin-bottom:18px;border-left:5px solid var(--lila)}
+.uitleg summary{cursor:pointer;font-weight:700;color:var(--bordeaux);font-size:16.5px;list-style:none;display:flex;justify-content:space-between;align-items:center;gap:12px}
+.uitleg summary::-webkit-details-marker{display:none}
+.uitleg summary::after{content:'+';font-size:22px;line-height:1;color:var(--bordeaux)}
+.uitleg[open] summary::after{content:'\2212'}
+.uitleg ol{margin:14px 0 0;padding-left:22px}
+.uitleg li{margin:0 0 9px;font-size:15px}
+.uitleg .klein{font-size:13.5px;color:var(--muted);margin:10px 0 0}
+.muted{color:var(--muted)}
+.brand{display:flex;justify-content:center;margin-top:22px;font-size:13px;color:var(--muted);letter-spacing:.04em}
+.printkop{display:none}
+@media (max-width:700px){.vs3{grid-template-columns:1fr}}
+@media (max-width:560px){.va-row,.two{grid-template-columns:1fr;gap:8px}.kpis{grid-template-columns:1fr;gap:6px}.kpi{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:10px 13px}.kpi .v{font-size:18px;white-space:nowrap}.card{padding:20px 16px}.hero{padding:26px 20px}.uitleg{padding:16px 16px}th,td{padding:8px 3px;font-size:13.5px}th{font-size:10.5px;letter-spacing:0}.knoppen .btn{flex:1 1 auto}}
+h1,h2,h3,.big,.verdict,.vraag p,.opt .n{font-family:'Glitz','Outfit',system-ui,sans-serif !important;font-weight:400 !important;letter-spacing:.005em !important;word-spacing:.14em}
+/* afdrukken of bewaren als PDF: enkel invoer en resultaat, zwart op wit */
+@media print{
+  @page{margin:14mm}
+  html,body{background:#fff !important;font-size:12.5px}
+  .wrap{max-width:none;padding:0}
+  .hero{background:none;padding:0 0 8px;margin:0 0 10px;border-bottom:2px solid var(--bordeaux);border-radius:0}
+  .hero .intro,.hero-note,.uitleg,.toggle,.knoppen,.vb,.acties,.vraag,.trajecten,.crit,.hint,.brand,#helper[hidden]{display:none !important}
+  .printkop{display:block;font-size:12px;color:var(--muted);margin:0 0 10px}
+  .card,.result{box-shadow:none !important;border:1px solid #d9c9c0;border-radius:10px;padding:12px 14px;margin:0 0 10px;break-inside:avoid}
+  .result{background:#fff !important;color:var(--ink) !important;border:2px solid var(--bordeaux)}
+  .result *{color:var(--ink) !important;background:transparent !important;border-color:#e5d6cd !important}
+  .result h2,.result .big{color:var(--bordeaux) !important}
+  .kpi{border:1px solid #e5d6cd !important}
+  .meer > summary{display:none}
+  .vs3 .tile{border:1px solid #e5d6cd !important;background:#fff !important}
+  select,input[type=text]{border:1px solid #ccc;background:#fff;padding:6px 8px}
+  a{color:var(--ink);text-decoration:none}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none !important;scroll-behavior:auto !important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="hero">
+    <p class="eyebrow">De Cijfercoach · Calculator</p>
+    <h1>Voorafbetalingen voor je vennootschap</h1>
+    <p class="intro" id="intro">Betaalt je vennootschap te weinig vooraf, dan krijg je een vermeerdering bovenop je vennootschapsbelasting. Dat is een soort boete. Hier zie je hoe hoog die zou zijn en hoeveel je nog moet storten om ze te vermijden.</p>
+    <p class="hero-note">Deze calculator vervangt geen persoonlijk fiscaal advies.</p>
+    <p class="printkop" id="printkop"></p>
+  </header>
+
+  <details class="uitleg" data-key="uitleg">
+    <summary>Zo gebruik je deze calculator</summary>
+    <ol>
+      <li><b>Kies het boekjaar van je vennootschap.</b> Is ze klein en zit ze in haar eerste drie boekjaren? Vink dan het vakje aan.</li>
+      <li><b>Vul je geschatte vennootschapsbelasting in.</b> Ken je enkel je winst? Klik op <b>Reken het uit vanaf je winst</b>.</li>
+      <li><b>Vul in wat je al vooraf betaalde.</b> Nog niets betaald? Laat de velden leeg.</li>
+      <li><b>Lees je resultaat.</b> Bovenaan staat het bedrag dat je nog moet storten, met de uiterste datum. Liever spreiden? Klik op <b>Vul een gespreid plan in</b>.</li>
+      <li><b>Krap bij kas?</b> Onderaan zie je wat een krediet voor voorafbetalingen kost, naast zelf storten en niets doen.</li>
+    </ol>
+    <p class="klein">Bedragen typ je met of zonder punt: 10000 of 10.000. Wat je invult, blijft op je eigen toestel. Niets wordt bewaard of doorgestuurd.</p>
+  </details>
+
+  <div class="card">
+    <h2>1. Jouw vennootschap</h2>
+    <p class="sub">Kies het boekjaar dat nu loopt.</p>
+
+    <div class="field">
+      <label class="lbl" for="boekjaar">Wanneer loopt je boekjaar?</label>
+      <select id="boekjaar" aria-describedby="boekjaarHint"></select>
+      <div class="hint" id="boekjaarHint">Bij de meeste vennootschappen is dat het kalenderjaar.</div>
+    </div>
+
+    <label class="check"><input type="checkbox" id="starter">
+      <span>Mijn vennootschap is een <b>kleine vennootschap</b> en dit is één van haar <b>eerste drie boekjaren</b>.</span></label>
+    <details class="crit" data-key="crit">
+      <summary>Wanneer is je vennootschap klein?</summary>
+      <p>Je vennootschap is klein zolang ze <b>niet meer dan één</b> van deze drie grenzen overschrijdt:</p>
+      <ul id="grenzen"></ul>
+      <p>Je kijkt naar het laatst afgesloten boekjaar. Je status verandert pas als je twee boekjaren na elkaar meer dan één grens overschrijdt. In je eerste boekjaar maak je bij de start een eerlijke schatting.</p>
+      <p>Hoort je vennootschap bij een groep, dan tel je omzet en balanstotaal van de verbonden vennootschappen samen.</p>
+      <p>De vrijstelling van de vermeerdering geldt voor de <b>eerste drie boekjaren</b> na de oprichting.</p>
+    </details>
+
+    <div class="field" style="margin-top:18px">
+      <label class="lbl" for="belasting">Geschatte vennootschapsbelasting voor dit boekjaar</label>
+      <div class="money"><span aria-hidden="true">€</span><input type="text" id="belasting" inputmode="decimal" placeholder="0" autocomplete="off" aria-describedby="belastingHint belastingFout"></div>
+      <div class="fout" id="belastingFout"></div>
+      <div class="hint" id="belastingHint">De belasting op de winst van dit boekjaar, na aftrek van eventuele voorheffingen.</div>
+      <button type="button" class="toggle" id="toggleHelper" aria-expanded="false" aria-controls="helper" style="margin-top:8px">Ken je enkel je winst? Reken het uit vanaf je winst.</button>
+      <div class="helper" id="helper" hidden>
+        <label class="lbl" for="winst">Verwachte belastbare winst</label>
+        <div class="money"><span aria-hidden="true">€</span><input type="text" id="winst" inputmode="decimal" placeholder="0" autocomplete="off" aria-describedby="winstFout"></div>
+        <div class="fout" id="winstFout"></div>
+        <label class="check" style="margin-top:12px"><input type="checkbox" id="verlaagd" checked>
+          <span id="verlaagdTekst">Mijn vennootschap heeft recht op het <b>verlaagd tarief</b>.</span></label>
+        <details class="crit" data-key="verlaagd" style="margin-bottom:6px">
+          <summary>Wanneer heb je recht op het verlaagd tarief?</summary>
+          <ul id="verlaagdVoorwaarden"></ul>
+          <p>Twijfel je? Vink het vakje dan uit. Dan rekent de calculator voorzichtig, met het gewone tarief.</p>
+        </details>
+        <div class="hint" id="helperOut" aria-live="polite"></div>
+      </div>
+    </div>
+    <button type="button" class="btn ghost klein vb" id="voorbeeld">Probeer met een voorbeeld</button>
+  </div>
+
+  <div class="card">
+    <h2>2. Je voorafbetalingen</h2>
+    <p class="sub">Vul in wat je al stortte of nog van plan bent. Een storting telt mee op de dag dat ze op de rekening van de FOD Financiën staat. Stort dus een paar dagen vóór de vervaldag.</p>
+    <div id="vaRows"></div>
+    <div class="knoppen">
+      <button type="button" class="btn" id="gespreid">Vul een gespreid plan in</button>
+      <button type="button" class="btn ghost" id="ineens">Alles in één keer</button>
+      <button type="button" class="btn ghost" id="wis">Plan leegmaken</button>
+    </div>
+  </div>
+
+  <div class="sr-only" id="samenvatting" aria-live="polite" aria-atomic="true"></div>
+  <section class="card result" id="result" aria-labelledby="resultTitel"></section>
+
+  <div class="card krediet">
+    <h2>3. Krap bij kas? Financier je voorafbetaling</h2>
+    <p class="sub" id="kredietIntro"></p>
+    <div class="two">
+      <div class="field">
+        <label class="lbl" for="kredietRente">Rentevoet van het krediet</label>
+        <div class="pctin"><input type="text" id="kredietRente" inputmode="decimal" autocomplete="off" aria-describedby="renteHint renteFout"><span aria-hidden="true">%</span></div>
+        <div class="fout" id="renteFout"></div>
+        <div class="hint" id="renteHint">Een voorbeeld. Vraag de juiste rentevoet aan je bank.</div>
+      </div>
+      <div class="field">
+        <label class="lbl" for="kredietMaanden">Terugbetalen over</label>
+        <select id="kredietMaanden" aria-describedby="maandenHint"></select>
+        <div class="hint" id="maandenHint">Bij Bonifisc maximaal 12 maanden.</div>
+      </div>
+    </div>
+    <div id="kredietOut"></div>
+  </div>
+
+  <section class="trajecten" id="trajecten"></section>
+
+  <p class="disclaimer" id="disclaimer"></p>
+  <div class="brand">de cijfercoach · Kimberley Van Poecke</div>
+</div>
+
+<script>
+/* ================= INSTELLINGEN (jaarlijks nakijken) =================
+   Laatst gecontroleerd: 13 november 2026.
+   Bronnen:
+   - Percentages aanslagjaar 2026 en 2027 (vermeerdering 6,75%, voordeel 9 / 7,5 / 6 / 4,5%, vier vervaldagen,
+     geen minimumgrens voor vennootschappen, vrijstelling kleine vennootschap eerste drie boekjaren):
+     https://www.practicali.be/blog/voorafbetalingen-in-2026 en https://bakertilly.be/nl/news/verhoging-wegens-onvoldoende-voorafbetaling-daalt-opnieuw-naar-675-belang-van-voorafbetalingen-in-boekjaar-2025/
+     Officieel: https://financien.belgium.be/nl/ondernemingen/vennootschapsbelasting/voorafbetalingen
+     De vermeerdering is 2,25 keer een basisrentevoet van minstens 3% (wettelijk minimum), daarom 6,75%.
+   - Minimumbezoldiging bedrijfsleider (verlaagd tarief): € 45.000 tot aanslagjaar 2026, € 51.000 vanaf aanslagjaar 2027
+     (wet hervorming personenbelasting 2026): https://www.kbc.be/private-banking/nl/nieuws/ondernemen/Minimumbezoldiging-bedrijfsleiders-aangescherpt-op-twee-punten.html
+   - Grenzen kleine vennootschap (art. 1:24 WVV, boekjaren vanaf 1 januari 2024): https://www.ibr-ire.be/nl/actueel/news-detail/mededeling-2024-13
+   - Bonifisc: looptijd tot 12 maanden: https://www.bnpparibasfortis.be/nl/public/ondernemers/lenen/professionele-kredieten/sociale-fiscale-optimalisatie/bonifisc
+   ===================================================================== */
+var CONFIG = {
+  laatstGecontroleerd: '13 november 2026',
+  /* per aanslagjaar. Aanslagjaar = jaar waarin het boekjaar afsluit, of het jaar erna als het op 31 december afsluit.
+     Ontbreekt een aanslagjaar, dan rekent de calculator met het laatst gekende en meldt dat. */
+  percentages: {
+    2026: { vermeerdering: 0.0675, voordeel: [0.09, 0.075, 0.06, 0.045] },
+    2027: { vermeerdering: 0.0675, voordeel: [0.09, 0.075, 0.06, 0.045] }
+  },
+  /* vennootschapsbelasting: 20% op de eerste € 100.000 (verlaagd tarief), anders 25% */
+  tarief: { verlaagd: 0.20, schijf: 100000, normaal: 0.25 },
+  /* minimale bezoldiging van minstens één bedrijfsleider voor het verlaagd tarief, per aanslagjaar */
+  minimumBezoldiging: { 2026: 45000, 2027: 51000 },
+  /* grenzen kleine vennootschap, art. 1:24 WVV */
+  klein: { werknemers: 50, omzet: 11250000, balans: 6000000 },
+  /* krediet voor voorafbetalingen: voorbeeldrente, standaard looptijd, keuzes in maanden en een link (leeg laten = geen link) */
+  krediet: { rente: 5, maanden: 12, keuzes: [6, 8, 9, 10, 11, 12], link: 'https://www.bnpparibasfortis.be/nl/public/ondernemers/lenen/professionele-kredieten/sociale-fiscale-optimalisatie/bonifisc', linkTekst: 'Meer over Bonifisc bij BNP Paribas Fortis' },
+  /* voorbeeld voor de knop 'Probeer met een voorbeeld' */
+  voorbeeld: { belasting: 30000, betaald: [5000, 5000, 0, 0] },
+  trajecten: [
+    { naam: 'Financial Fundamentals', voor: 'Voor vrouwen in hoofdberoep', kleur: 'oranje', url: 'https://decijfercoach.be/financialfundamentals/',
+      tekst: 'Leer je cijfers begrijpen, neem financieel sterke beslissingen en bouw een zaak die niet alleen groeit, maar ook iets oplevert.' },
+    { naam: 'Financial Co-Pilot', voor: 'Voor vrouwen met omzet boven € 200.000', kleur: 'bordeaux', url: 'https://decijfercoach.be/financialcopilot/',
+      tekst: 'Zes maanden 1 op 1, met mij als je financiële rechterhand. Voor gevestigde ondernemers die strategisch willen sturen op hun cijfers.' }
+  ],
+  trajectenTitel: 'Zo word je zelf sterk in je cijfers',
+  trajectenIntro: 'Deze calculator geeft je een antwoord voor dit boekjaar. In mijn trajecten leer je zelf lezen wat de cijfers van je vennootschap je vertellen, zodat je elke financiële keuze met vertrouwen maakt. Mijn trajecten zijn er exclusief voor vrouwelijke ondernemers.',
+  vraagTekst: 'Geen idee wat je winst voor belastingen is dit jaar?',
+  knopTekst: 'Ontdek mijn trajecten'
+};
+/* ==================================================================== */
+
+var MAANDEN = ['januari','februari','maart','april','mei','juni','juli','augustus','september','oktober','november','december'];
+var TODAY = new Date(); TODAY.setHours(0,0,0,0);
+var $ = function(id){ return document.getElementById(id); };
+var OPEN = {};      /* onthoudt welke uitklapblokken open staan, ook na herberekenen */
+var DATES = [], P = null, BJ = null, STAND = null;
+
+/* ---------- invoer lezen en controleren ---------- */
+function leesBedrag(v){
+  v = String(v || '').replace(/[€\s ]/g,'');
+  if(v === '') return { leeg: true, n: 0 };
+  if(!/^-?[\d.,]+$/.test(v)) return { fout: 'Typ enkel cijfers, bijvoorbeeld 12.500.' };
+  if(v.charAt(0) === '-') return { fout: 'Een negatief bedrag kan hier niet. Typ een bedrag vanaf 0.' };
+  if(v.indexOf(',') > -1){ v = v.replace(/\./g,'').replace(',', '.'); }
+  else if((v.match(/\./g)||[]).length > 1 || /\.\d{3}$/.test(v)){ v = v.replace(/\./g,''); }
+  var n = parseFloat(v);
+  if(!isFinite(n)) return { fout: 'Dit bedrag kan de calculator niet lezen. Typ bijvoorbeeld 12.500.' };
+  if(n > 1e9) return { fout: 'Dat bedrag is wel heel groot. Kijk het even na.' };
+  return { n: n };
+}
+function veld(id){
+  var el = $(id), r = leesBedrag(el.value), f = $(id + 'Fout');
+  if(f) f.textContent = r.fout || '';
+  if(r.fout) el.setAttribute('aria-invalid','true'); else el.removeAttribute('aria-invalid');
+  return r.fout ? 0 : r.n;
+}
+function parseBedrag(v){ var r = leesBedrag(v); return r.fout ? 0 : r.n; }
+function netjes(el){
+  var r = leesBedrag(el.value);
+  if(r.fout || r.leeg) return;
+  el.value = r.n.toLocaleString('nl-BE', { maximumFractionDigits: 2 });
+}
+function eur(n, dec){
+  return '€ ' + (n||0).toLocaleString('nl-BE',{minimumFractionDigits:dec||0, maximumFractionDigits:dec||0});
+}
+function pct(n){ return (n*100).toLocaleString('nl-BE',{maximumFractionDigits:2}) + '%'; }
+function datum(d){ return d.getDate() + ' ' + MAANDEN[d.getMonth()] + ' ' + d.getFullYear(); }
+function naarBoven(x){ return Math.ceil(x - 1e-6); }
+function opsomming(a){ return a.length > 1 ? a.slice(0,-1).join(', ') + ' en ' + a[a.length-1] : (a[0] || ''); }
+
+/* ---------- datums: weekends en Belgische wettelijke feestdagen ---------- */
+function pasen(y){
+  var a=y%19,b=Math.floor(y/100),c=y%100,d=Math.floor(b/4),e=b%4,f=Math.floor((b+8)/25),g=Math.floor((b-f+1)/3),
+      h=(19*a+b-d-g+15)%30,i=Math.floor(c/4),k=c%4,l=(32+2*e+2*i-h-k)%7,m=Math.floor((a+11*h+22*l)/451),
+      mo=Math.floor((h+l-7*m+114)/31), da=((h+l-7*m+114)%31)+1;
+  return new Date(y, mo-1, da);
+}
+function isFeestdag(d){
+  var y = d.getFullYear(), key = d.getMonth() + '-' + d.getDate();
+  if(['0-1','4-1','6-21','7-15','10-1','10-11','11-25'].indexOf(key) > -1) return true;
+  var p = pasen(y);
+  return [1, 39, 50].some(function(n){ var x = new Date(y, p.getMonth(), p.getDate() + n); return x.getTime() === d.getTime(); });
+}
+function werkdag(d){
+  while(d.getDay() === 0 || d.getDay() === 6 || isFeestdag(d)) d.setDate(d.getDate() + 1);
+  return d;
+}
+/* vervaldagen: de 10de van de 4de, 7de en 10de maand en de 20ste van de 12de maand van het boekjaar */
+function vervaldagen(y, startMaand){
+  return [
+    werkdag(new Date(y, startMaand+3, 10)),
+    werkdag(new Date(y, startMaand+6, 10)),
+    werkdag(new Date(y, startMaand+9, 10)),
+    werkdag(new Date(y, startMaand+11, 20))
+  ];
+}
+function boekjaarInfo(waarde){
+  var p = String(waarde).split('-'), y = +p[0], m = +p[1];
+  var eind = new Date(y, m + 12, 0);
+  var aj = (eind.getMonth() === 11 && eind.getDate() === 31) ? eind.getFullYear() + 1 : eind.getFullYear();
+  return { y: y, m: m, start: new Date(y, m, 1), eind: eind, aj: aj };
+}
+function percentagesVoor(aj){
+  if(CONFIG.percentages[aj]) return { aj: aj, vermeerdering: CONFIG.percentages[aj].vermeerdering, voordeel: CONFIG.percentages[aj].voordeel, voorlopig: false };
+  var jaren = Object.keys(CONFIG.percentages).map(Number).sort(function(a,b){return a-b;});
+  var basis = aj > jaren[jaren.length-1] ? jaren[jaren.length-1] : jaren[0];
+  return { aj: aj, vermeerdering: CONFIG.percentages[basis].vermeerdering, voordeel: CONFIG.percentages[basis].voordeel, voorlopig: true, basis: basis };
+}
+function waardeVoor(tabel, aj){
+  if(tabel[aj]) return { n: tabel[aj], aj: aj, exact: true };
+  var jaren = Object.keys(tabel).map(Number).sort(function(a,b){return a-b;}), j = jaren[jaren.length-1];
+  return { n: tabel[j], aj: j, exact: false };
+}
+
+/* ---------- boekjaar keuzelijst: alle boekjaren die vandaag lopen, standaard het kalenderjaar ---------- */
+(function(){
+  var sel = $('boekjaar');
+  for(var k=11;k>=0;k--){
+    var start = new Date(TODAY.getFullYear(), TODAY.getMonth()-k, 1);
+    var eind = new Date(start.getFullYear(), start.getMonth()+12, 0);
+    var o = document.createElement('option');
+    o.value = start.getFullYear() + '-' + start.getMonth();
+    o.textContent = datum(start) + ' tot ' + datum(eind) + (start.getMonth() === 0 ? ' (kalenderjaar)' : '');
+    if(start.getMonth() === 0) o.selected = true;
+    sel.appendChild(o);
+  }
+})();
+
+function bouwRijen(){
+  var bestaande = [];
+  for(var i=0;i<4;i++){ var el = $('va'+i); bestaande.push(el ? el.value : ''); }
+  BJ = boekjaarInfo($('boekjaar').value);
+  P = percentagesVoor(BJ.aj);
+  DATES = vervaldagen(BJ.y, BJ.m);
+  var html = '';
+  for(var j=0;j<4;j++){
+    var vandaag = DATES[j].getTime() === TODAY.getTime(), open = DATES[j] >= TODAY;
+    var tag = vandaag ? '<span class="tag nu">vandaag laatste dag</span>' : (open ? '<span class="tag open">nog open</span>' : '<span class="tag past">vervaldag voorbij</span>');
+    html += '<div class="va-row"><div><label class="va-name" for="va' + j + '">Voorafbetaling ' + (j+1) + tag + '</label>' +
+      '<div class="va-meta" id="va' + j + 'Meta">Uiterlijk ' + datum(DATES[j]) + ' · elke euro telt voor ' + pct(P.voordeel[j]) + '</div></div>' +
+      '<div><div class="money"><span aria-hidden="true">€</span><input type="text" id="va' + j + '" inputmode="decimal" placeholder="0" autocomplete="off" aria-describedby="va' + j + 'Meta va' + j + 'Fout"></div>' +
+      '<div class="fout" id="va' + j + 'Fout"></div></div></div>';
+  }
+  $('vaRows').innerHTML = html;
+  for(var k=0;k<4;k++){
+    var inp = $('va'+k);
+    inp.value = bestaande[k];
+    inp.addEventListener('input', bereken);
+    inp.addEventListener('blur', function(){ netjes(this); });
+  }
+  vulTeksten();
+}
+
+/* teksten die afhangen van CONFIG en het gekozen aanslagjaar */
+function vulTeksten(){
+  var k = CONFIG.klein;
+  $('grenzen').innerHTML = '<li>gemiddeld <b>' + k.werknemers + ' werknemers</b> over het jaar</li><li><b>' + eur(k.omzet) + '</b> jaaromzet, zonder btw</li><li><b>' + eur(k.balans) + '</b> balanstotaal</li>';
+  var t = CONFIG.tarief, mb = waardeVoor(CONFIG.minimumBezoldiging, BJ.aj);
+  $('verlaagdTekst').innerHTML = 'Mijn vennootschap heeft recht op het <b>verlaagd tarief</b> van ' + pct(t.verlaagd) + ' op de eerste ' + eur(t.schijf) + ' winst. Daarboven is het ' + pct(t.normaal) + '.';
+  $('verlaagdVoorwaarden').innerHTML =
+    '<li>Je vennootschap is een kleine vennootschap.</li>' +
+    '<li>Minstens één bedrijfsleider krijgt een bezoldiging van minstens <b>' + eur(mb.n) + '</b>' + (mb.exact ? ' (aanslagjaar ' + mb.aj + ')' : ' (bedrag van aanslagjaar ' + mb.aj + ', het nieuwe bedrag is nog niet bekend)') + '. Is de winst lager, dan volstaat een bezoldiging die minstens even hoog is als de winst.</li>' +
+    (BJ.aj >= 2027 ? '<li>Voordelen zoals een bedrijfswagen of een woning van de zaak maken samen hoogstens 20% van die bezoldiging uit.</li>' : '') +
+    '<li>In de eerste vier boekjaren na de oprichting geldt die minimale bezoldiging niet.</li>' +
+    '<li>Er zijn nog enkele voorwaarden, bijvoorbeeld over wie de aandelen heeft. Je boekhouder kijkt ze na.</li>';
+  $('intro').innerHTML = 'Betaalt je vennootschap te weinig vooraf, dan krijg je een <b>vermeerdering</b> van ' + pct(P.vermeerdering) + ' bovenop je vennootschapsbelasting. Dat is een soort boete. Hier zie je hoe hoog die zou zijn en hoeveel je nog moet storten om ze te vermijden.';
+}
+
+function belastingUitWinst(w){
+  var t = CONFIG.tarief;
+  if($('verlaagd').checked){
+    return Math.min(w, t.schijf) * t.verlaagd + Math.max(0, w - t.schijf) * t.normaal;
+  }
+  return w * t.normaal;
+}
+/* tarief waartegen een extra kost (zoals rente) wegvalt: het hoogste tarief dat je winst raakt */
+function marginaalTarief(T){
+  var t = CONFIG.tarief;
+  if(!$('verlaagd').checked) return t.normaal;
+  return T > t.schijf * t.verlaagd ? t.normaal : t.verlaagd;
+}
+
+function bereken(){
+  STAND = null;
+  var helperOpen = !$('helper').hidden, T, winstFout = false;
+  var winst = veld('winst');
+  if($('winst').getAttribute('aria-invalid')) winstFout = true;
+  if(helperOpen && winst > 0){
+    T = belastingUitWinst(winst);
+    $('belasting').value = Math.round(T).toLocaleString('nl-BE');
+    veld('belasting');
+    $('helperOut').innerHTML = 'Geschatte vennootschapsbelasting: <b>' + eur(T) + '</b>. Dit bedrag staat nu hierboven ingevuld.';
+  } else {
+    T = veld('belasting');
+    if(helperOpen) $('helperOut').textContent = '';
+  }
+  T = Math.round(T * 100) / 100;
+
+  var paid = [0,1,2,3].map(function(i){ return veld('va'+i); });
+  var V0 = P.voordeel;
+  var totaalBetaald = paid.reduce(function(a,b){return a+b;},0);
+  var voordeel = paid.reduce(function(s,v,i){ return s + v*V0[i]; },0);
+  var bruto = P.vermeerdering * T;
+  var V = Math.max(0, bruto - voordeel);
+  var openIdx = [0,1,2,3].filter(function(i){ return DATES[i] >= TODAY; });
+  var starter = $('starter').checked;
+  var betaaldVerleden = paid.reduce(function(t,v,i){ return t + (DATES[i] >= TODAY ? 0 : v); }, 0);
+  var voordeelVerleden = paid.reduce(function(t,v,i){ return t + (DATES[i] >= TODAY ? 0 : v*V0[i]); }, 0);
+  var Vp = Math.max(0, bruto - voordeelVerleden);            /* vermeerdering als je niets meer stort */
+  var planOpen = totaalBetaald - betaaldVerleden;             /* wat er bij de open vervaldagen is ingevuld */
+  var R = { label: '', big: '', cls: '', lead: '', kpis: [], meer: [] };
+
+  if(T <= 0){
+    var heeftFout = $('belasting').getAttribute('aria-invalid') || winstFout;
+    renderLeeg(heeftFout ? 'Kijk het bedrag in blok 1 even na, dan zie je meteen je resultaat.' : 'Vul je geschatte vennootschapsbelasting in, dan zie je hier meteen je resultaat. Of klik op <b>Probeer met een voorbeeld</b>.');
+    return;
+  }
+
+  if(P.voorlopig){
+    R.meer.push('<div class="note">De percentages voor aanslagjaar ' + P.aj + ' zijn nog niet officieel bekend. De calculator rekent voorlopig met die van aanslagjaar ' + P.basis + '.</div>');
+  }
+
+  if(starter){
+    R.label = 'Vermeerdering voor dit boekjaar';
+    R.big = '€ 0'; R.cls = '';
+    R.lead = 'Als kleine vennootschap in je eerste drie boekjaren betaal je geen vermeerdering, ook als je niets vooraf stort.';
+    R.kpis = [['Geschatte belasting', eur(T)], ['Vooraf gestort of gepland', eur(totaalBetaald)], ['Zet nog opzij', eur(Math.max(0, T - totaalBetaald))]];
+    R.meer.push('<div class="tip"><p><b>Toch vooraf betalen?</b> Dat mag, maar je vennootschap haalt er geen voordeel uit. Zet het geld wel apart op een spaarrekening. Dan staat het klaar wanneer je aanslagbiljet komt. Dat is ongeveer ' + eur(Math.max(0,T-totaalBetaald)) + '.</p></div>');
+    R.meer.push(planBlok(T, true));
+    render(R, T); return;
+  }
+
+  STAND = { T: T };
+  if(planOpen > 0.5 && openIdx.length > 0 && Vp >= 0.5){
+    /* er staat een plan ingevuld bij de vervaldagen die nog open staan */
+    var e1 = openIdx[0], laagste = naarBoven(Vp / V0[e1]);
+    var aantal = openIdx.filter(function(i){ return paid[i] > 0; }).length;
+    R.label = 'Vermeerdering met jouw plan';
+    R.big = eur(V < 0.5 ? 0 : V); R.cls = V < 0.5 ? '' : 'bad';
+    if(V < 0.5){
+      R.lead = 'Met dit plan betaal je <b>geen vermeerdering</b>. Je stort nog ' + eur(planOpen) + (aantal > 1 ? ', gespreid over ' + aantal + ' vervaldagen.' : ', in één keer.');
+    } else {
+      R.lead = 'Er blijft nog vermeerdering over. Stort ' + eur(naarBoven(V / V0[e1])) + ' extra uiterlijk <b>' + datum(DATES[e1]) + '</b>, dan kom je op € 0.';
+    }
+    R.kpis = [['Vermeerdering als je niets meer stort', eur(Vp)], ['Nog te storten volgens je plan', eur(planOpen)], ['Al vooraf betaald', eur(betaaldVerleden)]];
+    if(V < 0.5 && planOpen > laagste + 1){
+      R.meer.push('<div class="tip"><p><b>Spreiden of alles in één keer?</b> Het laagste bedrag is ' + eur(laagste) + ', in één keer uiterlijk ' + datum(DATES[e1]) + '. Jouw plan vraagt ' + eur(planOpen - laagste) + ' meer, omdat latere stortingen minder zwaar wegen. Daar staat tegenover dat je cashflow rustiger blijft en dat je onderweg kan bijsturen als je winst anders uitvalt.</p></div>');
+    }
+    if(totaalBetaald > T + 0.5){
+      var over = totaalBetaald - T;
+      /* zelfde plan, maar teruggebracht tot precies de belasting */
+      var restT = Math.max(0, T - betaaldVerleden), factor = planOpen > 0 ? Math.min(1, restT / planOpen) : 0;
+      var voordeelAlt = voordeelVerleden + openIdx.reduce(function(t,i){ return t + paid[i] * factor * V0[i]; }, 0);
+      var Valt = Math.max(0, bruto - voordeelAlt);
+      var delen = openIdx.filter(function(i){ return paid[i] > 0; }).map(function(i){ return eur(paid[i] * factor); });
+      var zelfde = delen.every(function(d){ return d === delen[0]; });
+      var altTekst = restT < 0.5 ? 'niets meer' : (zelfde && delen.length > 1 ? delen.length + ' keer ' + delen[0] : opsomming(delen));
+      var besparing = Valt - V;
+      R.meer.push('<div class="tip"><p><b>Je stort ' + eur(over) + ' meer dan je belasting. Waarom?</b> Je belasting is ' + eur(T) + ', maar in dit plan stort je in totaal ' + eur(totaalBetaald) + '. De eerste vervaldagen zijn voorbij, en latere stortingen wegen minder zwaar.</p>' +
+        '<p><b>Stort je enkel je belasting?</b> Stort je ' + altTekst + ', dan betaal je ' + eur(Valt) + ' vermeerdering. Met ' + eur(over) + ' extra ' + (V < 0.5 ? 'vermijd je die volledig.' : 'daalt die naar ' + eur(V) + '.') + '</p>' +
+        '<p><b>Wanneer krijg je die ' + eur(over) + ' terug?</b> Na je aanslagbiljet, zonder interest. Reken voor dit boekjaar op ' + terugPeriode() + '.</p>' +
+        (besparing > 0.5 ?
+          '<p><b>Overweeg het als</b> je dat geld ruim een jaar kan missen. Je bespaart ' + eur(besparing) + ' op ' + eur(over) + '. Dat is ' + pct(besparing/over) + ', zonder risico. De vermeerdering is ook niet aftrekbaar.</p>' +
+          '<p><b>Doe het niet als</b> je cashflow krap is, als je er een duurder krediet voor nodig hebt, of als dat geld in je zaak meer opbrengt. Dan is ' + eur(Valt) + ' vermeerdering betalen goedkoper.</p>' : '') +
+        '</div>');
+    }
+    R.meer.push('<div class="note"><b>Doe je niets meer?</b> Dan komt er ' + eur(Vp) + ' vermeerdering bovenop je belasting van ' + eur(T) + '. Dat is ' + pct(Vp/T) + ' extra, en die vermeerdering is niet aftrekbaar als kost.</div>');
+  } else if(V < 0.5){
+    R.label = 'Vermeerdering voor dit boekjaar';
+    R.big = '€ 0'; R.cls = '';
+    R.lead = 'Mooi zo. Met wat je al betaalde, is de vermeerdering helemaal weg. Je hoeft niets meer vooraf te storten.';
+    R.kpis = [['Geschatte belasting', eur(T)], ['Al vooraf betaald', eur(totaalBetaald)], [totaalBetaald > T ? 'Je krijgt terug' : 'Nog te betalen bij je aanslag', eur(Math.abs(T - totaalBetaald))]];
+    if(totaalBetaald > T){
+      R.meer.push('<div class="tip">Je betaalde ' + eur(totaalBetaald - T) + ' meer dan je geschatte belasting. Dat krijg je terug na je aanslagbiljet, zonder interest. Reken op ' + terugPeriode() + '.</div>');
+    }
+  } else if(openIdx.length === 0){
+    R.label = 'Vermeerdering voor dit boekjaar';
+    R.big = eur(V); R.cls = 'bad';
+    R.lead = 'Alle vervaldagen van dit boekjaar zijn voorbij, dus dit bedrag ligt vast. Onder <b>Meer uitleg</b> zie je hoe je het volgend boekjaar vermijdt.';
+    R.kpis = [['Geschatte belasting', eur(T)], ['Al vooraf betaald', eur(totaalBetaald)], ['Vermeerdering in procent', pct(V/T)]];
+    R.meer.push('<div class="note">Deze vermeerdering is niet aftrekbaar als kost.</div>');
+  } else {
+    var eerste = openIdx[0];
+    var nodigEerste = naarBoven(V / V0[eerste]);
+    var rest = Math.max(0, T - totaalBetaald);
+    var somPct = openIdx.reduce(function(t,i){ return t + V0[i]; }, 0);
+    var perKeer = naarBoven(V / somPct), totaalGespreid = perKeer * openIdx.length;
+    STAND = { T: T, V: V };
+
+    R.label = 'Stort nog ten laatste ' + datum(DATES[eerste]);
+    R.big = eur(nodigEerste); R.cls = '';
+    R.lead = 'Dan valt de vermeerdering van ' + eur(V) + ' helemaal weg. Dit is het laagste bedrag waarmee dat lukt.';
+    R.kpis = [['Vermeerdering als je niets doet', eur(V)], ['Al vooraf betaald', eur(totaalBetaald)],
+      openIdx.length > 1 ? ['Of gespreid: per vervaldag', eur(perKeer)]
+        : (T - totaalBetaald - nodigEerste >= 0 ? ['Rest bij je aanslag', eur(T - totaalBetaald - nodigEerste)] : ['Krijg je later terug', eur(totaalBetaald + nodigEerste - T)])];
+
+    R.meer.push('<div class="tip"><b>Waarom dit bedrag?</b> Bij voorafbetaling ' + (eerste+1) + ' telt elke euro voor ' + pct(V0[eerste]) + '. ' + eur(nodigEerste) + ' × ' + pct(V0[eerste]) + ' = ' + eur(V) + ', precies je vermeerdering.' +
+      (openIdx.length > 1 ? ' Wacht je tot de laatste vervaldag, dan heb je ' + eur(naarBoven(V/V0[openIdx[openIdx.length-1]])) + ' nodig.' : '') + '</div>');
+
+    if(totaalBetaald + nodigEerste > T){
+      var rest_V = Math.max(0, V - rest*V0[eerste]);
+      R.meer.push('<div class="tip"><p><b>Dat is meer dan je belasting.</b> Je betaalt dan in totaal ' + eur(totaalBetaald + nodigEerste) + ' vooraf, voor een belasting van ' + eur(T) + '. Dat komt doordat de eerdere vervaldagen voorbij zijn, en latere stortingen wegen minder zwaar. Het overschot krijg je terug na je aanslagbiljet, zonder interest. Reken op ' + terugPeriode() + '.</p>' +
+        (rest > 0 ? '<p>Stort je liever enkel wat je nog aan belasting verschuldigd bent (' + eur(rest) + '), dan blijft er ' + eur(rest_V) + ' vermeerdering over.</p>' : '') + '</div>');
+    }
+
+    if(openIdx.length > 1){
+      R.meer.push('<div class="opt"><div class="t">Liever spreiden? Stort ' + openIdx.length + ' keer hetzelfde bedrag</div>' +
+        '<div class="n">' + eur(perKeer) + ' per vervaldag</div>' +
+        '<div class="d">Uiterlijk ' + opsomming(openIdx.map(function(i){ return datum(DATES[i]); })) + '. Samen ' + eur(totaalGespreid) + ', dat is ' + eur(totaalGespreid - nodigEerste) + ' meer dan alles in één keer. Ook zo betaal je geen vermeerdering, en je kan onderweg bijsturen. Klik in blok 2 op <b>Vul een gespreid plan in</b>.</div></div>');
+    }
+    R.meer.push('<div class="note"><b>Doe je niets?</b> Dan komt er ' + eur(V) + ' vermeerdering bovenop je belasting van ' + eur(T) + '. Dat is ' + pct(V/T) + ' extra, en die vermeerdering is niet aftrekbaar als kost.</div>');
+  }
+
+  /* overzichtstabel */
+  var tab = '<table><caption class="sr-only">Overzicht van je voorafbetalingen</caption><thead><tr><th scope="col">Voorafbetaling</th><th class="num" scope="col">Gestort of gepland</th><th class="num" scope="col">Telt tegen vermeerdering</th></tr></thead><tbody>';
+  paid.forEach(function(v,i){
+    tab += '<tr><td>' + (i+1) + ' · ' + datum(DATES[i]) + '</td><td class="num">' + eur(v) + '</td><td class="num">' + eur(v*V0[i]) + '</td></tr>';
+  });
+  tab += '<tr><td><b>Totaal</b></td><td class="num"><b>' + eur(totaalBetaald) + '</b></td><td class="num"><b>' + eur(voordeel) + '</b></td></tr>';
+  tab += '<tr><td class="muted">Vermeerdering zonder voorafbetalingen (' + pct(P.vermeerdering) + ')</td><td></td><td class="num muted">' + eur(bruto) + '</td></tr>';
+  tab += '</tbody></table>';
+  R.meer.push(tab);
+  R.meer.push(planBlok(T, false));
+  render(R, T);
+}
+
+/* wanneer komt een overschot terug: na aangifte (zowat 7 maanden na het einde van het boekjaar) en aanslagbiljet. Ruwe schatting. */
+function terugPeriode(){
+  var e = BJ.eind;
+  var van = new Date(e.getFullYear(), e.getMonth() + 10, 1), tot = new Date(e.getFullYear(), e.getMonth() + 18, 1);
+  return 'ongeveer tussen ' + MAANDEN[van.getMonth()] + ' ' + van.getFullYear() + ' en ' + MAANDEN[tot.getMonth()] + ' ' + tot.getFullYear();
+}
+function vulPlan(gespreid){
+  var T = parseBedrag($('belasting').value);
+  if(T <= 0){ $('belasting').focus(); $('belastingFout').textContent = 'Vul eerst je geschatte vennootschapsbelasting in.'; return; }
+  var open = [0,1,2,3].filter(function(i){ return DATES[i] >= TODAY; });
+  if(!open.length) return;
+  var voordeelVerleden = [0,1,2,3].reduce(function(t,i){ return t + (DATES[i] >= TODAY ? 0 : parseBedrag($('va'+i).value) * P.voordeel[i]); }, 0);
+  var Vp = Math.max(0, P.vermeerdering * T - voordeelVerleden);
+  var som = open.reduce(function(t,i){ return t + P.voordeel[i]; }, 0);
+  open.forEach(function(i, n){
+    var bedrag = gespreid ? naarBoven(Vp / som) : (n === 0 ? naarBoven(Vp / P.voordeel[i]) : 0);
+    $('va'+i).value = bedrag > 0 ? bedrag.toLocaleString('nl-BE') : '';
+  });
+  bereken();
+}
+function wisPlan(){
+  [0,1,2,3].forEach(function(i){ if(DATES[i] >= TODAY) $('va'+i).value = ''; });
+  bereken();
+}
+
+function planBlok(T, starter){
+  var Pn = percentagesVoor(BJ.aj + 1);
+  return '<div class="tip"><p><b>Zo pak je het volgend boekjaar aan</b>' + (starter ? ', zodra de vrijstelling stopt' : '') + ' (bij een gelijkaardige belasting van ' + eur(T) + '):</p>' +
+    '<p>• Alles in één keer bij de eerste vervaldag: <b>' + eur(naarBoven(T*Pn.vermeerdering/Pn.voordeel[0])) + '</b> (' + pct(Pn.vermeerdering/Pn.voordeel[0]) + ' van je belasting) volstaat.<br>' +
+    '• Liever spreiden? Stort elk kwartaal <b>' + eur(naarBoven(T/4)) + '</b> (25% van je belasting). Ook dan is je vermeerdering € 0.</p>' +
+    (Pn.voorlopig ? '<p class="muted" style="font-size:13.5px">Voorlopig berekend met de percentages van aanslagjaar ' + Pn.basis + '.</p>' : '') + '</div>';
+}
+
+/* ============ KREDIET VOOR VOORAFBETALINGEN ============ */
+function leesPct(){
+  var el = $('kredietRente'), v = String(el.value||'').replace(/[%\s]/g,'').replace(',', '.'), n = parseFloat(v), f = '';
+  if(v === '') n = 0;
+  else if(!/^\d*\.?\d+$/.test(v) || !isFinite(n)) f = 'Typ een rentevoet, bijvoorbeeld 5 of 4,5.';
+  $('renteFout').textContent = f || (n > 30 ? 'Dat is een erg hoge rentevoet. Kijk ze even na.' : '');
+  if(f) el.setAttribute('aria-invalid','true'); else el.removeAttribute('aria-invalid');
+  return f ? null : n/100;
+}
+function berekenKrediet(){
+  var box = $('kredietOut');
+  var r = leesPct();
+  if(!STAND){
+    box.innerHTML = '<p class="muted" style="margin:0">' + ($('starter').checked
+      ? 'Als kleine vennootschap in je eerste drie boekjaren heb je geen vermeerdering en dus geen krediet nodig.'
+      : 'Vul bovenaan je geschatte vennootschapsbelasting in, dan zie je hier de vergelijking.') + '</p>';
+    meldHoogte(); return;
+  }
+  if(r === null){ box.innerHTML = ''; meldHoogte(); return; }
+  /* altijd de eerste vervaldag; is die van dit boekjaar voorbij, dan die van het volgende boekjaar */
+  var va1 = DATES[0], volgend = va1 < TODAY, Pk = volgend ? percentagesVoor(BJ.aj + 1) : P;
+  if(volgend) va1 = werkdag(new Date(BJ.y + 1, BJ.m + 3, 10));
+  var T = STAND.T, V = Pk.vermeerdering * T, L = naarBoven(V / Pk.voordeel[0]);
+  var n = parseInt($('kredietMaanden').value, 10);
+  var i = r/12;
+  var maand = i > 0 ? L * i / (1 - Math.pow(1+i, -n)) : L / n;
+  var rente = maand * n - L;
+  var tarief = marginaalTarief(T);
+  var netto = rente * (1 - tarief);
+  var winst = V - netto;
+  var h = '<p class="muted" style="margin:0 0 4px;font-size:14.5px">' + (volgend
+      ? 'De eerste vervaldag van dit boekjaar is voorbij. Deze vergelijking geldt daarom voor je volgende boekjaar, bij een gelijkaardige belasting van ' + eur(T) + '. Eerste vervaldag: ' + datum(va1) + '.'
+      : 'Vergelijking voor een belasting van ' + eur(T) + ', met storting bij de eerste vervaldag: ' + datum(va1) + '.') +
+      (Pk.voorlopig ? ' De percentages voor dat boekjaar zijn nog niet bekend. De calculator rekent voorlopig met die van aanslagjaar ' + Pk.basis + '.' : '') + '</p>';
+  h += '<div class="verdict">' + (winst > 0
+      ? 'Met een krediet betaal je ' + eur(netto) + ' in plaats van ' + eur(V) + ' vermeerdering. Dat scheelt ' + eur(winst) + '.'
+      : 'Bij deze rentevoet kost het krediet meer dan de vermeerdering.') + '</div>';
+  h += '<div class="vs3">' +
+    '<div class="tile a"><div class="t">Zelf storten bij de eerste vervaldag</div>' +
+      '<div class="r"><span>In één keer uit je cashflow</span><b>' + eur(L) + '</b></div>' +
+      '<div class="r"><span>Vermeerdering</span><b>€ 0</b></div>' +
+      '<div class="r tot"><span>Extra kost</span><b>€ 0</b></div></div>' +
+    '<div class="tile b' + (winst > 0 ? ' win' : '') + '"><div class="t">De bank stort voor jou' + (winst > 0 ? ' <span class="pill">spaart je cashflow</span>' : '') + '</div>' +
+      '<div class="r"><span>In één keer uit je cashflow</span><b>€ 0</b></div>' +
+      '<div class="r"><span>Per maand, ' + n + ' maanden lang</span><b>' + eur(maand) + '</b></div>' +
+      '<div class="r"><span>Rente in totaal</span><b>' + eur(rente) + '</b></div>' +
+      '<div class="r tot"><span>Extra kost na belastingen</span><b>' + eur(netto) + '</b></div></div>' +
+    '<div class="tile c"><div class="t">Niets vooraf betalen</div>' +
+      '<div class="r"><span>In één keer uit je cashflow</span><b>€ 0</b></div>' +
+      '<div class="r"><span>Vermeerdering</span><b>' + eur(V) + '</b></div>' +
+      '<div class="r tot"><span>Extra kost</span><b>' + eur(V) + '</b></div></div>' +
+    '</div>';
+  var meer = '<div class="tip"><p><b>Hoe werkt het?</b> Bij de eerste vervaldag weegt elke euro het zwaarst: ' + eur(L) + ' volstaat om de volledige vermeerdering van ' + eur(V) + ' weg te werken. Dat is ' + pct(L/T) + ' van je belasting.</p>' +
+    '<p>De bank stort dat bedrag voor jou, uiterlijk ' + datum(va1) + '. Jij betaalt het terug met ' + eur(maand) + ' per maand, ' + n + ' maanden lang. In totaal betaal je ' + eur(maand*n) + ' terug, waarvan ' + eur(rente) + ' rente.</p>' +
+    '<p>Die rente is een aftrekbare kost. Na ' + pct(tarief) + ' vennootschapsbelasting kost ze je dus ' + eur(netto) + '. De vermeerdering van ' + eur(V) + ' is niet aftrekbaar.</p>' +
+    '<p><b>Het verschil met zelf storten:</b> je betaalt ' + eur(netto) + ' extra, maar je hoeft in ' + MAANDEN[va1.getMonth()] + ' ' + va1.getFullYear() + ' geen ' + eur(L) + ' in één keer uit je cashflow te halen. De rest van je belasting, ' + eur(Math.max(0, T - L)) + ', betaal je bij je aanslagbiljet.</p></div>';
+  meer += '<div class="note"><b>Waar je op let.</b> Een krediet blijft een schuld die je elke maand moet kunnen dragen. Vraag je bank naar de rentevoet, de dossierkosten en de voorwaarden, en vergelijk met een andere bank. Elke bank geeft het een eigen naam.' +
+    (CONFIG.krediet.link ? ' <a href="' + CONFIG.krediet.link + '" target="_blank" rel="noopener">' + CONFIG.krediet.linkTekst + '</a>' : '') + '</div>';
+  h += uitklap('krediet', meer);
+  box.innerHTML = h;
+  meldHoogte();
+}
+
+/* ---------- weergave ---------- */
+function uitklap(key, inhoud){
+  return '<details class="meer" data-key="' + key + '"' + (OPEN[key] ? ' open' : '') + '><summary>Meer uitleg</summary>' + inhoud + '</details>';
+}
+function vraagBlok(){
+  return '<div class="vraag"><p>' + CONFIG.vraagTekst + '</p><button type="button" class="naar-trajecten" onclick="naarTrajecten()">' + CONFIG.knopTekst + ' <span aria-hidden="true">↓</span></button></div>';
+}
+function renderLeeg(tekst){
+  $('result').innerHTML = '<h2 id="resultTitel">Jouw resultaat</h2><p class="lead muted">' + tekst + '</p>' + vraagBlok();
+  $('samenvatting').textContent = '';
+  na();
+}
+function render(R, T){
+  var h = '<h2 id="resultTitel">Jouw resultaat</h2>' +
+    '<p class="label">' + R.label + '</p>' +
+    '<div class="big' + (R.cls ? ' ' + R.cls : '') + '">' + R.big + '</div>' +
+    '<p class="lead">' + R.lead + '</p>';
+  if(R.kpis.length){
+    h += '<div class="kpis">' + R.kpis.map(function(k){ return '<div class="kpi"><div class="k">' + k[0] + '</div><div class="v">' + k[1] + '</div></div>'; }).join('') + '</div>';
+  }
+  h += uitklap('resultaat', R.meer.join(''));
+  h += '<div class="acties"><button type="button" class="btn klein" onclick="drukAf()">Druk af of bewaar als PDF</button></div>';
+  h += vraagBlok();
+  $('result').innerHTML = h;
+  var tmp = document.createElement('div'); tmp.innerHTML = R.label + ': ' + R.big + '. ' + R.lead;
+  $('samenvatting').textContent = tmp.textContent;
+  na();
+}
+function na(){
+  meldHoogte();
+  if($('kredietMaanden').options.length) berekenKrediet();
+}
+
+function meldHoogte(){
+  try{ window.parent.postMessage({type:'dcc-height', height: document.documentElement.scrollHeight}, '*'); }catch(e){}
+}
+/* elk uitklapblok: hoogte doorgeven en onthouden of het open staat */
+document.addEventListener('toggle', function(e){
+  var d = e.target;
+  if(d && d.getAttribute && d.getAttribute('data-key')) OPEN[d.getAttribute('data-key')] = d.open;
+  meldHoogte();
+}, true);
+if(window.ResizeObserver){ new ResizeObserver(meldHoogte).observe(document.body); }
+window.addEventListener('load', meldHoogte);
+
+/* afdrukken: alle uitleg bij resultaat en krediet openklappen, daarna terugzetten */
+var VOOR_PRINT = [];
+function drukAf(){ window.print(); }
+window.addEventListener('beforeprint', function(){
+  $('printkop').textContent = 'Berekend op ' + datum(TODAY) + ' met de calculator voorafbetalingen van De Cijfercoach (decijfercoach.be). Boekjaar ' + datum(BJ.start) + ' tot ' + datum(BJ.eind) + '.';
+  VOOR_PRINT = [];
+  document.querySelectorAll('.result details, .krediet details').forEach(function(d){ if(!d.open){ VOOR_PRINT.push(d); d.open = true; } });
+});
+window.addEventListener('afterprint', function(){ VOOR_PRINT.forEach(function(d){ d.open = false; }); VOOR_PRINT = []; });
+
+$('toggleHelper').addEventListener('click', function(){
+  var open = $('helper').hidden;
+  $('helper').hidden = !open;
+  this.setAttribute('aria-expanded', open ? 'true' : 'false');
+  if(open) $('winst').focus();
+  bereken();
+});
+$('belasting').addEventListener('input', function(){ $('winst').value=''; $('winstFout').textContent=''; $('winst').removeAttribute('aria-invalid'); bereken(); });
+$('belasting').addEventListener('blur', function(){ netjes(this); });
+$('winst').addEventListener('input', bereken);
+$('winst').addEventListener('blur', function(){ netjes(this); });
+['starter','verlaagd'].forEach(function(id){ $(id).addEventListener('change', bereken); });
+$('boekjaar').addEventListener('change', function(){ bouwRijen(); bereken(); });
+$('voorbeeld').addEventListener('click', function(){
+  var sel = $('boekjaar');
+  for(var i=0;i<sel.options.length;i++){ if(/-0$/.test(sel.options[i].value)) sel.selectedIndex = i; }
+  $('starter').checked = false;
+  $('winst').value = '';
+  bouwRijen();
+  $('belasting').value = CONFIG.voorbeeld.belasting.toLocaleString('nl-BE');
+  CONFIG.voorbeeld.betaald.forEach(function(v,i){ $('va'+i).value = v ? v.toLocaleString('nl-BE') : ''; });
+  bereken();
+  $('result').scrollIntoView({behavior:'smooth', block:'start'});
+});
+
+function zetDisclaimer(){
+  $('disclaimer').textContent = 'Deze calculator geeft een indicatieve berekening met de laatst gekende percentages (laatst gecontroleerd op ' + CONFIG.laatstGecontroleerd + '): een vermeerdering van ' + pct(P.vermeerdering) + ' en per voorafbetaling een voordeel van ' +
+    opsomming(P.voordeel.map(function(v){ return pct(v); })) + '. Die percentages kunnen elk jaar wijzigen. Vervaldagen in een weekend of op een feestdag schuiven op naar de eerstvolgende werkdag. De calculator rekent met boekjaren van twaalf maanden. De calculator vervangt geen persoonlijk fiscaal advies. Kleine afwijkingen door afrondingen of bijzondere situaties blijven mogelijk.';
+}
+(function(){
+  var sel = $('kredietMaanden');
+  CONFIG.krediet.keuzes.forEach(function(m){ var o = document.createElement('option'); o.value = m; o.textContent = m + ' maanden'; if(m === CONFIG.krediet.maanden) o.selected = true; sel.appendChild(o); });
+  $('kredietRente').value = String(CONFIG.krediet.rente).replace('.', ',');
+  $('kredietRente').addEventListener('input', berekenKrediet);
+  sel.addEventListener('change', berekenKrediet);
+  $('kredietIntro').innerHTML = 'Met een krediet voor voorafbetalingen stort de bank je voorafbetaling voor jou. Bij BNP Paribas Fortis heet dat Bonifisc, andere banken hebben iets gelijkaardigs. Jij betaalt in maandelijkse schijven terug. Zo vermijd je de vermeerdering zonder dat je in één keer een groot bedrag uit je cashflow haalt.';
+})();
+$('gespreid').addEventListener('click', function(){ vulPlan(true); });
+$('ineens').addEventListener('click', function(){ vulPlan(false); });
+$('wis').addEventListener('click', wisPlan);
+bouwRijen();
+zetDisclaimer();
+$('boekjaar').addEventListener('change', zetDisclaimer);
+bereken();
+
+/* ============ TRAJECTEN ============ */
+(function(){
+  var h = '<p class="eyebrow">The Financial Academy</p><h2>' + CONFIG.trajectenTitel + '</h2><p class="sub">' + CONFIG.trajectenIntro + '</p><div class="tr-grid">';
+  CONFIG.trajecten.forEach(function(t){
+    h += '<a class="tr ' + t.kleur + '" href="' + t.url + '" target="_top"><span class="voor">' + t.voor + '</span><h3>' + t.naam + '</h3><p>' + t.tekst + '</p><span class="go">Ontdek dit traject <span aria-hidden="true">→</span></span></a>';
+  });
+  $('trajecten').innerHTML = h + '</div>';
+  meldHoogte();
+})();
+function naarTrajecten(){ $('trajecten').scrollIntoView({behavior:'smooth', block:'start'}); }
+</script>
+<script>
+/* koppeling met de insluitcode op decijfercoach.be: hoogte op vraag doorgeven en melden dat er een nieuwe pagina geladen is */
+(function(){
+  function hoogte(){ try{ window.parent.postMessage({type:'dcc-height', height: document.documentElement.scrollHeight}, '*'); }catch(e){} }
+  window.addEventListener('message', function(e){ if(e.data && e.data.type === 'dcc-vraag-hoogte') hoogte(); });
+  window.addEventListener('load', function(){ try{ window.parent.postMessage({type:'dcc-nav'}, '*'); }catch(e){} hoogte(); });
+})();
+</script>
+</body>
+</html>
