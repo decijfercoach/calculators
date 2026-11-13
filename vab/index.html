@@ -61,14 +61,14 @@ h1,h2,h3,.big,.verdict,.vraag p,.opt .n{font-family:'Glitz','Outfit',system-ui,s
   <div class="brand">de cijfercoach · Kimberley Van Poecke</div>
 </div>
 <script>
-function meldHoogte(){ try{ window.parent.postMessage({type:'dcc-height', height: document.documentElement.scrollHeight}, '*'); }catch(e){} }
+function meldHoogte(){ try{ window.parent.postMessage({type:'dcc-height', height: Math.ceil(document.body.getBoundingClientRect().height)}, '*'); }catch(e){} }
 if(window.ResizeObserver){ new ResizeObserver(meldHoogte).observe(document.body); }
 window.addEventListener('load', meldHoogte);
 </script>
 <script>
 /* koppeling met de insluitcode op decijfercoach.be: hoogte op vraag doorgeven en melden dat er een nieuwe pagina geladen is */
 (function(){
-  function hoogte(){ try{ window.parent.postMessage({type:'dcc-height', height: document.documentElement.scrollHeight}, '*'); }catch(e){} }
+  function hoogte(){ try{ window.parent.postMessage({type:'dcc-height', height: Math.ceil(document.body.getBoundingClientRect().height)}, '*'); }catch(e){} }
   window.addEventListener('message', function(e){ if(e.data && e.data.type === 'dcc-vraag-hoogte') hoogte(); });
   window.addEventListener('load', function(){ try{ window.parent.postMessage({type:'dcc-nav'}, '*'); }catch(e){} hoogte(); });
 })();
