@@ -1786,7 +1786,7 @@ $('btnWis').addEventListener('click', function(){
 });
 
 /* ---------- hoogte doorgeven aan de website ---------- */
-function meldHoogte(){ try{ window.parent.postMessage({type:'dcc-height', height: document.documentElement.scrollHeight}, '*'); }catch(e){} }
+function meldHoogte(){ try{ window.parent.postMessage({type:'dcc-height', height: Math.ceil(document.body.getBoundingClientRect().height)}, '*'); }catch(e){} }
 if(window.ResizeObserver){ new ResizeObserver(meldHoogte).observe(document.body); }
 /* elk openklappen (ook in het resultaat, dat telkens opnieuw opgebouwd wordt) meldt de nieuwe hoogte */
 document.addEventListener('toggle', function(e){
@@ -1817,7 +1817,7 @@ function naarTrajecten(){ $('trajecten').scrollIntoView({behavior:'smooth', bloc
 <script>
 /* koppeling met de insluitcode op decijfercoach.be: hoogte op vraag doorgeven en melden dat er een nieuwe pagina geladen is */
 (function(){
-  function hoogte(){ try{ window.parent.postMessage({type:'dcc-height', height: document.documentElement.scrollHeight}, '*'); }catch(e){} }
+  function hoogte(){ try{ window.parent.postMessage({type:'dcc-height', height: Math.ceil(document.body.getBoundingClientRect().height)}, '*'); }catch(e){} }
   window.addEventListener('message', function(e){ if(e.data && e.data.type === 'dcc-vraag-hoogte') hoogte(); });
   window.addEventListener('load', function(){ try{ window.parent.postMessage({type:'dcc-nav'}, '*'); }catch(e){} hoogte(); });
 })();
