@@ -1,0 +1,1828 @@
+<!doctype html>
+<html lang="nl-BE">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Loonpakket bedrijfsleider | De Cijfercoach</title>
+<meta name="description" content="Stel je loonpakket samen als bedrijfsleider van een vennootschap: loon, tantième, onkostenvergoedingen, voordelen alle aard, maaltijdcheques, huur, auteursrechten, warranten en dividend.">
+<!--
+  CALCULATOR LOONPAKKET BEDRIJFSLEIDER
+  Cijfers voor inkomstenjaar 2026 (aanslagjaar 2027).
+  Alle bedragen en percentages staan in CONFIG bovenaan het script.
+  Jaarlijkse update: pas CONFIG aan en controleer de teksten in de uitlegblokken.
+-->
+<style>
+/* Lettertypes van het merk, lokaal geladen */
+@font-face{font-family:'Glitz';src:url('../fonts/glitz.woff2') format('woff2');font-weight:400;font-style:normal;font-display:swap}
+@font-face{font-family:'Outfit';src:url('../fonts/outfit-400.woff2') format('woff2');font-weight:400;font-style:normal;font-display:swap}
+@font-face{font-family:'Outfit';src:url('../fonts/outfit-500.woff2') format('woff2');font-weight:500;font-style:normal;font-display:swap}
+@font-face{font-family:'Outfit';src:url('../fonts/outfit-600.woff2') format('woff2');font-weight:600;font-style:normal;font-display:swap}
+@font-face{font-family:'Outfit';src:url('../fonts/outfit-700.woff2') format('woff2');font-weight:700;font-style:normal;font-display:swap}
+@font-face{font-family:'Outfit';src:url('../fonts/outfit-800.woff2') format('woff2');font-weight:800;font-style:normal;font-display:swap}
+:root{
+  --creme:#feefe5;--perzik:#f9c195;--lila-licht:#b8c5e7;--bordeaux:#b92c52;--bordeaux-donker:#9a2344;--oranje:#f3925a;--lila:#93a3d4;--roze:#e62987;--roze-donker:#c81f73;
+  --ink:#2b1d22;--muted:#7a6168;--line:#f1dccd;--card:#fff;--shadow:0 10px 30px rgba(185,44,82,.08)
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--creme);color:var(--ink);font-family:'Outfit',system-ui,-apple-system,'Segoe UI',Arial,sans-serif;font-size:16px;line-height:1.55;font-weight:400}
+b,strong{font-weight:700}
+.wrap{max-width:760px;margin:0 auto;padding:20px 16px 36px}
+.terug{display:inline-block;color:var(--bordeaux);font-weight:600;font-size:14.5px;text-decoration:none;margin:0 0 12px}
+.terug:hover{text-decoration:underline}
+.hero{background:linear-gradient(180deg,var(--lila-licht) 0%,#dcc3c8 55%,var(--perzik) 100%);border-radius:24px;padding:32px 26px 30px;margin-bottom:20px}
+.eyebrow{font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:var(--bordeaux);font-weight:700;margin:0 0 10px}
+h1{font-size:clamp(28px,6vw,42px);line-height:1.05;color:var(--bordeaux);margin:0 0 12px}
+.hero-note{margin:14px 0 0;font-size:13.5px;font-weight:600;color:var(--bordeaux)}
+.intro{margin:0;font-size:16.5px}
+.card{background:var(--card);border-radius:20px;box-shadow:var(--shadow);padding:24px 22px;margin-bottom:18px}
+.card h2{font-size:21px;color:var(--bordeaux);margin:0 0 4px}
+.card .sub{color:var(--muted);font-size:14.5px;margin:0 0 18px}
+label.lbl{display:block;font-weight:600;font-size:15px;margin:0 0 7px}
+.field{margin-bottom:16px}
+.hint{font-size:13.5px;color:var(--muted);margin-top:6px}
+select,input[type=text]{width:100%;font:inherit;color:var(--ink);background:#fffaf6;border:1.5px solid var(--line);border-radius:12px;padding:12px 13px;outline:none;transition:border-color .15s,box-shadow .15s}
+select:focus,input[type=text]:focus{border-color:var(--lila);box-shadow:0 0 0 3px rgba(147,163,212,.25)}
+.money{position:relative}
+.money span{position:absolute;left:13px;top:50%;transform:translateY(-50%);color:var(--muted);pointer-events:none}
+.money input{padding-left:30px;text-align:right;font-variant-numeric:tabular-nums;font-weight:600}
+.unit{position:relative}
+.unit span{position:absolute;right:13px;top:50%;transform:translateY(-50%);color:var(--muted);pointer-events:none}
+.unit input{padding-right:84px;text-align:right;font-weight:600;font-variant-numeric:tabular-nums}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.check{display:flex;gap:10px;align-items:flex-start;font-size:15px;cursor:pointer;margin-bottom:12px}
+.check input{margin-top:4px;width:18px;height:18px;flex:none;accent-color:var(--bordeaux)}
+.check .bedrag{color:var(--muted);font-size:13.5px}
+.check.uit{opacity:.45;cursor:not-allowed}
+.check .reden{display:block;color:var(--bordeaux);font-size:13px;font-weight:600}
+.check .reden:empty{display:none}
+input[type=text]:disabled,select:disabled{opacity:.5;cursor:not-allowed}
+.sub-block{background:#fff6f0;border:1px solid var(--line);border-radius:14px;padding:16px;margin:4px 0 16px}
+.sub-block[hidden]{display:none}
+.groep{font-weight:700;color:var(--bordeaux);font-size:15px;margin:18px 0 10px}
+.groep:first-of-type{margin-top:4px}
+.warn{background:#fff4ea;border-left:4px solid var(--oranje);border-radius:12px;padding:10px 13px;font-size:14px;margin:8px 0 12px}
+.warn:empty{display:none}
+.btn{display:inline-block;background:var(--bordeaux);color:var(--creme);border:0;border-radius:999px;font:inherit;font-weight:700;font-size:15px;padding:11px 18px;cursor:pointer;margin-top:4px;transition:background .15s}
+.btn:hover{background:var(--bordeaux-donker)}
+.btn.ghost{background:transparent;color:var(--bordeaux);border:1.5px solid var(--bordeaux)}
+.btn.ghost:hover{background:#fff1f4}
+.knoppen{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px}
+/* resultaat */
+.result{background:var(--bordeaux);color:var(--creme);box-shadow:0 14px 34px rgba(185,44,82,.25)}
+.result h2{color:var(--creme)}
+.result .muted{color:rgba(254,239,229,.78)}
+.big{font-size:clamp(34px,8vw,50px);line-height:1.05;margin:6px 0 4px;font-variant-numeric:tabular-nums;color:var(--creme)}
+.lead{font-size:16px;margin:0 0 16px;color:rgba(254,239,229,.92)}
+.kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:16px 0}
+.kpi{background:rgba(255,255,255,.1);border-radius:14px;padding:13px}
+.kpi .k{font-size:13px;color:rgba(254,239,229,.78);font-weight:500}
+.kpi .v{font-size:21px;font-weight:800;font-variant-numeric:tabular-nums}
+table{width:100%;border-collapse:collapse;font-size:15px;margin-top:8px}
+th,td{padding:9px 6px;border-bottom:1px solid rgba(254,239,229,.2);text-align:left;vertical-align:top}
+th{font-size:12px;color:rgba(254,239,229,.7);text-transform:uppercase;letter-spacing:.06em;font-weight:600}
+td.num,th.num{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+tr.tot td{border-top:2px solid rgba(254,239,229,.5);font-weight:700}
+tr.win td{background:rgba(254,239,229,.12)}
+.result h3{font-size:19px;margin:26px 0 6px;color:var(--creme)}
+.checks{display:grid;gap:8px;margin:12px 0}
+.chk{display:flex;gap:10px;align-items:flex-start;background:rgba(255,255,255,.08);border-radius:12px;padding:11px 13px;font-size:14.5px}
+.chk .ic{flex:none;width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:14px}
+.chk.ok .ic{background:var(--lila-licht);color:#2d3566}
+.chk.bad .ic{background:var(--perzik);color:#7a3510}
+.chk.na .ic{background:rgba(254,239,229,.25);color:var(--creme)}
+.comp{background:rgba(255,255,255,.08);border-radius:14px;padding:13px 15px;margin:8px 0;font-size:14.5px}
+.comp .t{font-weight:700;font-size:15.5px;margin-bottom:4px}
+.comp .r{display:flex;justify-content:space-between;gap:10px;padding:2px 0}
+.comp .r b{font-variant-numeric:tabular-nums;white-space:nowrap}
+.comp .d{margin-top:6px;color:rgba(254,239,229,.85)}
+.note,.tip{border-radius:14px;padding:13px 15px;font-size:14.5px;margin:14px 0 0}
+.note{background:rgba(249,193,149,.18);border-left:4px solid var(--perzik)}
+.tip{background:rgba(255,255,255,.1);border-left:4px solid var(--lila-licht)}
+.verdict{font-size:clamp(20px,4.5vw,25px);line-height:1.2;margin:14px 0 4px;color:var(--creme)}
+.disclaimer{font-size:13px;color:var(--muted);margin-top:18px}
+/* uitleg */
+.uitleg{background:#fff;border-radius:20px;box-shadow:var(--shadow);padding:18px 22px;margin-bottom:14px;border-left:5px solid var(--lila)}
+.uitleg summary{cursor:pointer;font-weight:700;color:var(--bordeaux);font-size:16.5px;list-style:none;display:flex;justify-content:space-between;align-items:center;gap:12px}
+.uitleg summary::-webkit-details-marker{display:none}
+.uitleg summary::after{content:'+';font-size:22px;line-height:1;color:var(--bordeaux)}
+.uitleg[open] summary::after{content:'−'}
+.uitleg ol,.uitleg ul{margin:12px 0 0;padding-left:22px}
+.uitleg li{margin:0 0 8px;font-size:15px}
+.uitleg p{font-size:15px;margin:12px 0 0}
+.uitleg .klein{font-size:13.5px;color:var(--muted)}
+.uitleg h4{margin:16px 0 0;font-size:15.5px;color:var(--bordeaux)}
+.sectie-titel{font-size:clamp(24px,5vw,32px);line-height:1.1;color:var(--bordeaux);margin:30px 0 6px}
+.sectie-sub{margin:0 0 16px}
+/* trajecten */
+.trajecten{margin:26px 0 8px}
+.trajecten h2{font-size:clamp(24px,5vw,32px);line-height:1.1;color:var(--bordeaux);margin:0 0 8px}
+.trajecten .sub{margin:0 0 16px;font-size:16px}
+.tr-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:14px}
+.tr{display:flex;flex-direction:column;border-radius:20px;padding:22px 20px;color:var(--creme);text-decoration:none;transition:transform .15s}
+.tr:hover{transform:translateY(-3px)}
+.tr.oranje{background:var(--oranje)}
+.tr.bordeaux{background:var(--bordeaux)}
+.tr .voor{display:inline-block;align-self:flex-start;background:rgba(254,239,229,.22);border-radius:999px;padding:3px 11px;font-size:12.5px;font-weight:600;margin-bottom:12px}
+.tr h3{font-size:22px;line-height:1.1;margin:0 0 8px}
+.tr p{margin:0 0 18px;font-size:15px;line-height:1.5;flex:1}
+.tr .go{align-self:flex-start;background:var(--creme);color:var(--bordeaux);font-weight:700;border-radius:999px;padding:9px 16px;font-size:14.5px}
+.vraag{margin-top:24px;padding-top:20px;border-top:1px solid rgba(254,239,229,.25);text-align:center}
+.vraag p{margin:0;font-size:clamp(19px,4.5vw,23px);line-height:1.25;color:var(--creme)}
+.naar-trajecten{display:block;width:100%;text-align:center;background:var(--roze);color:#fff;border:0;font:inherit;font-weight:700;font-style:italic;border-radius:999px;padding:15px 20px;margin-top:14px;cursor:pointer;transition:background .15s}
+.naar-trajecten:hover{background:var(--roze-donker)}
+.brand{display:flex;justify-content:center;margin-top:22px;font-size:13px;color:var(--muted);letter-spacing:.04em}
+/* inklapbare blokken met invoer */
+details.blok{padding:0}
+details.blok>summary{list-style:none;cursor:pointer;padding:20px 22px;display:flex;gap:12px;align-items:center;justify-content:space-between;border-radius:20px}
+details.blok>summary::-webkit-details-marker{display:none}
+details.blok>summary h2{margin:0 0 2px}
+details.blok>summary .sub{display:block;margin:0}
+details.blok>summary::after{content:'+';flex:none;width:32px;height:32px;border-radius:50%;background:var(--creme);color:var(--bordeaux);display:flex;align-items:center;justify-content:center;font-size:22px;line-height:1;font-weight:700}
+details.blok[open]>summary::after{content:'−'}
+details.blok .blok-in{padding:0 22px 22px}
+details.blok>summary>span:first-child{flex:1;min-width:0}
+details.blok>summary h2{overflow-wrap:break-word}
+.badge{display:inline-block;margin-top:6px;background:var(--lila-licht);color:#2d3566;border-radius:999px;padding:2px 10px;font-size:12.5px;font-weight:700;white-space:nowrap}
+.badge[hidden]{display:none}
+.optioneel{margin:22px 4px 10px;font-weight:600;color:var(--bordeaux)}
+/* foutmeldingen bij invoer */
+.fout{color:var(--bordeaux);font-size:13.5px;font-weight:600;margin-top:6px}
+.fout:empty{display:none}
+input[aria-invalid=true]{border-color:var(--bordeaux);background:#fff1f4}
+/* toegankelijkheid */
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+a:focus-visible,button:focus-visible,summary:focus-visible,select:focus-visible,input:focus-visible{outline:3px solid var(--roze);outline-offset:2px}
+.check input:focus-visible{outline:3px solid var(--roze);outline-offset:2px}
+/* resultaat: kort bovenaan, details inklapbaar */
+.status{display:flex;gap:10px;align-items:flex-start;background:rgba(255,255,255,.1);border-radius:12px;padding:11px 13px;font-size:15px;margin:12px 0 0}
+.status .ic{flex:none;width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:14px}
+.status.ok .ic{background:var(--lila-licht);color:#2d3566}
+.status.bad .ic{background:var(--perzik);color:#7a3510}
+.status.tip .ic{background:var(--creme);color:var(--bordeaux)}
+.rdet{border-top:1px solid rgba(254,239,229,.25);margin-top:6px}
+.rdet>summary{cursor:pointer;list-style:none;display:flex;justify-content:space-between;align-items:center;gap:12px;padding:15px 2px;font-weight:700;font-size:16.5px;color:var(--creme)}
+.rdet>summary::-webkit-details-marker{display:none}
+.rdet>summary::after{content:'+';font-size:22px;line-height:1}
+.rdet[open]>summary::after{content:'−'}
+.rdet>.in{padding:0 0 16px}
+.result .btn.licht{background:var(--creme);color:var(--bordeaux)}
+.result .btn.licht:hover{background:#fff}
+.print-only{display:none}
+@media (max-width:560px){.two{grid-template-columns:1fr}.kpis{grid-template-columns:1fr}.card{padding:20px 16px}details.blok{padding:0}details.blok>summary{padding:18px 16px}details.blok>summary h2{font-size:19px}details.blok .blok-in{padding:0 16px 18px}.hero{padding:26px 20px}th,td{padding:8px 3px;font-size:13.5px}th{font-size:10.5px;letter-spacing:0}}
+@media print{
+  @page{margin:14mm}
+  html,body{background:#fff;font-size:12pt}
+  .terug,.knoppen,.blok,.card:not(.result),.uitleg,.sectie-titel,.sectie-sub,.trajecten,.vraag,.optioneel,.no-print,#voorbeeldKnoppen{display:none !important}
+  .hero{background:none;padding:0;margin:0 0 10px}
+  .hero .intro{display:none}
+  .result{background:#fff !important;color:var(--ink) !important;box-shadow:none;padding:0}
+  .result *{color:var(--ink) !important}
+  .result .kpi,.result .chk,.result .comp,.result .tip,.result .note,.result .status{background:#fff !important;border:1px solid #ccc}
+  .rdet>summary::after{content:''}
+  th,td{border-bottom:1px solid #ccc}
+  .print-only{display:block}
+  .disclaimer{color:#444}
+}
+h1,h2,h3,.big,.verdict,.vraag p,.sectie-titel{font-family:'Glitz','Outfit',system-ui,sans-serif !important;font-weight:400 !important;letter-spacing:.005em !important;word-spacing:.14em}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="terug" href="../">← Alle calculators</a>
+  <header class="hero">
+    <p class="eyebrow">De Cijfercoach · Calculator</p>
+    <h1>Stel je loonpakket samen als bedrijfsleider</h1>
+    <p class="intro">Loon, onkostenvergoedingen, voordelen alle aard, maaltijdcheques, huur en dividend: zie wat er netto bij jou terechtkomt en of je vennootschap het verlaagd tarief van 20% houdt.</p>
+    <p class="hero-note">Cijfers voor inkomstenjaar <span class="jr"></span> (aanslagjaar <span class="aj"></span>). Deze calculator vervangt geen persoonlijk fiscaal advies.</p>
+    <p class="hero-note" id="jaarMelding" hidden></p>
+  </header>
+
+  <details class="uitleg">
+    <summary>Zo gebruik je deze calculator</summary>
+    <ol>
+      <li><b>Neem je cijfers erbij.</b> Je hebt nodig:
+        <ul>
+          <li>een schatting van de winst van je vennootschap voor dit jaar. Die vraag je aan je boekhouder, of je haalt ze uit je tussentijdse cijfers;</li>
+          <li>heb je een bedrijfswagen: je <b>inschrijvingsbewijs</b> (voor de CO2 uitstoot) en je <b>bestelbon of leasecontract</b> (voor de cataloguswaarde);</li>
+          <li>verhuur je een privékantoor of woon je in een woning van je vennootschap: het <b>kadastraal inkomen</b>. Dat vind je op je jaarlijkse <b>aanslagbiljet van de onroerende voorheffing</b>.</li>
+        </ul>
+      </li>
+      <li><b>Blok 1: winst vóór je loonpakket.</b> Dat is de winst van je vennootschap vóór je eigen loon en vóór alle kosten die je in deze calculator invult (vergoedingen, wagen, cheques, huur). Ken je enkel je winst vóór belastingen? Tel daar je huidige loon als bedrijfsleider en de kosten die je hieronder invult bij op.</li>
+      <li><b>Blok 2: je gewenste nettoloon per maand.</b> Wat je elke maand als loon op je rekening wil. De calculator rekent uit welk brutoloon je vennootschap je daarvoor moet toekennen. Dat bedrag heeft je boekhouder nodig. Twijfel je? Klik op <b>Toon mijn beste loon</b>.</li>
+      <li><b>Blok 3 tot 9 zijn optioneel.</b> Klik een blok open als het op jou van toepassing is: voordelen alle aard, onkostenvergoedingen, cheques, huur, pensioen, andere routes en dividend. Alles wat je invult, telt meteen mee. Een blok waarin iets staat, krijgt het label <b>ingevuld</b>.</li>
+      <li><b>Lees je resultaat.</b> Bovenaan zie je één getal: wat er elke maand netto voor jou overblijft. Wil je weten hoe dat tot stand komt? Klik dan de onderdelen eronder open.</li>
+      <li><b>Bewaar of druk af.</b> Met <b>Bewaar als pdf</b> druk je je resultaat af of bewaar je het als pdf voor je boekhouder.</li>
+    </ol>
+    <p class="klein">Bedragen typ je gewoon in, met of zonder punt: 60000 of 60.000. Twijfel je hoe het werkt? Klik op <b>Probeer met een voorbeeld</b>. Alles wat je invult, blijft op je eigen toestel. Niets wordt bewaard of doorgestuurd.</p>
+  </details>
+
+  <!-- 1. VENNOOTSCHAP -->
+  <div class="card">
+    <h2>1. Jouw vennootschap en jij</h2>
+    <p class="sub">De basis waarop alles berekend wordt.</p>
+    <div class="knoppen" id="voorbeeldKnoppen" style="margin:0 0 16px">
+      <button type="button" class="btn ghost" id="btnVoorbeeld">Probeer met een voorbeeld</button>
+      <button type="button" class="btn ghost" id="btnWis">Wis alles</button>
+    </div>
+    <div class="field">
+      <label class="lbl" for="winst">Winst van je vennootschap vóór je loonpakket, per jaar</label>
+      <div class="money"><span>€</span><input type="text" id="winst" inputmode="decimal" placeholder="0" autocomplete="off"></div>
+      <div class="hint">Omzet min alle kosten, maar vóór je eigen loon en vóór de kosten die je hieronder invult. Een schatting volstaat.</div>
+    </div>
+    <label class="check"><input type="checkbox" id="kmo" checked>
+      <span>Mijn vennootschap is een <b>kleine vennootschap</b>, is <b>niet voor de helft of meer</b> in handen van andere vennootschappen en is <b>geen holding</b>: haar aandelen en beleggingen in aandelen (ook een DBI bevek) zijn samen niet meer waard dan de helft van haar kapitaal en reserves. <span class="bedrag">Zo ja, dan kan ze het verlaagd tarief van 20% krijgen.</span></span></label>
+    <label class="check"><input type="checkbox" id="starter">
+      <span>Mijn vennootschap zit in haar <b>eerste vier boekjaren</b> en zet geen bestaande eenmanszaak voort. <span class="bedrag">Dan geldt de regel van € 51.000 nog niet. De regel van 20% voor voordelen alle aard geldt wel.</span></span></label>
+    <div class="two">
+      <div class="field">
+        <label class="lbl" for="kinderen">Kinderen ten laste</label>
+        <select id="kinderen">
+          <option value="0">Geen</option><option value="1">1 kind</option><option value="2">2 kinderen</option><option value="3">3 kinderen</option><option value="4">4 kinderen</option><option value="5">5 kinderen of meer</option>
+        </select>
+        <div class="hint">Enkel als ze bij jou ten laste staan. Bij een koppel gaan ze naar wie het hoogste inkomen heeft.</div>
+      </div>
+      <div class="field">
+        <label class="lbl" for="gemeente">Gemeentebelasting</label>
+        <div class="unit"><input type="text" id="gemeente" inputmode="decimal" autocomplete="off" value="7,2"><span>%</span></div>
+        <div class="hint">Het Vlaamse gemiddelde ligt rond 7,2%. Het tarief van je gemeente vind je op je aanslagbiljet.</div>
+      </div>
+    </div>
+    <div class="field">
+      <label class="lbl" for="gezin">Gezinssituatie</label>
+      <select id="gezin">
+        <option value="alleen">Alleenstaand</option>
+        <option value="samen">Gehuwd of wettelijk samenwonend</option>
+      </select>
+    </div>
+    <div class="field" id="partnerVeld" hidden>
+      <label class="lbl" for="partnerInk">Hoeveel verdient je partner netto per maand?</label>
+      <div class="money"><span>€</span><input type="text" id="partnerInk" inputmode="decimal" placeholder="0" autocomplete="off"></div>
+      <div class="hint">Wat er elke maand op de rekening komt. Geen inkomen? Laat 0 staan. Verdient je partner weinig, dan verlaagt dat jullie belasting: de calculator rekent het voor je uit.</div>
+    </div>
+  </div>
+
+  <!-- 2. LOON -->
+  <div class="card">
+    <h2>2. Je gewenste nettoloon</h2>
+    <p class="sub">Wat wil je elke maand op je rekening krijgen als loon? De calculator rekent uit welk brutoloon je vennootschap je daarvoor moet toekennen.</p>
+    <div class="field">
+      <label class="lbl" for="nettoMaand">Gewenst nettoloon per maand</label>
+      <div class="money"><span>€</span><input type="text" id="nettoMaand" inputmode="decimal" placeholder="0" autocomplete="off"></div>
+      <div class="hint" id="loonHint">Na sociale bijdragen en belastingen. Onkostenvergoedingen, cheques en huur komen er nog bovenop.</div>
+    </div>
+    <div class="knoppen">
+      <button type="button" class="btn" id="btnOptimum">Toon mijn beste loon</button>
+      <button type="button" class="btn ghost" id="btnMinimum">Vul het minimum in voor het verlaagd tarief</button>
+    </div>
+    <div class="warn" id="loonMelding" role="status"></div>
+  </div>
+
+  <p class="optioneel">Optioneel: klik open wat op jou van toepassing is.</p>
+
+  <!-- 3. VOORDELEN ALLE AARD -->
+  <details class="card blok" id="blok3">
+    <summary><span><h2>3. Voordelen alle aard</h2><span class="sub">Bedrijfswagen, laptop, gsm, woning of een lening van je vennootschap.</span><span class="badge" hidden>ingevuld</span></span></summary>
+    <div class="blok-in">
+    <p class="hint" style="margin:0 0 14px">Je vennootschap stelt iets ter beschikking dat je ook privé gebruikt. Op een vast bedrag (een forfait) betaal je belasting en sociale bijdragen. Let op de nieuwe regel van 20%: zie je resultaat.</p>
+
+    <p class="groep">Bedrijfswagen</p>
+    <label class="check"><input type="checkbox" id="vWagen"><span>Ik heb (of overweeg) een <b>bedrijfswagen</b> die ik ook privé gebruik</span></label>
+    <div class="sub-block" id="wagenBlok" hidden>
+      <div class="two">
+        <div class="field">
+          <label class="lbl" for="wCat">Cataloguswaarde</label>
+          <div class="money"><span>€</span><input type="text" id="wCat" inputmode="decimal" placeholder="0" autocomplete="off"></div>
+          <div class="hint">Nieuwprijs met btw en opties, zonder korting. Staat op je bestelbon of leasecontract.</div>
+        </div>
+        <div class="field">
+          <label class="lbl" for="wBrandstof">Brandstof</label>
+          <select id="wBrandstof"><option value="e">Elektrisch</option><option value="b">Benzine, hybride, lpg of aardgas</option><option value="d">Diesel</option></select>
+        </div>
+      </div>
+      <div class="two">
+        <div class="field" id="co2Veld">
+          <label class="lbl" for="wCo2">CO2 uitstoot</label>
+          <div class="unit"><input type="text" id="wCo2" inputmode="decimal" placeholder="0" autocomplete="off"><span>g/km</span></div>
+          <div class="hint">Staat op je inschrijvingsbewijs of gelijkvormigheidsattest (WLTP).</div>
+        </div>
+        <div class="field">
+          <label class="lbl" for="wLeeftijd">Leeftijd van de wagen</label>
+          <select id="wLeeftijd"><option value="0">Minder dan 1 jaar</option><option value="1">1 tot 2 jaar</option><option value="2">2 tot 3 jaar</option><option value="3">3 tot 4 jaar</option><option value="4">4 tot 5 jaar</option><option value="5">Meer dan 5 jaar</option></select>
+          <div class="hint">Sinds de eerste inschrijving.</div>
+        </div>
+      </div>
+      <div class="two">
+        <div class="field">
+          <label class="lbl" for="wKost">Kosten van de wagen per jaar voor je vennootschap</label>
+          <div class="money"><span>€</span><input type="text" id="wKost" inputmode="decimal" placeholder="0" autocomplete="off"></div>
+          <div class="hint">Leasing of afschrijving, verzekering, onderhoud, brandstof of laden.</div>
+        </div>
+        <div class="field">
+          <label class="lbl" for="wBijdrage">Eigen bijdrage die jij betaalt, per jaar</label>
+          <div class="money"><span>€</span><input type="text" id="wBijdrage" inputmode="decimal" placeholder="0" autocomplete="off"></div>
+          <div class="hint">Meestal € 0. Een eigen bijdrage verlaagt je voordeel alle aard.</div>
+        </div>
+      </div>
+      <div class="field">
+        <label class="lbl" for="wBesteld">Wanneer werd de wagen besteld?</label>
+        <select id="wBesteld"><option value="oud">Vóór juli 2023</option><option value="mid">Van juli 2023 tot eind 2025</option><option value="nieuw">Vanaf 2026</option></select>
+        <div class="hint">Dit bepaalt hoeveel je vennootschap van de autokosten mag aftrekken.</div>
+      </div>
+      <label class="check"><input type="checkbox" id="wKaart"><span>De vennootschap betaalt ook <b>privé brandstof of laden</b> (tankkaart, laadkaart of laadpaal thuis)</span></label>
+    </div>
+
+    <p class="groep">Toestellen en abonnementen</p>
+    <label class="check"><input type="checkbox" id="vLaptop"><span><b>Laptop of pc</b> van de zaak, ook privé gebruikt <span class="bedrag">€ 72 per jaar</span></span></label>
+    <label class="check"><input type="checkbox" id="vGsm"><span><b>Smartphone</b> van de zaak <span class="bedrag">€ 36 per jaar</span></span></label>
+    <label class="check"><input type="checkbox" id="vTablet"><span><b>Tablet</b> van de zaak <span class="bedrag">€ 36 per jaar</span></span></label>
+    <label class="check"><input type="checkbox" id="vInternet"><span><b>Internetabonnement</b> betaald door de zaak <span class="bedrag">€ 60 per jaar</span></span></label>
+    <label class="check"><input type="checkbox" id="vTelefoon"><span><b>Gsm of telefoonabonnement</b> betaald door de zaak <span class="bedrag">€ 48 per jaar</span></span></label>
+    <div class="hint" style="margin:-4px 0 12px 28px">Zit er mobiele data in je gsm abonnement? Vink dan ook <b>internetabonnement</b> aan. Een smartphone met abonnement en data is samen € 144 per jaar: € 36 + € 48 + € 60.</div>
+
+    <p class="groep">Bedrijfsfiets</p>
+    <label class="check"><input type="checkbox" id="vFiets"><span>Ik heb een <b>fiets, elektrische fiets of speed pedelec van de zaak</b> en gebruik die regelmatig voor (een deel van) mijn woon werkverkeer <span class="bedrag">Geen voordeel alle aard, geen sociale bijdragen, 100% aftrekbaar</span></span></label>
+    <div class="sub-block" id="fietsBlok" hidden>
+      <div class="field" style="margin-bottom:0">
+        <label class="lbl" for="fietsKost">Kosten van de fiets per jaar voor je vennootschap</label>
+        <div class="money"><span>€</span><input type="text" id="fietsKost" inputmode="decimal" placeholder="0" autocomplete="off"></div>
+        <div class="hint">Leasing of afschrijving, onderhoud, stalling, verzekering. Je mag de fiets ook privé gebruiken. De fietsvergoeding voor woon werk in blok 4 mag je erbovenop krijgen.</div>
+      </div>
+    </div>
+
+    <p class="groep">Geld lenen van je vennootschap</p>
+    <div class="two">
+      <div class="field">
+        <label class="lbl" for="rcSaldo">Wat je gemiddeld leent van je vennootschap</label>
+        <div class="money"><span>€</span><input type="text" id="rcSaldo" inputmode="decimal" placeholder="0" autocomplete="off"></div>
+        <div class="hint">Een debetstand op je rekening courant: geld dat je uit je vennootschap haalde en nog moet terugbetalen.</div>
+      </div>
+      <div class="field">
+        <label class="lbl" for="rcRente">Interest die jij daarop betaalt</label>
+        <div class="unit"><input type="text" id="rcRente" inputmode="decimal" placeholder="0" autocomplete="off"><span>%</span></div>
+        <div class="hint" id="rcHint"></div>
+      </div>
+    </div>
+
+    <p class="groep">Woning van de vennootschap</p>
+    <label class="check"><input type="checkbox" id="vWoning"><span>Ik woon in een <b>woning van mijn vennootschap</b></span></label>
+    <div class="sub-block" id="woningBlok" hidden>
+      <div class="two">
+        <div class="field">
+          <label class="lbl" for="wKi">Kadastraal inkomen, niet geïndexeerd</label>
+          <div class="money"><span>€</span><input type="text" id="wKi" inputmode="decimal" placeholder="0" autocomplete="off"></div>
+          <div class="hint">Staat op het aanslagbiljet van de onroerende voorheffing. Enkel het deel dat je privé gebruikt.</div>
+        </div>
+        <div class="field">
+          <label class="lbl" for="wKostWoning">Kosten van de woning per jaar voor je vennootschap</label>
+          <div class="money"><span>€</span><input type="text" id="wKostWoning" inputmode="decimal" placeholder="0" autocomplete="off"></div>
+          <div class="hint">Afschrijving, interest, verzekering, onderhoud. Mag leeg blijven.</div>
+        </div>
+      </div>
+      <label class="check"><input type="checkbox" id="wGemeubeld"><span>De woning is <b>gemeubeld</b></span></label>
+      <label class="check"><input type="checkbox" id="wVerwarming"><span>De vennootschap betaalt de <b>verwarming</b> <span class="bedrag">€ 2.560 per jaar</span></span></label>
+      <label class="check"><input type="checkbox" id="wElek"><span>De vennootschap betaalt de <b>elektriciteit</b> <span class="bedrag">€ 1.280 per jaar</span></span></label>
+      <div class="hint">Wees waakzaam: de fiscus en de rechtbanken kijken de aftrek van woningkosten in je vennootschap zeer streng na. Je vennootschap moet kunnen uitleggen waarom ze voor deze verloning kiest. Leg je argumenten vooraf schriftelijk vast.</div>
+    </div>
+    <div class="warn" id="vWarn"></div>
+    </div>
+  </details>
+
+  <!-- 4. ONKOSTENVERGOEDINGEN -->
+  <details class="card blok" id="blok4">
+    <summary><span><h2>4. Onkostenvergoedingen</h2><span class="sub">Thuiskantoor, kilometers, onderweg, werkkledij.</span><span class="badge" hidden>ingevuld</span></span></summary>
+    <div class="blok-in">
+    <p class="hint" style="margin:0 0 14px">Je vennootschap vergoedt kosten die jij privé maakt voor je zaak. Belastingvrij voor jou, geen sociale bijdragen, en aftrekbaar voor je vennootschap. Vink aan wat bij jouw werk past: elke vergoeding moet een echte kost dekken.</p>
+
+    <p class="groep">Je kantoor thuis</p>
+    <label class="check"><input type="checkbox" id="oBureau">
+      <span><b>Bureauvergoeding</b> <span class="bedrag" id="oBureauBedrag"></span></span></label>
+    <label class="check"><input type="checkbox" id="oPc">
+      <span><b>Eigen pc of laptop</b> <span class="bedrag">€ 20 per maand</span></span></label>
+    <label class="check"><input type="checkbox" id="oInternet">
+      <span><b>Eigen internet</b> <span class="bedrag">€ 20 per maand</span></span></label>
+    <div class="field">
+      <label class="lbl" for="oScherm">Eigen tweede scherm, printer of scanner</label>
+      <select id="oScherm"><option value="0">Geen</option><option value="1">1 toestel: € 5 per maand</option><option value="2">2 of meer: € 10 per maand</option></select>
+      <div class="hint">Enkel als je geen vergoeding voor een eigen pc krijgt. Maximaal 3 jaar per toestel.</div>
+    </div>
+
+    <p class="groep">Verplaatsingen voor je zaak</p>
+    <div class="two">
+      <div class="field">
+        <label class="lbl" for="km">Met je eigen wagen, per jaar</label>
+        <div class="unit"><input type="text" id="km" inputmode="decimal" placeholder="0" autocomplete="off"><span>km</span></div>
+        <div class="hint" id="kmHint"></div>
+      </div>
+      <div class="field">
+        <label class="lbl" for="kmFiets">Met je eigen fiets, per jaar</label>
+        <div class="unit"><input type="text" id="kmFiets" inputmode="decimal" placeholder="0" autocomplete="off"><span>km</span></div>
+        <div class="hint">€ 0,37 per km, ook met een elektrische fiets of speed pedelec.</div>
+      </div>
+    </div>
+    <div class="sub-block" id="kmWagenVeld" hidden>
+      <div class="field">
+        <label class="lbl" for="kmWagen">Welke privéwagen gebruik je?</label>
+        <select id="kmWagen">
+          <option value="1">Elektrisch</option>
+          <option value="0.75">Benzine, diesel of hybride, besteld vóór juli 2023</option>
+          <option value="0.5">Benzine, diesel of hybride, besteld van juli 2023 tot eind 2025</option>
+          <option value="0">Benzine, diesel of hybride, besteld vanaf 2026</option>
+        </select>
+        <div class="hint">Dit bepaalt hoeveel je vennootschap mag aftrekken. Voor jou blijft het altijd belastingvrij.</div>
+      </div>
+    </div>
+    <div class="sub-block" id="autoExtraVeld" hidden>
+      <p style="margin:0 0 8px;font-size:14.5px">Gebruik je je wagen (eigen wagen of bedrijfswagen) <b>vooral voor je zaak</b>? Dan kan er ook bij:</p>
+      <label class="check"><input type="checkbox" id="oParking"><span><b>Parkeerkosten</b> die je regelmatig betaalt <span class="bedrag">€ 15 per maand</span></span></label>
+      <label class="check"><input type="checkbox" id="oGarage"><span><b>Garage</b>, als je de wagen veilig moet stallen <span class="bedrag">€ 50 per maand</span></span></label>
+      <label class="check" style="margin-bottom:0"><input type="checkbox" id="oCarwash"><span><b>Carwash</b>, als je job een verzorgde wagen vraagt <span class="bedrag">€ 15 per maand</span></span></label>
+    </div>
+    <div class="field">
+      <label class="lbl" for="kmFietsWW">Met de fiets van huis naar je werk, per jaar</label>
+      <div class="unit"><input type="text" id="kmFietsWW" inputmode="decimal" placeholder="0" autocomplete="off"><span>km</span></div>
+      <div class="hint">€ 0,37 per km, maximaal € 3.700 per jaar. Werk je thuis, dan laat je dit leeg.</div>
+    </div>
+
+    <p class="groep">Onderweg voor je zaak</p>
+    <div class="two">
+      <div class="field">
+        <label class="lbl" for="dagenOnderweg">Dagen per jaar dat je minstens 4 uur aan een stuk onderweg bent</label>
+        <div class="unit"><input type="text" id="dagenOnderweg" inputmode="decimal" placeholder="0" autocomplete="off"><span>dagen</span></div>
+        <div class="hint">Bijvoorbeeld bij klanten, zonder toegang tot een eigen kantoor of sanitair: € 10 per dag.</div>
+      </div>
+      <div class="field">
+        <label class="lbl" for="nachten">Overnachtingen in België voor je zaak</label>
+        <div class="unit"><input type="text" id="nachten" inputmode="decimal" placeholder="0" autocomplete="off"><span>nachten</span></div>
+        <div class="hint">Als je niet naar huis kan: € 35 per nacht, voor avondmaal, logies en ontbijt.</div>
+      </div>
+    </div>
+    <label class="check"><input type="checkbox" id="oMaaltijd"><span>Op die dagen moet ik <b>buitenshuis eten</b> <span class="bedrag">€ 9 per dag</span></span></label>
+    <div class="field">
+      <label class="lbl" for="dagenDienstreis">Of: dagen per jaar op dienstreis in België van minstens 6 uur</label>
+      <div class="unit"><input type="text" id="dagenDienstreis" inputmode="decimal" placeholder="0" autocomplete="off"><span>dagen</span></div>
+      <div class="hint">Bijvoorbeeld als je lang bij een klant zit. Fiscale dagvergoeding van € 22,08 per dag sinds 1 september 2026 (€ 21,22 in januari en februari, € 21,64 van maart tot augustus). De calculator rekent met het gemiddelde over het jaar. Voor maximaal 16 dagen per maand bij een voltijdse job. Kies per dag voor deze regeling of voor de € 10 en € 9 hierboven, nooit allebei voor dezelfde dag.</div>
+    </div>
+    <div class="two">
+      <div class="field">
+        <label class="lbl" for="dagenBuitenland">Dagen op dienstreis in het buitenland</label>
+        <div class="unit"><input type="text" id="dagenBuitenland" inputmode="decimal" placeholder="0" autocomplete="off"><span>dagen</span></div>
+      </div>
+      <div class="field">
+        <label class="lbl" for="dagBuitenland">Dagvergoeding van dat land</label>
+        <div class="money"><span>€</span><input type="text" id="dagBuitenland" inputmode="decimal" placeholder="0" autocomplete="off"></div>
+        <div class="hint">Verschilt per land: van € 25 (Somalië) tot € 125 (Denemarken) per dag. Na 30 dagen aan een stuk ligt het bedrag lager.</div>
+      </div>
+    </div>
+
+    <p class="groep">Representatie en andere kleine kosten</p>
+    <div class="field">
+      <label class="lbl" for="oRepr">Forfaitaire vergoeding voor representatiekosten, per maand</label>
+      <div class="money"><span>€</span><input type="text" id="oRepr" inputmode="decimal" placeholder="0" autocomplete="off"></div>
+      <div class="hint">Kleine kosten die je privé voorschiet om klanten te ontvangen of te bedanken, zonder telkens een bonnetje. Er bestaat geen officieel bedrag: blijf realistisch, anders volgt discussie met de fiscus. Zekerheid nodig? Vraag een voorafgaande beslissing (ruling) aan. Je vennootschap mag representatiekosten maar voor 50% aftrekken.</div>
+    </div>
+
+    <p class="groep">Werkkledij en gereedschap</p>
+    <label class="check"><input type="checkbox" id="oKledij"><span><b>Werkkledij</b> die je niet als gewone kledij kan dragen (uniform, schort, veiligheidsschoenen): aankoop en onderhoud <span class="bedrag">€ 2,20 + € 2,20 per werkdag</span></span></label>
+    <label class="check"><input type="checkbox" id="oGereedschap"><span><b>Eigen arbeidsgereedschap</b>, bijvoorbeeld scharen, borstels, instrumenten <span class="bedrag">€ 1,25 per werkdag</span></span></label>
+    <div class="field" id="werkdagenVeld" hidden>
+      <label class="lbl" for="werkdagen">Werkdagen per jaar</label>
+      <div class="unit"><input type="text" id="werkdagen" inputmode="decimal" value="220" autocomplete="off"><span>dagen</span></div>
+    </div>
+    <div class="warn" id="oWarn"></div>
+    </div>
+  </details>
+
+  <!-- 5. CHEQUES -->
+  <details class="card blok" id="blok5">
+    <summary><span><h2>5. Maaltijdcheques en ecocheques</h2><span class="sub">Geen belasting en geen sociale bijdragen voor jou.</span><span class="badge" hidden>ingevuld</span></span></summary>
+    <div class="blok-in">
+    <p class="hint" style="margin:0 0 14px">Wel een kost voor je vennootschap, die maar deels aftrekbaar is.</p>
+    <div class="field">
+      <label class="lbl" for="mcDagen">Aantal maaltijdcheques per jaar</label>
+      <div class="unit"><input type="text" id="mcDagen" inputmode="decimal" placeholder="0" autocomplete="off"><span>stuks</span></div>
+      <div class="hint">Eén per dag dat je echt werkt. Bij een voltijdse werkweek is dat ongeveer 220 per jaar.</div>
+    </div>
+    <label class="check"><input type="checkbox" id="mcMax" checked>
+      <span>Mijn vennootschap legt het <b>maximum van € 8,91</b> per cheque bij (cheque van € 10, jij betaalt € 1,09) <span class="bedrag">Dan mag ze € 4 per cheque aftrekken in plaats van € 2.</span></span></label>
+    <label class="check"><input type="checkbox" id="eco"><span><b>Ecocheques</b> <span class="bedrag">€ 250 per jaar, niet aftrekbaar voor je vennootschap</span></span></label>
+    <div class="fout" id="mcFout"></div>
+    </div>
+  </details>
+
+  <!-- 6. HUUR -->
+  <details class="card blok" id="blok6">
+    <summary><span><h2>6. Huur van je privékantoor</h2><span class="sub">Je verhuurt een deel van je woning aan je vennootschap.</span><span class="badge" hidden>ingevuld</span></span></summary>
+    <div class="blok-in">
+    <p class="hint" style="margin:0 0 14px">Die huur is belast als onroerend inkomen, zonder sociale bijdragen, zolang ze onder een wettelijke grens blijft.</p>
+    <div class="two">
+      <div class="field">
+        <label class="lbl" for="huurKi">Kadastraal inkomen van het kantoor, niet geïndexeerd</label>
+        <div class="money"><span>€</span><input type="text" id="huurKi" inputmode="decimal" placeholder="0" autocomplete="off"></div>
+        <div class="hint">Het KI van je woning staat op het aanslagbiljet van de onroerende voorheffing. Vermenigvuldig het met het deel dat je kantoor inneemt: is je kantoor 15% van je woning met een KI van € 1.500, dan vul je € 225 in.</div>
+      </div>
+      <div class="field">
+        <label class="lbl" for="huurJaar">Huur die je vennootschap jou betaalt, per jaar</label>
+        <div class="money"><span>€</span><input type="text" id="huurJaar" inputmode="decimal" placeholder="0" autocomplete="off"></div>
+        <div class="hint" id="huurHint">Vul eerst het kadastraal inkomen in, dan zie je de maximale huur.</div>
+      </div>
+    </div>
+    <button type="button" class="btn ghost" id="btnHuurMax">Vul de maximale huur in</button>
+    <div class="warn" id="hWarn"></div>
+    </div>
+  </details>
+
+  <!-- 7. PENSIOEN -->
+  <details class="card blok" id="blok7">
+    <summary><span><h2>7. Aanvullend pensioen</h2><span class="sub">VAPZ en IPT: fiscaal voordelig extra pensioen.</span><span class="badge" hidden>ingevuld</span></span></summary>
+    <div class="blok-in">
+    <p class="hint" style="margin:0 0 14px">Je wettelijk pensioen als zelfstandige is beperkt. Met een VAPZ en een IPT bouw je er fiscaal voordelig iets bij.</p>
+    <p class="groep">VAPZ: vrij aanvullend pensioen voor zelfstandigen</p>
+    <div class="two">
+      <div class="field">
+        <label class="lbl" for="vapz">VAPZ premie per jaar</label>
+        <div class="money"><span>€</span><input type="text" id="vapz" inputmode="decimal" placeholder="0" autocomplete="off"></div>
+        <div class="hint" id="vapzHint"></div>
+      </div>
+      <div class="field">
+        <label class="lbl" for="vapzType">Soort VAPZ</label>
+        <select id="vapzType"><option value="klassiek">Klassiek VAPZ</option><option value="sociaal">Sociaal VAPZ</option></select>
+        <div class="hint">Een sociaal VAPZ heeft een hoger maximum en dekt ook bijvoorbeeld arbeidsongeschiktheid.</div>
+      </div>
+    </div>
+    <div class="field">
+      <label class="lbl" for="vapzDoor">Wie betaalt de premie?</label>
+      <select id="vapzDoor"><option value="zelf">Ik betaal zelf, uit mijn netto inkomen</option><option value="vennootschap">Mijn vennootschap betaalt</option></select>
+      <div class="hint">Betaalt je vennootschap, dan is de premie voor jou een voordeel alle aard dat bij je bezoldiging komt. Je trekt ze tegelijk af als sociale bijdrage, dus je betaalt er per saldo niets op. Voor je vennootschap is ze een aftrekbare kost, en ze telt mee voor de € 51.000.</div>
+    </div>
+    <button type="button" class="btn ghost" id="btnVapzMax">Vul het maximum in</button>
+    <p class="groep" style="margin-top:22px">IPT: je vennootschap betaalt</p>
+    <div class="field">
+      <label class="lbl" for="ipt">IPT premie per jaar</label>
+      <div class="money"><span>€</span><input type="text" id="ipt" inputmode="decimal" placeholder="0" autocomplete="off"></div>
+      <div class="hint">Individuele pensioentoezegging. Hoeveel je mag storten, hangt af van je loon, leeftijd en loopbaan: de grens van 80%. Laat het maximum berekenen door je verzekeraar of makelaar.</div>
+    </div>
+    <div class="warn" id="pWarn"></div>
+    </div>
+  </details>
+
+  <!-- 8. ANDERE ROUTES -->
+  <details class="card blok" id="blok8">
+    <summary><span><h2>8. Andere manieren om geld uit je vennootschap te halen</h2><span class="sub">Tantième, auteursrechten, warranten.</span><span class="badge" hidden>ingevuld</span></span></summary>
+    <div class="blok-in">
+    <p class="hint" style="margin:0 0 14px">Elke route heeft eigen voorwaarden, dus lees de uitleg onderaan voor je ze inzet. Laat leeg wat niet voor jou geldt.</p>
+
+    <p class="groep">Tantième</p>
+    <div class="field">
+      <label class="lbl" for="tantieme">Tantième voor dit boekjaar</label>
+      <div class="money"><span>€</span><input type="text" id="tantieme" inputmode="decimal" placeholder="0" autocomplete="off"></div>
+      <div class="hint">Een eenmalige beloning uit de winst, die de algemene vergadering jou als bestuurder toekent. Aftrekbaar voor je vennootschap in dit boekjaar, voor jou belast zoals loon (met sociale bijdragen), maar pas in het jaar dat je ze uitbetaald krijgt. Telt mee voor de € 51.000.</div>
+    </div>
+
+    <p class="groep">Auteursrechten</p>
+    <div class="field">
+      <label class="lbl" for="auteur">Vergoeding voor auteursrechten, per jaar</label>
+      <div class="money"><span>€</span><input type="text" id="auteur" inputmode="decimal" placeholder="0" autocomplete="off"></div>
+      <div class="hint">Voor werk dat echt auteursrechtelijk beschermd is en waarvan jij de rechten aan je vennootschap overdraagt: teksten, beelden, ontwerpen, opleidingen, video, en sinds 2026 ook software en code. 15% roerende voorheffing, geen sociale bijdragen, aftrekbaar voor je vennootschap. Telt niet mee voor de € 51.000.</div>
+    </div>
+    <label class="check"><input type="checkbox" id="kunstwerk"><span>Ik heb een <b>kunstwerkattest</b> (gewoon of plus) voor dit werk <span class="bedrag">Dan mag je nog forfaitaire kosten aftrekken: 50% op de eerste € 20.590 en 25% tot € 41.180. Zonder attest valt dat forfait sinds 2026 weg.</span></span></label>
+
+    <p class="groep">Warranten of aandelenopties</p>
+    <div class="field">
+      <label class="lbl" for="warrant">Waarde van de warranten die je vennootschap je toekent, per jaar</label>
+      <div class="money"><span>€</span><input type="text" id="warrant" inputmode="decimal" placeholder="0" autocomplete="off"></div>
+      <div class="hint">Je vennootschap koopt ze aan en kent ze jou toe. Je betaalt eenmalig belasting op een forfaitair voordeel, zonder sociale bijdragen. De calculator gaat ervan uit dat je ze later verkoopt tegen dezelfde waarde.</div>
+    </div>
+    <div class="sub-block" id="warrantBlok" hidden>
+      <div class="two">
+        <div class="field">
+          <label class="lbl" for="warrantPct">Belastbaar voordeel</label>
+          <select id="warrantPct"><option value="0.18">18% van de waarde (standaard)</option><option value="0.09">9%, met vaste uitoefenprijs en uitoefening vanaf het 3de jaar</option></select>
+          <div class="hint">18% bij een looptijd tot 5 jaar, +1% per extra jaar. Gehalveerd onder strikte voorwaarden.</div>
+        </div>
+        <div class="field">
+          <label class="lbl" for="warrantKost">Bijkomende kosten per jaar</label>
+          <div class="money"><span>€</span><input type="text" id="warrantKost" inputmode="decimal" placeholder="0" autocomplete="off"></div>
+          <div class="hint">Kosten van de aanbieder, het bezoldigingsverslag en je boekhouder. Vraag ze op voor je start.</div>
+        </div>
+      </div>
+    </div>
+    <div class="warn" id="aWarn"></div>
+    </div>
+  </details>
+
+  <!-- 9. DIVIDEND -->
+  <details class="card blok" id="blok9">
+    <summary><span><h2>9. De winst die overblijft</h2><span class="sub">Hoe keer je die later uit als dividend? Standaard: 18%.</span><span class="badge" hidden>ingevuld</span></span></summary>
+    <div class="blok-in">
+    <p class="hint" style="margin:0 0 14px">Wat in je vennootschap blijft na alle kosten en vennootschapsbelasting, kan je later als dividend uitkeren. Kies hoe je dat zou doen.</p>
+    <div class="field">
+      <label class="lbl" for="divRoute">Hoe keer je die winst later uit?</label>
+      <select id="divRoute">
+        <option value="laag">VVPRbis vanaf het 3de boekjaar na je inbreng, of liquidatiereserve na 3 jaar: ongeveer 18%</option>
+        <option value="vvpr20">VVPRbis in het 2de boekjaar na een inbreng tot eind 2025: 20%</option>
+        <option value="vereffening">Liquidatiereserve die je pas uitkeert bij de vereffening: 10%</option>
+        <option value="gewoon">Als gewoon dividend: 30%</option>
+      </select>
+      <div class="hint">Twijfel je? Kies 18%. Een liquidatiereserve kan elke kleine vennootschap aanleggen, al moet je dan wel 3 jaar wachten. Lees meer in de uitleg onderaan.</div>
+    </div>
+
+    <p class="groep">Beleggen via je vennootschap</p>
+    <div class="field">
+      <label class="lbl" for="dbi">Dividend dat je vennootschap verwacht uit een DBI bevek, per jaar</label>
+      <div class="money"><span>€</span><input type="text" id="dbi" inputmode="decimal" placeholder="0" autocomplete="off"></div>
+      <div class="hint">Sinds aanslagjaar 2026 krijgt je vennootschap de 30% roerende voorheffing op het DBI deel enkel terug als ze de regel van de minimumbezoldiging haalt: € 51.000, of een bezoldiging die minstens even hoog is als haar belastbare winst (behalve in de eerste vier boekjaren). Anders gaat die voorheffing verloren.</div>
+    </div>
+    </div>
+  </details>
+
+  <p id="liveStatus" class="sr-only" aria-live="polite"></p>
+  <div class="card result" id="result" tabindex="-1"></div>
+
+  <h2 class="sectie-titel">Wat betekenen je keuzes?</h2>
+  <p class="sectie-sub">Klik een onderwerp open voor de volledige uitleg.</p>
+
+  <details class="uitleg">
+    <summary>Loon of dividend: wanneer is dividend interessanter?</summary>
+    <p>Elke euro die je uit je vennootschap haalt, wordt belast. Alleen de weg verschilt:</p>
+    <ul>
+      <li><b>Loon</b> is een kost voor je vennootschap, dus ze betaalt er geen vennootschapsbelasting op. Jij betaalt wel sociale bijdragen (20,5%) en personenbelasting tegen je hoogste schijf: 25%, 40%, 45% of 50%, plus gemeentebelasting.</li>
+      <li><b>Dividend</b> komt uit de winst na vennootschapsbelasting (20% of 25%). Daarna betaal je 30% roerende voorheffing, of 18% via VVPRbis of een liquidatiereserve. Geen sociale bijdragen en geen gemeentebelasting.</li>
+    </ul>
+    <p>Een vuistregel: zolang je loon in de lage schijven valt, is loon goedkoper. Bij een hoog loon kost elke extra euro je ongeveer 20,5% sociale bijdragen en daarna 50% belasting plus gemeentebelasting. Dan wint dividend aan 18%: van € 100 winst hou je € 65,60 over (€ 20 vennootschapsbelasting, daarna 18%).</p>
+    <p>Het kantelpunt hangt af van je situatie: je kinderen ten laste, je gemeente, je voordelen alle aard en of je het verlaagd tarief houdt. Daarom zoekt de calculator het voor jou uit met <b>Toon mijn beste loon</b>.</p>
+    <h4>Waar je op let</h4>
+    <ul>
+      <li><b>Haal de € 51.000 of de helftregel.</b> Zakt je loon daaronder, dan betaalt je vennootschap 25% in plaats van 20% op de eerste € 100.000 winst. Dat kan tot € 5.000 per jaar kosten.</li>
+      <li><b>Loon bouwt pensioen op, dividend niet.</b> Je wettelijk pensioen als zelfstandige hangt af van je inkomen waarop je sociale bijdragen betaalt. Een IPT (individuele pensioentoezegging) is enkel mogelijk met een voldoende hoog loon.</li>
+      <li><b>Wanneer kan je dividend uitkeren?</b> Een gewoon dividend beslist de algemene vergadering na het afsluiten van het boekjaar. Wil je niet wachten? In een BV kan dat ook tussentijds, op elk moment van het jaar: als <b>interimdividend</b> (beslist door het bestuursorgaan, uit de winst van het lopende of vorige boekjaar) of als <b>tussentijds dividend</b> (beslist door een bijzondere algemene vergadering, ook uit de reserves). Een interimdividend moet wel in je statuten staan. Bij BV's is dat pas mogelijk sinds 2022, dus vaak staat het er nog niet in. Laat je statuten nakijken.</li>
+      <li><b>Liquidatiereserve:</b> pas na 3 jaar het lage tarief van 9,8% (samen met de 10% bij de aanleg ongeveer 18%). Binnen 3 jaar betaal je 30%. Wacht je tot de vereffening van je vennootschap, dan betaal je niets meer bovenop de 10%. De wachttijd loopt telkens opnieuw voor de winst van elk boekjaar.</li>
+      <li><b>VVPRbis</b> kan enkel voor aandelen uitgegeven bij een inbreng in geld in een kleine vennootschap, vanaf 1 juli 2013. Sinds 1 juli 2026 betaal je 18% op dividenden vanaf het derde boekjaar na de inbreng (daarvoor was dat 15%). In het tweede boekjaar betaal je 20% bij een inbreng tot eind 2025, en 30% bij een inbreng vanaf 2026. Daarna kan je de opgespaarde winst in één keer uitkeren en vervolgens elk jaar de winst van dat jaar.</li>
+      <li><b>Je vennootschap moet het geld kunnen missen.</b> Elke uitkering vraagt een dubbele balanstest: zie de uitleg verderop.</li>
+      <li><b>Eerste € 833 dividend</b> is vrijgesteld in de personenbelasting (inkomsten 2026). De roerende voorheffing daarop (tot € 249,90) vraag je terug via je aangifte. De calculator rekent die kleine teruggave niet mee.</li>
+    </ul>
+  </details>
+
+  <details class="uitleg">
+    <summary>Je sociale bijdragen: waarop betaal je ze?</summary>
+    <p>Als bedrijfsleider ben je zelfstandige. Je betaalt sociale bijdragen op je <b>netto belastbaar beroepsinkomen</b>: je brutoloon plus je voordelen alle aard (en geherkwalificeerde huur), min je beroepskosten en min de sociale bijdragen zelf.</p>
+    <ul>
+      <li><b>20,5%</b> op je inkomen tot € 75.024,54.</li>
+      <li><b>14,16%</b> op het deel tussen € 75.024,54 en € 110.562,42.</li>
+      <li><b>Niets meer</b> boven € 110.562,42. Boven dat plafond kost extra loon je geen extra sociale bijdragen.</li>
+      <li><b>Minimum € 890,42 per kwartaal</b> in hoofdberoep, ook als je weinig of geen loon neemt. Dividend laat je bijdrage dus niet zakken onder dat minimum.</li>
+      <li>Daarbovenop rekent je sociaal verzekeringsfonds <b>beheerskosten</b>, gemiddeld rond 4%. De calculator rekent met 4%.</li>
+    </ul>
+    <p><b>Geen sociale bijdragen</b> op: dividend, VVPRbis, liquidatiereserve, onkostenvergoedingen, maaltijdcheques, ecocheques en huur onder de wettelijke grens.</p>
+    <p>Je sociale bijdragen zijn aftrekbaar in je personenbelasting. Daarom kost een extra € 1.000 loon je minder dan € 205 aan bijdragen plus de volle belasting erbovenop: de calculator rekent dat precies uit.</p>
+    <p class="klein">De calculator berekent je definitieve bijdragen voor 2026. In de praktijk betaal je eerst voorlopige bijdragen op basis van je inkomen van drie jaar geleden, en wordt dat later rechtgezet. Gebruik dit om bij te sturen: ligt je loon nu veel hoger, vraag dan een verhoging aan om een grote rekening achteraf te vermijden.</p>
+  </details>
+
+  <details class="uitleg">
+    <summary>De regel van € 51.000 en de helftregel</summary>
+    <p>Je vennootschap betaalt maar 20% vennootschapsbelasting op de eerste € 100.000 winst als ze minstens één bedrijfsleider voldoende bezoldigt. Vanaf aanslagjaar 2027 (inkomsten 2026) is dat <b>€ 51.000 bruto per jaar</b>. Tot vorig jaar was dat € 45.000. Het bedrag wordt voortaan elk jaar geïndexeerd. De € 50.000 die je vaak leest, was een raming. Na indexering is het € 51.000.</p>
+    <h4>De helftregel</h4>
+    <p>Maakt je vennootschap minder winst? Dan volstaat een loon dat minstens even hoog is als de belastbare winst die na je loon overblijft. In de praktijk: je loon moet minstens de helft zijn van je winst vóór je loon. Bij € 80.000 winst vóór loon is dat € 40.000.</p>
+    <h4>Wat telt mee?</h4>
+    <ul>
+      <li><b>Telt mee:</b> je brutoloon, een tantième, je voordelen alle aard (ook het voordeel uit warranten en een VAPZ die je vennootschap betaalt) en het deel van de huur dat geherkwalificeerd wordt tot loon.</li>
+      <li><b>Telt niet mee:</b> dividend, auteursrechten (tot het plafond), onkostenvergoedingen, maaltijd- en ecocheques, gewone huur, en premies voor een IPT.</li>
+      <li><b>Dreig je de grens te missen?</b> Dan kan je het verschil op het einde van het boekjaar nog bijpassen met een tantième.</li>
+    </ul>
+    <h4>Starter?</h4>
+    <p>In de eerste vier boekjaren van een nieuwe vennootschap geldt de regel van € 51.000 niet. Zet je een bestaande eenmanszaak voort in een vennootschap, dan ben je geen starter.</p>
+    <p class="klein">Haal je de regel niet, dan verliest je vennootschap het verlaagd tarief: 25% op alle winst. De vroegere extra heffing op het tekort aan loon bestaat niet meer.</p>
+  </details>
+
+  <details class="uitleg">
+    <summary>De nieuwe regel van 20% voor voordelen alle aard</summary>
+    <p>Vanaf aanslagjaar 2027 (inkomsten 2026) mag een vennootschap het verlaagd tarief maar houden als de <b>forfaitaire voordelen alle aard</b> van haar bedrijfsleiders samen <b>niet meer dan 20%</b> zijn van hun totale bezoldiging.</p>
+    <ul>
+      <li><b>Het is alles of niets.</b> Gaan je voordelen ook maar € 1 boven 20%, dan betaalt je vennootschap 25% op al haar winst. Dat geldt zelfs als je cashloon alleen al hoger is dan € 51.000.</li>
+      <li><b>Ook voor starters.</b> De vrijstelling in de eerste vier boekjaren geldt niet voor deze regel.</li>
+      <li><b>Wat telt mee:</b> bedrijfswagen, gratis woning, verwarming en elektriciteit (bij een woning van de zaak), pc, tablet, smartphone, internet- en telefoonabonnement, goedkope leningen, en het forfaitaire voordeel uit warranten of aandelenopties.</li>
+      <li><b>Wat telt niet mee:</b> onkostenvergoedingen, maaltijdcheques, huur, een bedrijfsfiets (vrijgesteld), en voordelen die op hun werkelijke waarde belast worden, zoals een VAPZ die je vennootschap betaalt.</li>
+      <li><b>Een voorbeeld:</b> bij een totale bezoldiging van € 51.000 (loon plus voordelen) mogen je voordelen maximaal € 10.200 zijn. Een elektrische wagen van € 60.000 geeft ongeveer € 2.060 voordeel: geen probleem. Een woning van de vennootschap met verwarming en elektriciteit gaat er al snel over.</li>
+    </ul>
+    <p class="klein">De calculator rekent de 20% op je totale bezoldiging inclusief de voordelen zelf. Zo lezen de meeste vakbronnen de wet. Zit je dicht bij de grens? Laat het nakijken door je boekhouder.</p>
+  </details>
+
+  <details class="uitleg">
+    <summary>Onkostenvergoedingen: belastingvrij, maar met regels</summary>
+    <ul>
+      <li><b>Bureauvergoeding:</b> € 164,21 per maand sinds september 2026 (€ 157,83 in januari en februari, € 160,99 van maart tot augustus). Voor 2026 samen € 1.938,44. Voorwaarde: je werkt structureel van thuis uit, gemiddeld minstens één dag per week. Het bedrag dekt kantoorkosten zoals verwarming, elektriciteit, klein kantoormateriaal.</li>
+      <li><b>Eigen pc en eigen internet:</b> elk € 20 per maand. Niet als je vennootschap je een laptop geeft of je internet betaalt: dan krijg je een voordeel alle aard en mag je dezelfde kost niet nog eens forfaitair laten vergoeden.</li>
+      <li><b>Tweede scherm, printer of scanner:</b> € 5 per maand per toestel, maximaal € 10, gedurende maximaal 3 jaar. Niet samen met de vergoeding voor een eigen pc.</li>
+      <li><b>Kilometervergoeding:</b> voor verplaatsingen voor je zaak met je eigen wagen, nooit voor woon werk. De calculator rekent met € 0,4452 per km (vierde kwartaal 2026). De fiscus aanvaardt dat tot 24.000 km per jaar. Hou een rittenlijst bij. Heb je een bedrijfswagen, dan kan je geen kilometervergoeding krijgen.</li>
+      <li><b>Parking, garage en carwash:</b> € 15, € 50 en € 15 per maand, enkel als je wagen vooral voor je zaak dient. Dat kan met je eigen wagen en ook met een bedrijfswagen. Parking als je regelmatig kleine parkeerbedragen betaalt, garage als je de wagen veilig moet stallen, carwash als je job een verzorgde wagen vraagt.</li>
+      <li><b>Fiets:</b> € 0,37 per km voor verplaatsingen voor je zaak met je eigen fiets, ook elektrisch of speed pedelec. Woon werk met de fiets: ook € 0,37 per km, maximaal € 3.700 per jaar.</li>
+      <li><b>Onderweg:</b> ben je minstens 4 uur aan een stuk onderweg zonder toegang tot een kantoor of sanitair, dan € 10 per dag. Moet je dan buitenshuis eten, nog € 9 per dag. Kan je niet naar huis voor de nacht: € 35 per overnachting in België.</li>
+      <li><b>Binnenlandse dienstreis:</b> een tweede, fiscale regeling. Zit je bijvoorbeeld lange tijd bij een klant en ben je minstens 6 uur per dag onderweg, dan mag je € 22,08 per dag krijgen (sinds 1 september 2026; daarvoor € 21,64 en in januari en februari € 21,22), voor maximaal 16 dagen per maand bij een voltijdse job. Per dag kies je één regeling. Combineer je met maaltijdcheques? Dat kan maar beperkt: laat je adviseren.</li>
+      <li><b>Buitenlandse dienstreis:</b> een dagvergoeding per land, van € 25 (Somalië) tot € 125 (Denemarken) per dag. Voor reizen van meer dan 30 dagen ligt het bedrag lager.</li>
+      <li><b>Representatiekosten:</b> geen officieel forfait, maar een realistische maandelijkse vergoeding kan. Wil je zekerheid, vraag dan een voorafgaande beslissing (ruling) aan. Voor je vennootschap is ze maar voor 50% aftrekbaar.</li>
+      <li><b>Werkkledij en gereedschap:</b> enkel voor kledij die je niet als gewone kledij kan dragen, zoals een uniform, schort of veiligheidsschoenen: € 2,20 per werkdag voor aankoop en € 2,20 voor onderhoud. Gebruik je je eigen gereedschap: € 1,25 per werkdag.</li>
+    </ul>
+    <p class="klein">Deze forfaits komen uit de lijst die de RSZ aanvaardt (instructies 2026/3). De fiscus volgt ze in de praktijk als "ernstige normen". Je vennootschap moet wel kunnen uitleggen waarom de kost bij jouw werk past. Kosten van je eigen wagen (kilometers, parking, garage, carwash) zijn voor je vennootschap maar zo aftrekbaar als de wagen zelf.</p>
+    <h4>Zo blijven ze belastingvrij</h4>
+    <ul>
+      <li>Leg de vergoedingen vast in een beslissing van je bestuursorgaan.</li>
+      <li>Laat ze vermelden op je fiche 281.20. Anders riskeer je dat ze belast worden.</li>
+      <li>Laat nooit dezelfde kost twee keer vergoeden: forfaitair én op bewijsstukken, of forfaitair én via een voordeel alle aard.</li>
+    </ul>
+    <h4>Wat als de fiscus je vergoeding verwerpt?</h4>
+    <p>Vindt de fiscus bij een controle dat de kosten onvoldoende bewezen zijn, of dat ze eigenlijk bij je vennootschap horen, dan wordt het verschil belast als loon. Er volgt een bijkomende aanslag, met sociale bijdragen erbovenop, en vaak een verhoging: 10% bij een eerste overtreding, 20% bij een tweede, 30% bij een derde, en tot 50% als er opzet in het spel is.</p>
+    <p class="klein">Een eigen gsm heeft geen officieel forfait. Die laat je vergoeden op basis van bewijsstukken. Daarom staat hij niet in de calculator.</p>
+  </details>
+
+  <details class="uitleg">
+    <summary>Voordelen alle aard: bedrijfswagen, woning en toestellen</summary>
+    <h4>Bedrijfswagen</h4>
+    <p>Je voordeel = cataloguswaarde × leeftijdscoëfficiënt × CO2 percentage × 6/7. Het CO2 percentage is 5,5% bij de referentie uitstoot (2026: 70 g/km voor benzine, 58 g/km voor diesel), plus of min 0,1% per gram, tussen 4% en 18%. Een elektrische wagen zit altijd op 4%. Het voordeel is minstens € 1.690 per jaar.</p>
+    <ul>
+      <li><b>Aftrek voor je vennootschap:</b> een elektrische wagen besteld vóór 2027 is 100% aftrekbaar. Een wagen op benzine, diesel of hybride besteld vanaf 2026 is <b>0%</b> aftrekbaar. Besteld van juli 2023 tot eind 2025: 50% in 2026, daarna 25% en vanaf 2028 niets meer. Oudere bestellingen volgen de oude CO2 formule.</li>
+      <li><b>Extra verworpen uitgave:</b> 17% van je voordeel is niet aftrekbaar voor je vennootschap, en 40% als ze ook privé brandstof of laden betaalt (ook bij een elektrische wagen).</li>
+      <li><b>Eigen bijdrage:</b> wat je zelf aan je vennootschap betaalt, gaat van je voordeel af.</li>
+    </ul>
+    <p class="klein">Voor oplaadbare hybrides besteld vanaf 2025 met een uitstoot tussen 50 en 75 g/km geldt een aparte, gunstiger aftrekregeling. Die is nog niet helemaal uitgeklaard en zit niet in de calculator. Vraag het na bij je boekhouder.</p>
+    <h4>Woning van de vennootschap</h4>
+    <p>Je voordeel = niet geïndexeerd kadastraal inkomen × 2,30 × 100/60 × 2. Gemeubeld: × 5/3. Betaalt je vennootschap verwarming of elektriciteit, dan komt er € 2.560 of € 1.280 per jaar bij. Dat telt zwaar mee in de regel van 20%.</p>
+    <h4>Toestellen en abonnementen</h4>
+    <p>Vaste bedragen per jaar: laptop of pc € 72, tablet € 36, smartphone € 36, internet € 60, telefoonabonnement € 48. Klein, en meestal veel voordeliger dan ze privé te betalen. Een voorbeeld: een smartphone van € 1.000 met een abonnement van € 600 per jaar geeft een voordeel van € 144. Daarop betaal je ongeveer € 80 per jaar. Privé zou je er € 1.600 voor betalen in het eerste jaar.</p>
+    <h4>Bedrijfsfiets</h4>
+    <p>Een fiets, elektrische fiets of speed pedelec van je vennootschap is <b>vrijgesteld</b>: geen belasting en geen sociale bijdragen, als je hem regelmatig gebruikt voor (een deel van) je woon werkverkeer. Je mag hem ook privé gebruiken, bijvoorbeeld voor een tochtje in het weekend. Je vennootschap trekt de kosten voor fiets, stalling, onderhoud en herstellingen voor 100% af. Daarbovenop mag je de fietsvergoeding van € 0,37 per km krijgen, tot € 3.700 per jaar. Het voordeel moet sinds 2024 wel op je fiscale fiche staan.</p>
+    <h4>Geld lenen van je vennootschap</h4>
+    <p>Haal je geld uit je vennootschap zonder het als loon of dividend uit te keren, dan sta je in het rood op je rekening courant: je leent van je vennootschap. Betaal je daarop minder interest dan een marktconforme rentevoet, dan krijg je een voordeel alle aard. De calculator rekent met de forfaitaire rentevoet van 5,57% (vastgelegd voor 2025). Het percentage voor 2026 wordt pas begin 2027 bekend. Dit voordeel telt mee in de regel van 20% en er zijn sociale bijdragen op verschuldigd. Een lening is bovendien geen inkomen: je moet ze ooit terugbetalen.</p>
+  </details>
+
+  <details class="uitleg">
+    <summary>Maaltijdcheques en ecocheques</summary>
+    <ul>
+      <li>Sinds 1 januari 2026 mag een maaltijdcheque <b>€ 10</b> waard zijn: je vennootschap betaalt maximaal € 8,91, jij minstens € 1,09.</li>
+      <li>Je vennootschap mag <b>€ 4 per cheque</b> aftrekken als ze het maximum van € 8,91 bijlegt. Legt ze minder bij, dan maar € 2. De rest is een verworpen uitgave.</li>
+      <li>Voor jou: geen belasting en geen sociale bijdragen. 220 cheques leveren je netto € 1.960 per jaar op.</li>
+      <li><b>Ook zonder personeel</b> mag je als bedrijfsleider maaltijdcheques krijgen, met een schriftelijke beslissing. Heb je personeel, dan krijg je ze onder dezelfde voorwaarden als je werknemers.</li>
+      <li>Eén cheque per dag dat je echt werkt. Geen cheques voor vakantie- of ziektedagen.</li>
+      <li><b>Ecocheques:</b> maximaal € 250 per jaar, belastingvrij voor jou, maar niet aftrekbaar voor je vennootschap.</li>
+    </ul>
+  </details>
+
+  <details class="uitleg">
+    <summary>Huur van je privékantoor</summary>
+    <p>Verhuur je een deel van je woning aan je vennootschap, dan is die huur <b>onroerend inkomen</b>. Je betaalt er personenbelasting op, maar geen sociale bijdragen. Je vennootschap trekt de huur volledig af.</p>
+    <ul>
+      <li><b>Maximale huur:</b> niet geïndexeerd KI van het kantoor × 5/3 × 5,75 (coëfficiënt 2026). Bij een KI van € 225 is dat € 2.156,25 per jaar.</li>
+      <li><b>Daarboven</b> wordt de huur gezien als loon: met sociale bijdragen en belasting zoals op loon. Dat heet herkwalificatie.</li>
+      <li><b>Belast deel:</b> je huur min 40% kosten. Bij de maximale huur betaal je dus belasting op 60% van de huur.</li>
+      <li>Sluit een schriftelijk huurcontract af, gebruik het kantoor echt en enkel voor je zaak, en vraag een marktconforme huur.</li>
+      <li>Verhuur je ook meubilair? Splits dat apart op in je contract. Daarvoor gelden andere regels (roerende voorheffing van 30% op de helft). De calculator gaat uit van een kantoor zonder meubilair.</li>
+      <li>Ben je getrouwd onder gemeenschap van goederen, of is je partner mee eigenaar? Dan wordt de grens anders verdeeld. Laat dat nakijken.</li>
+      <li><b>Soms is geen huur interessanter.</b> Huur haalt winst uit je vennootschap. Wil je die winst liever later als dividend aan 18% uitkeren, dan kan het voordeliger zijn om geen huur te vragen. De calculator toont je bij <b>Wat levert elke keuze op?</b> wat de huur jou echt oplevert.</li>
+    </ul>
+    <h4>Meldplicht: formulier 270 MLH</h4>
+    <p>Sinds aanslagjaar 2024 moet je huur voor onroerend goed melden. Je vennootschap voegt formulier <b>270 MLH</b> bij haar aangifte vennootschapsbelasting, per onroerend goed en per huurcontract. Daarin staan je gegevens als verhuurder, het volledige adres van het pand en het bedrag van de huur. Vergeet dat niet: je boekhouder heeft je adresgegevens en het huurbedrag nodig.</p>
+  </details>
+
+  <details class="uitleg">
+    <summary>Gehuwd of wettelijk samenwonend: het huwelijksquotiënt</summary>
+    <p>Verdient je partner geen of weinig beroepsinkomen? Dan wordt een deel van jouw beroepsinkomen bij je partner belast. Je partner heeft een eigen belastingvrije som en valt in een lagere schijf, dus jullie betalen samen minder.</p>
+    <ul>
+      <li><b>Hoeveel?</b> 30% van jullie samengetelde beroepsinkomen, min het eigen beroepsinkomen van je partner. In 2026 (aanslagjaar 2027) maximaal <b>€ 11.780</b>.</li>
+      <li><b>Wanneer?</b> Alleen als je partner minder verdient dan 3/7 van jouw beroepsinkomen. De calculator kijkt dat zelf na. Hij zet het netto maandinkomen van je partner om naar een geschat beroepsinkomen, dus de uitkomst is een benadering.</li>
+      <li><b>Wat telt mee?</b> Enkel beroepsinkomen: loon, voordelen alle aard en geherkwalificeerde huur. Dividend en gewone huur niet.</li>
+      <li><b>Het wordt afgebouwd.</b> Het maximum daalt elk jaar: in aanslagjaar 2026 was het nog € 13.460, en tegen aanslagjaar 2030 is het gehalveerd. Hoe kleiner het quotiënt, hoe minder je bespaart.</li>
+    </ul>
+    <p class="klein">De belasting die de calculator toont, is wat jullie samen betalen door jouw inkomen: jouw belasting plus de extra belasting bij je partner.</p>
+  </details>
+
+  <details class="uitleg">
+    <summary>Pensioen: VAPZ en IPT</summary>
+    <h4>VAPZ: vrij aanvullend pensioen voor zelfstandigen</h4>
+    <ul>
+      <li>Je betaalt de premie <b>zelf</b>, uit je netto inkomen. Ze is aftrekbaar als sociale bijdrage: ze verlaagt zowel je sociale bijdragen als je personenbelasting. Daardoor kost een premie je netto maar ongeveer de helft.</li>
+      <li>Maximum in 2026: <b>€ 4.251,39</b> (klassiek) of <b>€ 4.891,60</b> (sociaal VAPZ), en nooit meer dan 8,50% of 9,78% van je netto beroepsinkomen van drie jaar geleden (geherwaardeerd). Die hogere maxima gelden sinds de wet van juli 2026 voor heel 2026 (circulaire 2026/C/93).</li>
+      <li>Een <b>sociaal VAPZ</b> bevat ook een solidariteitsluik, bijvoorbeeld bij arbeidsongeschiktheid.</li>
+      <li><b>Je vennootschap kan de premie betalen.</b> Dan is ze voor jou een voordeel alle aard dat bij je belastbaar inkomen komt, en trek je ze tegelijk af als sociale bijdrage. Per saldo verandert er voor jou niets, maar ze telt wel mee als bezoldiging voor de € 51.000. Voor je vennootschap is ze een aftrekbare kost. Laat de precieze gevolgen voor jouw situatie nakijken.</li>
+      <li>Hoe lager je loon, hoe lager je persoonlijk maximum later. Ook dat is een reden om je loon niet te laag te zetten.</li>
+    </ul>
+    <h4>IPT: individuele pensioentoezegging</h4>
+    <ul>
+      <li>Je <b>vennootschap</b> betaalt de premie, plus 4,4% taks. Beide zijn aftrekbaar, dus de premie verlaagt de vennootschapsbelasting. Jij betaalt nu geen belasting en geen sociale bijdragen.</li>
+      <li>Bij uitbetaling op je pensioenleeftijd betaal je ongeveer 10% belasting plus gemeentebelasting en enkele bijdragen. De calculator rekent met ongeveer 16% in totaal, zonder beleggingsrendement.</li>
+      <li><b>De grens van 80%:</b> je wettelijk en aanvullend pensioen samen mogen niet meer zijn dan 80% van je laatste normale brutoloon. Hoe hoger en regelmatiger je loon, hoe meer je mag storten. Je verzekeraar berekent je maximum.</li>
+      <li>Een IPT telt <b>niet</b> mee voor de regel van € 51.000.</li>
+      <li>Vergelijk in je resultaat: de calculator toont wat de IPT je vennootschap kost en wat hetzelfde bedrag als dividend of als loon had opgeleverd. Bedenk wel dat je het IPT kapitaal pas bij je pensioen krijgt.</li>
+    </ul>
+  </details>
+
+  <details class="uitleg">
+    <summary>Liquidatiereserve en VVPRbis: welke kies je?</summary>
+    <p>Een kleine vennootschap kan (een deel van) haar winst na belasting in een <b>liquidatiereserve</b> zetten. Ze betaalt daar meteen 10% extra op. Wat je later uitkeert, wordt belast volgens de datum waarop de reserve werd aangelegd.</p>
+    <h4>Reserves aangelegd vanaf 31 december 2025</h4>
+    <ul>
+      <li><b>9,8%</b> bij uitkering na minstens 3 jaar. Samen met de 10% bij de aanleg kom je op ongeveer 18%, net als bij VVPRbis.</li>
+      <li><b>30%</b> bij uitkering binnen de 3 jaar.</li>
+      <li><b>0%</b> bij de vereffening van je vennootschap. Dan blijft het bij de 10%.</li>
+    </ul>
+    <h4>Reserves aangelegd tot en met 30 december 2025</h4>
+    <ul>
+      <li><b>5%</b> bij uitkering na minstens 5 jaar.</li>
+      <li><b>6,5%</b> bij uitkering na minstens 3 jaar, maar voor het 5de jaar.</li>
+      <li><b>20%</b> bij uitkering binnen de 3 jaar, en <b>0%</b> bij de vereffening.</li>
+    </ul>
+    <p>De wachttijd loopt voor de winst van elk boekjaar apart. Plan dus vooruit: wanneer kan je welk deel uitkeren, en hoe overbrug je de tussentijd?</p>
+    <h4>Het verschil met VVPRbis</h4>
+    <ul>
+      <li>Bij VVPRbis wacht je één keer: na de wachttijd keer je de opgespaarde winst uit en daarna elk jaar de nieuwe winst.</li>
+      <li>Draag je je aandelen over, dan vervalt het VVPRbis voordeel meestal. Een liquidatiereserve blijft wel behouden.</li>
+      <li>Groeit je vennootschap later uit tot een grote vennootschap, dan blijft VVPRbis bestaan. Een nieuwe liquidatiereserve aanleggen kan dan niet meer.</li>
+      <li><b>Allebei combineren?</b> Dat kan, maar is enkel interessant als je een vermogen in je vennootschap wil laten tot de stopzetting. De 10% bij de aanleg is dan je eindbelasting. Heb je die ruimte niet, dan haal je met VVPRbis het meeste voordeel.</li>
+    </ul>
+  </details>
+
+  <details class="uitleg">
+    <summary>De dubbele balanstest: kan je vennootschap dit wel missen?</summary>
+    <p>Elke uitkering uit het vermogen van een BV vraagt een <b>dubbele balanstest</b>: een dividend (gewoon, tussentijds of interim), een tantième, de inkoop van eigen aandelen, de teruggave van een inbreng.</p>
+    <ul>
+      <li><b>De netto actieftest:</b> voor de algemene vergadering beslist, kijkt het bestuur of het eigen vermogen (bezittingen min schulden en voorzieningen) niet negatief is of wordt door de uitkering.</li>
+      <li><b>De liquiditeitstest:</b> na de beslissing en voor de uitbetaling kijkt het bestuur of je vennootschap de schulden die de komende 12 maanden vervallen, nog kan betalen.</li>
+      <li>Van beide maakt het bestuur een <b>bijzonder verslag</b> op. In een NV volstaat de netto actieftest.</li>
+    </ul>
+    <p><b>Waarom dit belangrijk is:</b> loopt het daarna mis met je vennootschap, dan kan ze het uitgekeerde geld van jou terugvorderen. Als bestuurder ben je persoonlijk aansprakelijk voor de schade. Wie de verslagen niet opmaakt of toch uitkeert ondanks een negatieve test, riskeert boetes van € 50 tot € 10.000.</p>
+    <p class="klein">De calculator rekent met de winst van één jaar. Hij kijkt niet na of je vennootschap genoeg eigen vermogen en cash heeft. Dat doet je boekhouder.</p>
+  </details>
+
+  <details class="uitleg">
+    <summary>Tantième: een eenmalige beloning uit de winst</summary>
+    <p>Met een tantième kent de algemene vergadering jou als bestuurder een deel van de winst toe, bovenop je maandloon. Bij de goedkeuring van de jaarrekening.</p>
+    <ul>
+      <li><b>Voor je vennootschap:</b> een aftrekbare kost in het boekjaar waarvoor ze wordt toegekend. Een dividend komt uit de winst na belasting, een tantième verlaagt de winst.</li>
+      <li><b>Voor jou:</b> belast als bezoldiging, dus aan je hoogste tarief en met sociale bijdragen. Vaak de hoogste schijf.</li>
+      <li><b>Uitstel van belasting:</b> je vennootschap trekt ze af in jaar N, jij betaalt pas belasting in het jaar dat je ze krijgt, meestal N+1. De calculator rekent alles in hetzelfde jaar, dus dat uitstel zie je niet.</li>
+      <li><b>Telt mee voor de € 51.000.</b> Dreig je het verlaagd tarief te missen, dan kan je dat op het einde van het jaar rechtzetten met een tantième.</li>
+      <li><b>Individueel:</b> een dividend gaat naar alle aandeelhouders volgens hun aandelen, een tantième kan je per bestuurder toekennen.</li>
+      <li>Een tantième moet door de dubbele balanstest.</li>
+    </ul>
+  </details>
+
+  <details class="uitleg">
+    <summary>Auteursrechten: opnieuw interessant, ook voor software</summary>
+    <p>Maak je zelf werk dat auteursrechtelijk beschermd is, zoals teksten, beelden, ontwerpen, een opleiding, video of muziek? Dan ontstaan de rechten bij jou, nooit bij je vennootschap. Draag je die rechten over aan je vennootschap, dan kan ze je daarvoor een vergoeding betalen. Sinds 1 januari 2026 vallen ook software, code, scripts en technische documentatie weer onder dit regime.</p>
+    <ul>
+      <li><b>15% roerende voorheffing</b> tot € 77.220 per jaar (inkomstenjaar 2026). Geen progressieve belasting en geen sociale bijdragen. Daarboven wordt het meerdere belast als beroepsinkomen.</li>
+      <li>Het gemiddelde van je auteursrechten over vier jaar mag het plafond ook niet overschrijden.</li>
+      <li><b>Forfaitaire kosten:</b> vanaf 2026 enkel nog met een kunstwerkattest (gewoon of plus): 50% op de eerste € 20.590 en 25% tot € 41.180. Dan betaal je effectief ongeveer 7,5%. Zonder attest betaal je de volle 15%, wat nog altijd veel minder is dan op loon.</li>
+      <li><b>Voor je vennootschap</b> is de vergoeding een aftrekbare kost.</li>
+      <li><b>De 30/70 verhouding:</b> word je ook betaald als bestuurder of consultant, dan mag de vergoeding voor auteursrechten niet meer zijn dan 30% van wat je in totaal krijgt. Het percentage moet je kunnen verantwoorden, een willekeurige opsplitsing volstaat niet.</li>
+    </ul>
+    <h4>Zo blijft het overeind</h4>
+    <ul>
+      <li>Een duidelijke overeenkomst over de overdracht van de rechten, een inventaris van je werken en een verdedigbare waardering.</li>
+      <li>Je vennootschap maakt jaarlijks een fiche 281.45 op en geeft de roerende voorheffing aan en stort ze door. Zonder fiche geen gunstregime.</li>
+      <li>De RSZ kijkt strenger naar auteursrechten dan de fiscus. Zonder goede onderbouwing riskeer je herkwalificatie tot loon, met de volle belasting en sociale bijdragen.</li>
+    </ul>
+  </details>
+
+  <details class="uitleg">
+    <summary>Warranten en aandelenopties</summary>
+    <p>Met <b>aandelenopties</b> krijg je het recht om binnen een termijn aandelen te kopen tegen een vaste prijs. <b>Warranten</b> zijn vergelijkbaar: verhandelbare effecten, vaak uitgegeven door de vennootschap zelf, meestal gekoppeld aan een obligatie of een specifiek plan.</p>
+    <ul>
+      <li><b>Belast bij toekenning, niet bij verkoop.</b> Aanvaard je het aanbod schriftelijk binnen 60 dagen, dan betaal je eenmalig belasting op een forfaitair voordeel: 18% van de waarde (looptijd tot 5 jaar, daarna +1% per jaar). Met een vaste uitoefenprijs en een uitoefenperiode vanaf het 3de tot het 10de jaar: 9%.</li>
+      <li><b>Geen sociale bijdragen</b>, behalve als de uitoefenprijs lager ligt dan de marktwaarde bij toekenning.</li>
+      <li><b>Voor je vennootschap</b> is de aankoop in principe aftrekbaar.</li>
+      <li><b>De belasting moet je voorschieten:</b> bij de toekenning krijg je geen cash, dus er kan geen bedrijfsvoorheffing ingehouden worden.</li>
+      <li><b>Telt mee in de regel van 20%.</b> Het voordeel is een forfaitair voordeel alle aard. Ga je te ver, dan verliest je vennootschap het verlaagd tarief.</li>
+    </ul>
+    <h4>Wanneer is het interessant?</h4>
+    <p>Vooral bij een hoog loon, of in een vennootschap die nog geen verlaagd tarief met VVPRbis of liquidatiereserve gebruikt. Is je bezoldiging lager dan € 51.000, dan blijft het voordeel beperkt. Reken ook de kosten mee: de aanbieder, het bezoldigingsverslag en de extra boekhouding.</p>
+    <h4>Waar je op let</h4>
+    <ul>
+      <li>Hou de warranten minstens een jaar aan, zo vermijd je discussie met de fiscus over misbruik.</li>
+      <li>Laat een bezoldigingsverslag opmaken dat aantoont dat de toekenning past bij wat je echt presteert.</li>
+      <li>De fiscus kan het voordeel altijd nog herkwalificeren tot gewoon loon.</li>
+      <li><b>Nieuw sinds 2026:</b> verkoop je later de aandelen, dan valt de meerwaarde onder de nieuwe meerwaardebelasting van 10%, met een jaarlijkse vrijstelling van € 10.000. Optie en warrantplannen tellen niet mee voor de grens van 20% aanmerkelijk belang.</li>
+    </ul>
+  </details>
+
+  <details class="uitleg">
+    <summary>Beleggen via je vennootschap: de DBI bevek</summary>
+    <p>Een DBI bevek is een beleggingsfonds voor vennootschappen met overtollige cash. Het dividend dat je vennootschap ontvangt, is deels aftrekbaar via de DBI aftrek: enkel het deel dat uit goede inkomsten komt (dividenden en meerwaarden van voldoende belaste vennootschappen).</p>
+    <ul>
+      <li><b>Nieuw sinds aanslagjaar 2026:</b> op het dividend wordt 30% roerende voorheffing ingehouden. Je vennootschap krijgt die enkel terug als ze de regel van de minimumbezoldiging haalt: minstens één bedrijfsleider krijgt € 51.000, of een bezoldiging die minstens even hoog is als de belastbare winst. In de eerste vier boekjaren geldt die voorwaarde niet. De regel van 20% voor voordelen alle aard speelt hier volgens de huidige wettekst geen rol. Anders gaat de voorheffing op het DBI deel verloren.</li>
+      <li><b>Verkoop:</b> op het vrijgestelde deel van een meerwaarde betaalt je vennootschap sinds aanslagjaar 2026 een heffing van 5%. Die geldt niet als de bevek je aandelen zelf inkoopt en vernietigt, wat in de praktijk vaak gebeurt.</li>
+      <li><b>Verlaagd tarief:</b> een DBI bevek telt volledig mee als aandelen in de test van de helft van je kapitaal en reserves, ook als de bevek zelf in obligaties belegt.</li>
+      <li>Haal je de € 51.000 niet, dan is het soms voordeliger om het dividend gewoon te laten belasten aan 25% vennootschapsbelasting, met volledige verrekening van de voorheffing.</li>
+    </ul>
+  </details>
+
+  <details class="uitleg">
+    <summary>Wat deze calculator niet doet</summary>
+    <ul>
+      <li>Hij rekent voor één bedrijfsleider. Het huwelijksquotiënt zit erin, maar de overdracht van een ongebruikte belastingvrije som tussen partners niet.</li>
+      <li>Hij gaat uit van een zelfstandige in hoofdberoep, zonder andere inkomsten.</li>
+      <li>Investeringsaftrek, overgedragen verliezen en andere aftrekposten van je vennootschap zitten er niet in.</li>
+      <li>De jaarlijkse vennootschapsbijdrage (sinds 2026 afhankelijk van het balanstotaal, enkele honderden euro per jaar) en de kosten van een sociaal secretariaat zitten er niet in.</li>
+      <li>Hij rekent alles in hetzelfde jaar. Het uitstel van belasting bij een tantième, de wachttijd bij een liquidatiereserve en een eventuele meerwaarde op warranten zie je dus niet.</li>
+      <li>Hij kijkt niet na of je vennootschap genoeg eigen vermogen en cash heeft voor een uitkering (de dubbele balanstest).</li>
+      <li>De rentevoet voor leningen van je vennootschap in 2026 wordt pas begin 2027 bekend. De calculator gebruikt 5,57%, het percentage voor 2025.</li>
+      <li>Kilometervergoeding en dagvergoedingen veranderen een paar keer per jaar. De calculator rekent met het bedrag van het vierde kwartaal (kilometers) en met het jaargemiddelde (dienstreizen).</li>
+    </ul>
+  </details>
+
+  <section class="trajecten" id="trajecten"></section>
+
+  <p class="disclaimer">Deze calculator geeft een indicatieve berekening voor inkomstenjaar <span class="jr"></span> (aanslagjaar <span class="aj"></span>), op basis van de wetgeving zoals bekend op <span class="gecontroleerd"></span>, waaronder de wet van 15 juli 2026 tot hervorming van de personenbelasting. Bedragen en regels kunnen wijzigen. De calculator vervangt geen persoonlijk fiscaal advies. Kleine afwijkingen door afrondingen of bijzondere situaties blijven mogelijk.</p>
+  <div class="brand">de cijfercoach · Kimberley Van Poecke</div>
+</div>
+
+<script>
+/* ================= INSTELLINGEN (jaarlijks nakijken) =================
+   Laatst gecontroleerd: 13/11/2026. Bronnen (per onderdeel ook hieronder):
+   - personenbelasting AJ 2027: wet 15/07/2026 hervorming PB (BS 29/07/2026), indexering FOD Financiën; practicali.be/blog/geindexeerde-bedragen-aj-2027
+   - sociale bijdragen 2026: rsvz.be/nl/faq/hoeveel-sociale-bijdragen-moet-ik-betalen
+   - minimumbezoldiging en 20%-grens: kbc.be (Minimumbezoldiging bedrijfsleiders aangescherpt), partena-professional.be
+   - VVPRbis en liquidatiereserve: programmawet 18/07/2025 en programmawet 30/05/2026 (BS 01/06/2026)
+   - voordelen alle aard 2026: BS 24/12/2025 (CO2 referentie), bdo.be, partena-professional.be (verwarming, elektriciteit)
+   - thuiswerk: circulaire 2026/C/84; km: omzendbrief 771 (BS 29/09/2026); dienstreis: circulaire 2026/C/35 en securex.be (1/9/2026)
+   - VAPZ: circulaire 2026/C/93; maaltijdcheques: partena-professional.be; huur: securex.be (coëfficiënt 5,75)
+   Jaarlijkse update: pas jaar en bedragen aan, controleer de teksten in de uitlegblokken. */
+var CONFIG = {
+  /* inkomstenjaar waarvoor de bedragen gelden; aanslagjaar = jaar + 1 wordt automatisch berekend */
+  jaar: 2026,
+  gecontroleerd: '13 november 2026',
+  /* vennootschapsbelasting, aanslagjaar 2027 */
+  venb: { verlaagd: 0.20, schijf: 100000, normaal: 0.25, minLoon: 51000, vaaMax: 0.20 },
+  /* personenbelasting, aanslagjaar 2027 */
+  pb: {
+    schijven: [[16720, 0.25], [29510, 0.40], [51070, 0.45], [Infinity, 0.50]],
+    bvsSchijven: [[11750, 0.25], [16720, 0.30], [27860, 0.40], [51070, 0.45], [Infinity, 0.50]],
+    bvs: 11550, kinderen: [0, 2130, 5130, 11440, 18510], extraKind: 7070,
+    forfait: 0.03, forfaitMax: 3200,
+    /* huwelijksquotiënt: 30% van jullie samengetelde beroepsinkomen, min dat van je partner, met een maximum (wordt afgebouwd tot AJ 2030) */
+    quotient: 0.30, quotientMax: 11780,
+    /* schatting: netto maandinkomen partner × 12 × deze factor = belastbaar beroepsinkomen (na forfaitaire beroepskosten) */
+    partnerFactor: 0.70
+  },
+  /* sociale bijdragen zelfstandige in hoofdberoep 2026 */
+  rsvz: { t1: 0.205, grens1: 75024.54, t2: 0.1416, plafond: 110562.42, minI: 17374.08, beheer: 0.04 },
+  /* dividend: netto wat overblijft van elke euro na vennootschapsbelasting
+     laag = VVPRbis 18%, of liquidatiereserve: 10% bij aanleg + 9,8% na 3 jaar = 0,902/1,1 = 0,82
+     vvpr20 = VVPRbis 2de boekjaar, inbreng tot eind 2025; vereffening = liquidatiereserve tot de vereffening: 1/1,1 */
+  div: { gewoon: 0.70, laag: 0.82, vvpr20: 0.80, vereffening: 1/1.1 },
+  divLabel: { gewoon: '30%', laag: '18%', vvpr20: '20%', vereffening: '10% (liquidatiereserve tot de vereffening)' },
+  /* auteursrechten inkomstenjaar 2026: 15% RV tot het plafond; forfaitaire kosten enkel met kunstwerkattest */
+  auteur: { rv: 0.15, plafond: 77220, schijf1: 20590, schijf2: 41180, kost1: 0.50, kost2: 0.25, ratio: 0.30 },
+  /* lening van de vennootschap: forfaitaire rentevoet voorschotten zonder vaste termijn (inkomsten 2025, KB 8 feb 2026; 2026 nog niet bekend) */
+  rc: { rente: 0.0557 },
+  /* DBI bevek: RV die verloren gaat zonder bezoldiging van € 51.000 */
+  dbi: { rv: 0.30 },
+  /* onkostenvergoedingen: forfaits die de RSZ aanvaardt (instructies 2026/3) en de fiscus volgt.
+     bureauJaar = 2 × 157,83 + 6 × 160,99 + 4 × 164,21; km = 4de kwartaal 2026 */
+  onkost: { bureauJaar: 1938.44, bureauMaand: 164.21, pc: 240, internet: 240, scherm: 60, km: 0.4452, kmMax: 24000,
+    fiets: 0.37, fietsWWMax: 3700, parking: 180, garage: 600, carwash: 180,
+    onderweg: 10, maaltijd: 9, nacht: 35, kledij: 4.40, gereedschap: 1.25,
+    /* fiscale dagvergoeding binnenlandse dienstreis 2026: 21,22 (jan, feb), 21,64 (maart tot aug, circ. 2026/C/35), 22,08 (vanaf sept)
+       jaargemiddelde = (2 × 21,22 + 6 × 21,64 + 4 × 22,08) / 12 = 21,72; max 16 dagen per maand */
+    dienstreis: 21.72, dienstreisNu: 22.08, dienstreisMax: 192, reprAftrek: 0.50 },
+  /* voordelen alle aard 2026 */
+  vaa: { laptop: 72, gsm: 36, tablet: 36, internet: 60, telefoon: 48,
+    autoMin: 1690, refBenzine: 70, refDiesel: 58, ouderdom: [1, 0.94, 0.88, 0.82, 0.76, 0.70],
+    kiIndex: 2.30, verwarming: 2560, elektriciteit: 1280 },
+  /* autokosten: aftrek per besteldatum (fossiel); elektrisch altijd 100%.
+     mid = besteld 1/7/2023 tot eind 2025: oude CO2 formule, maar maximaal 50% in 2026 */
+  autoAftrek: { mid: 0.50, nieuw: 0 },
+  cheque: { werkgeverMax: 8.91, werkgeverLaag: 8, aftrekMax: 4, aftrekLaag: 2, eco: 250 },
+  huur: { reval: 5.75, kiIndex: 2.30 },
+  /* aanvullend pensioen 2026: VAPZ maxima; IPT: taks op de premie en ruwe netto na belasting bij uitbetaling (10% + gemeente, RIZIV, solidariteit) */
+  /* VAPZ 2026 na de wet van juli 2026 (circulaire 2026/C/93): 8,50% max 4.251,39 en 9,78% max 4.891,60 */
+  vapz: { klassiek: 4251.39, sociaal: 4891.60, pctKlassiek: 0.085, pctSociaal: 0.0978 },
+  ipt: { taks: 0.044, nettoUitkering: 0.84 },
+  trajecten: [
+    { naam: 'Financial Fundamentals', voor: 'Voor vrouwen in hoofdberoep', kleur: 'oranje', url: 'https://decijfercoach.be/financialfundamentals/',
+      tekst: 'Leer je cijfers begrijpen, neem financieel sterke beslissingen en bouw een zaak die niet alleen groeit, maar ook iets oplevert.' },
+    { naam: 'Financial Co-Pilot', voor: 'Voor vrouwen met omzet boven € 200.000', kleur: 'bordeaux', url: 'https://decijfercoach.be/financialcopilot/',
+      tekst: 'Zes maanden 1 op 1, met mij als je financiële rechterhand. Voor gevestigde ondernemers die strategisch willen sturen op hun cijfers.' }
+  ],
+  trajectenTitel: 'Zo word je zelf sterk in je cijfers',
+  trajectenIntro: 'Deze calculator toont je wat je keuzes vandaag opleveren. In mijn trajecten leer je zelf lezen wat de cijfers van je vennootschap je vertellen, zodat je elk jaar met vertrouwen je loonpakket kiest. Mijn trajecten zijn er exclusief voor vrouwelijke ondernemers.',
+  vraagTekst: 'Wil je dit elk jaar zelf kunnen inschatten?',
+  knopTekst: 'Ontdek mijn trajecten'
+};
+/* ==================================================================== */
+
+var $ = function(id){ return document.getElementById(id); };
+function parseBedrag(v){
+  if(!v) return 0;
+  v = String(v).replace(/[€%\s]/g,'');
+  /* 60,000 of 1,250,000 (Engelse schrijfwijze) lezen als duizendtallen */
+  if(/^\d{1,3}(,\d{3})+$/.test(v) && v.indexOf('.') < 0){ v = v.replace(/,/g,''); }
+  if(v.indexOf(',') > -1){ v = v.replace(/\./g,'').replace(',', '.'); }
+  else if((v.match(/\./g)||[]).length > 1 || /\.\d{3}$/.test(v)){ v = v.replace(/\./g,''); }
+  var n = parseFloat(v);
+  return isFinite(n) && n > 0 ? n : 0;
+}
+function eur(n){ return (n < -0.5 ? '− ' : '') + '€ ' + Math.round(Math.abs(n||0)).toLocaleString('nl-BE'); }
+function pct(n, d){ return (n*100).toLocaleString('nl-BE',{maximumFractionDigits: d === undefined ? 1 : d}) + '%'; }
+function chk(id){ return $(id).checked; }
+function val(id){ return parseBedrag($(id).value); }
+
+/* ---------- personenbelasting en sociale bijdragen ---------- */
+function schaal(inkomen, schijven){
+  var t = 0, onder = 0;
+  for(var i=0;i<schijven.length;i++){
+    var boven = schijven[i][0];
+    if(inkomen > onder){ t += (Math.min(inkomen, boven) - onder) * schijven[i][1]; }
+    onder = boven;
+  }
+  return t;
+}
+function bvsBedrag(kids){
+  var p = CONFIG.pb, k = p.kinderen;
+  var toeslag = kids <= 4 ? k[kids] : k[4] + (kids - 4) * p.extraKind;
+  return p.bvs + toeslag;
+}
+function rsvzOp(I){
+  var r = CONFIG.rsvz, basis = Math.max(I, r.minI);
+  var b = Math.min(basis, r.grens1) * r.t1 + Math.max(0, Math.min(basis, r.plafond) - r.grens1) * r.t2;
+  return b * (1 + r.beheer);
+}
+function federaal(inkomen, bvs){
+  return Math.max(0, schaal(inkomen, CONFIG.pb.schijven) - schaal(bvs, CONFIG.pb.bvsSchijven));
+}
+/* G = bezoldiging (loon + voordelen + geherkwalificeerde huur); extra = ander belastbaar inkomen (huur)
+   partner = { mode: 'alleen' | 'geen' | 'minder' | 'meer', ink: beroepsinkomen partner } */
+/* rsvzVrij = deel van G zonder sociale bijdragen (het forfaitaire voordeel uit warranten) */
+function persoon(G, extra, kids, gem, partner, vapz, rsvzVrij){
+  var S = rsvzOp(0), kost = 0, I = 0, Ir = 0;
+  vapz = vapz || 0; rsvzVrij = rsvzVrij || 0;
+  for(var n=0;n<80;n++){
+    var basis = Math.max(0, G - S - vapz);
+    kost = Math.min(basis * CONFIG.pb.forfait, CONFIG.pb.forfaitMax);
+    I = Math.max(0, basis - kost);
+    var basisR = Math.max(0, basis - rsvzVrij);
+    Ir = rsvzVrij > 0 ? Math.max(0, basisR - Math.min(basisR * CONFIG.pb.forfait, CONFIG.pb.forfaitMax)) : I;
+    var S2 = rsvzOp(Ir);
+    if(Math.abs(S2 - S) < 0.005){ S = S2; break; }
+    S = S2;
+  }
+  /* huwelijksquotiënt: een deel van jouw beroepsinkomen wordt bij je partner belast */
+  var Q = 0, partnerExtra = 0;
+  if(partner && (partner.mode === 'geen' || partner.mode === 'minder')){
+    var Ip = partner.mode === 'geen' ? 0 : partner.ink;
+    Q = Math.min(Math.max(0, CONFIG.pb.quotient * (I + Ip) - Ip), CONFIG.pb.quotientMax);
+    partnerExtra = federaal(Ip + Q, CONFIG.pb.bvs) - federaal(Ip, CONFIG.pb.bvs);
+  }
+  var fed = federaal(I - Q + extra, bvsBedrag(kids)) + partnerExtra;
+  return { S: S, I: I, Ir: Ir, kost: kost, Q: Q, pb: fed * (1 + gem) };
+}
+
+/* ---------- invoer lezen ---------- */
+function leesInvoer(){
+  var s = {
+    winst: val('winst'), kmo: chk('kmo'), starter: chk('starter'),
+    kids: +$('kinderen').value, gem: Math.min(parseBedrag($('gemeente').value), 10) / 100,
+    partner: { mode: $('gezin').value === 'samen' ? 'minder' : 'alleen', ink: val('partnerInk') * 12 * CONFIG.pb.partnerFactor },
+    nettoDoel: val('nettoMaand') * 12, loon: 0,
+    bureau: chk('oBureau'), pcEigen: chk('oPc'), netEigen: chk('oInternet'),
+    km: Math.min(val('km'), CONFIG.onkost.kmMax), kmAftrek: +$('kmWagen').value,
+    scherm: +$('oScherm').value, parking: chk('oParking'), garage: chk('oGarage'), carwash: chk('oCarwash'),
+    kmFiets: val('kmFiets'), kmFietsWW: val('kmFietsWW'),
+    dagenOnderweg: Math.min(val('dagenOnderweg'), 366), maaltijd: chk('oMaaltijd'), nachten: Math.min(val('nachten'), 366),
+    kledij: chk('oKledij'), gereedschap: chk('oGereedschap'), werkdagen: Math.min(val('werkdagen'), 366),
+    wagen: chk('vWagen'), wCat: val('wCat'), wBrandstof: $('wBrandstof').value, wCo2: val('wCo2'),
+    wLeeftijd: +$('wLeeftijd').value, wKost: val('wKost'), wBijdrage: val('wBijdrage'), wBesteld: $('wBesteld').value, wKaart: chk('wKaart'),
+    laptop: chk('vLaptop'), gsm: chk('vGsm'), tablet: chk('vTablet'), netVaa: chk('vInternet'), telefoon: chk('vTelefoon'),
+    woning: chk('vWoning'), wKi: val('wKi'), wKostWoning: val('wKostWoning'), gemeubeld: chk('wGemeubeld'), verwarming: chk('wVerwarming'), elek: chk('wElek'),
+    mc: Math.min(Math.round(val('mcDagen')), 366), mcMax: chk('mcMax'), eco: chk('eco'),
+    huurKi: val('huurKi'), huur: val('huurJaar'),
+    vapz: Math.min(val('vapz'), CONFIG.vapz[$('vapzType').value]), ipt: val('ipt'), vapzDoor: $('vapzDoor').value,
+    route: $('divRoute').value,
+    fiets: chk('vFiets'), fietsKost: val('fietsKost'),
+    rcSaldo: val('rcSaldo'), rcRente: parseBedrag($('rcRente').value) / 100,
+    dagenDienstreis: Math.min(val('dagenDienstreis'), CONFIG.onkost.dienstreisMax),
+    dagenBuitenland: val('dagenBuitenland'), dagBuitenland: val('dagBuitenland'), repr: val('oRepr') * 12,
+    tantieme: val('tantieme'), auteur: val('auteur'), kunstwerk: chk('kunstwerk'),
+    warrant: val('warrant'), warrantPct: +$('warrantPct').value, warrantKost: val('warrantKost'),
+    dbi: val('dbi')
+  };
+  if(!s.fiets) s.fietsKost = 0;
+  if(s.warrant <= 0) s.warrantKost = 0;
+  /* dubbele vergoeding van dezelfde kost kan niet */
+  if(s.laptop) s.pcEigen = false;
+  if(s.netVaa) s.netEigen = false;
+  if(s.pcEigen) s.scherm = 0;
+  if(!s.wagen && s.km <= 0){ s.parking = s.garage = s.carwash = false; }
+  if(s.wagen) s.km = 0;
+  s.loon = brutoVoorNetto(s, s.nettoDoel);
+  return s;
+}
+
+/* nettoloon = brutoloon min sociale bijdragen en personenbelasting (ook die op je voordelen alle aard en huur),
+   zonder de belasting op een tantième, warranten of auteursrechten boven het plafond */
+function nettoLoon(m){ return m.nettoLoon; }
+/* zoek het brutoloon dat het gewenste nettoloon oplevert */
+function brutoVoorNetto(s, doel){
+  if(doel <= 0) return 0;
+  var lo = 0, hi = 1000000;
+  for(var n=0;n<45;n++){
+    var mid = (lo + hi) / 2;
+    if(nettoLoon(model(s, mid)) < doel) lo = mid; else hi = mid;
+  }
+  return Math.round(hi);
+}
+function zetNetto(m){ $('nettoMaand').value = Math.ceil(nettoLoon(m) / 12).toLocaleString('nl-BE'); }
+
+/* ---------- onderdelen ---------- */
+function autoVaa(s){
+  if(!s.wagen || s.wCat <= 0) return 0;
+  var v = CONFIG.vaa, p;
+  if(s.wBrandstof === 'e'){ p = 4; }
+  else {
+    var ref = s.wBrandstof === 'd' ? v.refDiesel : v.refBenzine;
+    p = Math.min(18, Math.max(4, 5.5 + (s.wCo2 - ref) * 0.1));
+  }
+  var bruto = Math.max(v.autoMin, s.wCat * v.ouderdom[s.wLeeftijd] * p/100 * 6/7);
+  return Math.max(0, bruto - s.wBijdrage);
+}
+function autoAftrekPct(s){
+  if(s.wBrandstof === 'e') return 1;
+  if(s.wBesteld === 'nieuw') return CONFIG.autoAftrek.nieuw;
+  var coef = s.wBrandstof === 'd' ? 1 : 0.95;
+  var formule = s.wCo2 >= 200 ? 0.40 : Math.min(1, Math.max(0.5, 1.2 - 0.005 * coef * s.wCo2));
+  /* besteld van juli 2023 tot eind 2025: de oude formule, met een plafond dat elk jaar zakt */
+  if(s.wBesteld === 'mid') return Math.min(formule, CONFIG.autoAftrek.mid);
+  return formule;
+}
+function woningVaa(s){
+  if(!s.woning) return 0;
+  var w = s.wKi * CONFIG.vaa.kiIndex * 100/60 * 2;
+  if(s.gemeubeld) w *= 5/3;
+  return w + (s.verwarming ? CONFIG.vaa.verwarming : 0) + (s.elek ? CONFIG.vaa.elektriciteit : 0);
+}
+function toestelVaa(s){
+  var v = CONFIG.vaa;
+  return (s.laptop ? v.laptop : 0) + (s.gsm ? v.gsm : 0) + (s.tablet ? v.tablet : 0) + (s.netVaa ? v.internet : 0) + (s.telefoon ? v.telefoon : 0);
+}
+function huurDelen(s){
+  if(s.huur <= 0) return { grens: 0, herk: 0, onr: 0, belastbaar: 0 };
+  var h = CONFIG.huur, grens = s.huurKi * 5/3 * h.reval;
+  var herk = Math.max(0, s.huur - grens), onr = s.huur - herk;
+  var kosten = Math.min(onr * 0.4, s.huurKi * 2/3 * h.reval);
+  var belastbaar = onr > 0 ? Math.max(onr - kosten, s.huurKi * h.kiIndex * 1.4) : 0;
+  return { grens: grens, herk: herk, onr: onr, belastbaar: belastbaar };
+}
+/* tot = wat je vennootschap betaalt; aftrek = wat ze mag aftrekken (kosten van je eigen wagen volgen de autoregels) */
+function onkosten(s){
+  if(s.geenOnkost) return { tot: 0, aftrek: 0 };
+  var o = CONFIG.onkost;
+  var gewoon = (s.bureau ? o.bureauJaar : 0) + (s.pcEigen ? o.pc : 0) + (s.netEigen ? o.internet : 0) + s.scherm * o.scherm +
+    s.kmFiets * o.fiets + Math.min(s.kmFietsWW * o.fiets, o.fietsWWMax) +
+    s.dagenOnderweg * (o.onderweg + (s.maaltijd ? o.maaltijd : 0)) + s.nachten * o.nacht +
+    s.werkdagen * ((s.kledij ? o.kledij : 0) + (s.gereedschap ? o.gereedschap : 0)) +
+    s.dagenDienstreis * o.dienstreis + s.dagenBuitenland * s.dagBuitenland;
+  var km = s.km * o.km;
+  /* parking, garage en carwash volgen de aftrek van de wagen waarvoor ze dienen: bedrijfswagen of eigen wagen */
+  var autoExtra = (s.parking ? o.parking : 0) + (s.garage ? o.garage : 0) + (s.carwash ? o.carwash : 0);
+  var extraPct = s.wagen ? autoAftrekPct(s) : s.kmAftrek;
+  return { tot: gewoon + km + autoExtra + s.repr,
+    aftrek: gewoon + km * s.kmAftrek + autoExtra * extraPct + s.repr * o.reprAftrek };
+}
+function auteursDelen(s){
+  var a = CONFIG.auteur, cap = Math.min(s.auteur, a.plafond), boven = Math.max(0, s.auteur - a.plafond);
+  var kost = s.kunstwerk ? Math.min(cap, a.schijf1) * a.kost1 + Math.max(0, Math.min(cap, a.schijf2) - a.schijf1) * a.kost2 : 0;
+  var rv = (cap - kost) * a.rv;
+  return { cap: cap, boven: boven, kost: kost, rv: rv, netto: cap - rv };
+}
+
+/* ---------- het volledige model voor één brutoloon ---------- */
+function model(s, B){
+  var aVaa = autoVaa(s), wVaa = woningVaa(s), tVaa = toestelVaa(s);
+  var rcVaa = s.rcSaldo * Math.max(0, CONFIG.rc.rente - s.rcRente);
+  var warVaa = s.warrant * s.warrantPct;
+  var vaa = aVaa + wVaa + tVaa + rcVaa + warVaa;       /* forfaitaire voordelen: tellen voor de regel van 20% */
+  var vapzVaa = s.vapzDoor === 'vennootschap' ? s.vapz : 0;
+  var T = s.tantieme, ar = auteursDelen(s);
+  var h = huurDelen(s), ok = onkosten(s);
+  var G = B + T + vaa + vapzVaa + h.herk + ar.boven;   /* bezoldiging */
+  var onkTot = ok.tot;
+  var c = CONFIG.cheque, mcWg = s.mcMax ? c.werkgeverMax : c.werkgeverLaag, mcAftrek = s.mcMax ? c.aftrekMax : c.aftrekLaag;
+  var eco = s.eco ? c.eco : 0;
+  var autoKost = s.wagen ? s.wKost : 0, woonKost = s.woning ? s.wKostWoning : 0;
+  var bijdrage = s.wagen ? s.wBijdrage : 0;
+
+  /* vennootschap */
+  var iptKost = s.ipt * (1 + CONFIG.ipt.taks);
+  /* volledig aftrekbare extra's: tantième, auteursrechten, warranten en hun kosten, bedrijfsfiets, VAPZ via de vennootschap */
+  var extraKost = T + s.auteur + s.warrant + s.warrantKost + s.fietsKost + vapzVaa;
+  var betaald = B + onkTot + s.mc * mcWg + eco + s.huur + autoKost + woonKost + iptKost + extraKost;
+  var aftrekbaar = iptKost + B + ok.aftrek + s.mc * mcAftrek + s.huur + autoKost * autoAftrekPct(s) + woonKost + extraKost;
+  var vu = s.wagen ? aVaa * (s.wKaart ? 0.40 : 0.17) : 0;
+  var W = Math.max(0, s.winst + bijdrage - aftrekbaar + vu);
+  var vaaOk = vaa <= CONFIG.venb.vaaMax * G + 0.005;
+  var nodig = Math.min(CONFIG.venb.minLoon, W);
+  var loonOk = s.starter || G >= nodig - 0.5;
+  var verlaagd = s.kmo && vaaOk && loonOk;
+  var v = CONFIG.venb;
+  var venb = verlaagd ? Math.min(W, v.schijf) * v.verlaagd + Math.max(0, W - v.schijf) * v.normaal : W * v.normaal;
+  /* DBI bevek: haalt de vennootschap de minimumbezoldiging niet (€ 51.000 of de helftregel), dan gaat de roerende
+     voorheffing op het DBI deel verloren. De regel van 20% voor voordelen alle aard speelt hier niet mee (art. 282/1 WIB). */
+  var dbiVerlies = (s.dbi > 0 && !loonOk) ? s.dbi * CONFIG.dbi.rv : 0;
+  var R = s.winst + bijdrage - betaald - venb - dbiVerlies;
+
+  /* jij */
+  var p = persoon(G, h.belastbaar, s.kids, s.gem, s.partner, s.vapz, warVaa);
+  /* belasting op je maandloon apart: zonder tantième, warranten en auteursrechten boven het plafond */
+  var p0 = (T > 0 || warVaa > 0 || ar.boven > 0) ? persoon(G - T - warVaa - ar.boven, h.belastbaar, s.kids, s.gem, s.partner, s.vapz, 0) : p;
+  var mcNetto = s.mc * mcWg;
+  var vapzZelf = s.vapzDoor === 'vennootschap' ? 0 : s.vapz;
+  var netto = B + T + ar.boven - p.S - p.pb + onkTot + mcNetto + eco + s.huur - bijdrage - vapzZelf + ar.netto + s.warrant;
+  var divFactor = CONFIG.div[s.route];
+  var divNetto = Math.max(0, R) * divFactor;
+
+  return { vapz: s.vapz, vapzVaa: vapzVaa, ipt: s.ipt, iptKost: iptKost, B: B, G: G, T: T, ar: ar, vaa: vaa, aVaa: aVaa, wVaa: wVaa, tVaa: tVaa, rcVaa: rcVaa, warVaa: warVaa, h: h, ok: ok, onkTot: onkTot, mcNetto: mcNetto, eco: eco, bijdrage: bijdrage,
+    W: W, vaaOk: vaaOk, nodig: nodig, loonOk: loonOk, verlaagd: verlaagd, venb: venb, R: R, vu: vu, dbiVerlies: dbiVerlies,
+    S: p.S, I: p.I, Ir: p.Ir, kost: p.kost, Q: p.Q, pb: p.pb, nettoLoon: B - p0.S - p0.pb, netto: netto, divNetto: divNetto, totaal: netto + divNetto };
+}
+
+/* ---------- zoeken: beste loon en minimum ---------- */
+function zoekOptimum(s){
+  var best = null, stap = 100, max = Math.max(0, s.winst);
+  for(var B=0; B<=max; B+=stap){
+    var m = model(s, B);
+    if(m.R < -0.5) break;
+    if(!best || m.totaal > best.totaal + 0.5) best = m;
+  }
+  return best;
+}
+function zoekMinimum(s){
+  if(!s.kmo) return null;
+  var max = Math.max(0, s.winst);
+  for(var B=0; B<=max; B+=100){
+    var m = model(s, B);
+    if(m.R < -0.5) return null;
+    if(m.verlaagd) return m;
+  }
+  return null;
+}
+
+/* ---------- uitrekenen en tonen ---------- */
+function bereken(){
+  toonVelden();
+  var s = leesInvoer();
+  waarschuwingen(s);
+  if(s.winst <= 0){
+    $('loonHint').innerHTML = LOONHINT;
+    render('<h2>Jouw resultaat</h2><p class="lead">Vul in blok 1 de winst van je vennootschap in en in blok 2 het nettoloon dat je per maand wil. Dan zie je hier meteen wat er voor jou overblijft. Of klik op <b>Probeer met een voorbeeld</b>.</p>',
+      'Nog geen resultaat. Vul eerst de winst van je vennootschap in.');
+    return;
+  }
+  var m = model(s, s.loon);
+  var opt = zoekOptimum(s), min = s.starter ? null : zoekMinimum(s);
+  $('loonHint').innerHTML = m.B > 0
+    ? 'Daarvoor kent je vennootschap je een <b>brutoloon van ' + eur(m.B) + ' per jaar</b> toe, of ' + eur(m.B/12) + ' bruto per maand. Dat bedrag geef je door aan je boekhouder.'
+    : LOONHINT;
+  var out = '<h2>Jouw resultaat</h2>';
+
+  if(m.R < -0.5){
+    out += '<div class="note"><b>Je vennootschap komt ' + eur(-m.R) + ' tekort.</b> Je loonpakket kost meer dan de winst die je vennootschap maakt. Verlaag je nettoloon of schrap een onderdeel. Of klik op <b>Toon mijn beste loon</b>.</div>';
+  }
+
+  /* het hoofdgetal en één zin */
+  out += '<div class="muted" style="font-weight:600">Netto voor jou per maand</div>' +
+    '<div class="big">' + eur(m.netto/12) + '</div>' +
+    '<p class="lead">' + (m.netto - m.nettoLoon > 6 ? 'Je nettoloon van ' + eur(m.nettoLoon/12) + ' plus ' + eur((m.netto - m.nettoLoon)/12) + ' aan vergoedingen en andere extra’s. ' : m.netto - m.nettoLoon < -6 ? 'Je nettoloon van ' + eur(m.nettoLoon/12) + ' min wat je zelf betaalt (VAPZ premie of eigen bijdrage voor je wagen). ' : '') +
+      'Per jaar is dat ' + eur(m.netto) +
+      (m.R > 0.5 ? '. In je vennootschap blijft ' + eur(m.R) + ' winst over: keer je die later uit als dividend, dan hou je er nog ' + eur(m.divNetto) + ' van over.' : '.') + '</p>';
+
+  /* verlaagd tarief, kort */
+  var verschil = Math.min(m.W, CONFIG.venb.schijf) * (CONFIG.venb.normaal - CONFIG.venb.verlaagd);
+  if(!s.kmo){
+    out += statusRij('bad', 'Je vennootschap voldoet niet aan de basisvoorwaarden voor het verlaagd tarief. Ze betaalt 25% op alle winst.');
+  } else if(m.verlaagd){
+    out += statusRij('ok', 'Je vennootschap houdt het verlaagd tarief van 20% op de eerste € 100.000 winst.');
+  } else {
+    out += statusRij('bad', 'Je vennootschap verliest het verlaagd tarief' + (verschil > 0.5 ? ': dat kost haar ' + eur(verschil) + ' extra belasting' : '') + '. Lees hieronder waarom.');
+  }
+  if(opt && opt.totaal > m.totaal + 25){
+    out += statusRij('tip', 'Met een nettoloon van ' + eur(nettoLoon(opt)/12) + ' per maand hou je ' + eur(opt.totaal - m.totaal) + ' meer over, loon en dividend samen. Klik op <b>Toon mijn beste loon</b> in blok 2.');
+  }
+
+  out += '<div class="kpis">' +
+    '<div class="kpi"><div class="k">Sociale bijdragen</div><div class="v">' + eur(m.S) + '</div></div>' +
+    '<div class="kpi"><div class="k">Personenbelasting, met gemeentebelasting</div><div class="v">' + eur(m.pb) + '</div></div>' +
+    '<div class="kpi"><div class="k">Vennootschapsbelasting</div><div class="v">' + eur(m.venb) + '</div></div>' +
+    '</div>';
+  out += '<div class="knoppen no-print" style="margin-bottom:8px"><button type="button" class="btn licht" id="btnPrint">Bewaar als pdf of druk af</button></div>';
+
+  /* voor de afdruk: wat je invulde */
+  out += '<div class="print-only"><h3>Wat je invulde</h3><table><tbody>' +
+    rij('Winst van je vennootschap vóór je loonpakket', s.winst) +
+    rij('Gewenst nettoloon per jaar', s.nettoDoel) +
+    rij('Brutoloon dat je vennootschap toekent, per jaar', m.B) +
+    '<tr><td>Gezin</td><td class="num">' + ($('gezin').value === 'samen' ? 'gehuwd of wettelijk samenwonend' : 'alleenstaand') + ', ' + $('kinderen').selectedOptions[0].text.toLowerCase() + ' ten laste</td></tr>' +
+    '<tr><td>Dividend later uitgekeerd aan</td><td class="num">' + CONFIG.divLabel[s.route] + '</td></tr>' +
+    '</tbody></table></div>';
+
+  /* 1. de berekening */
+  var t = '<table><tbody>' +
+    rij('Brutoloon', m.B) +
+    (m.T > 0 ? rij('Tantième, bruto (krijg je meestal pas volgend jaar)', m.T) : '') +
+    (m.ar.boven > 0 ? rij('Auteursrechten boven het plafond, belast als loon', m.ar.boven) : '') +
+    rij('Sociale bijdragen', -m.S) +
+    rij('Personenbelasting en gemeentebelasting' + (m.vaa > 0 || m.h.onr > 0 ? ' (ook op je voordelen alle aard' + (m.h.onr > 0 ? ' en huur' : '') + ')' : ''), -m.pb) +
+    (s.huur > 0 ? rij('Huur van je privékantoor', s.huur) : '') +
+    (m.onkTot > 0 ? rij('Onkostenvergoedingen, belastingvrij', m.onkTot) : '') +
+    (m.mcNetto > 0 ? rij('Maaltijdcheques, netto voor jou', m.mcNetto) : '') +
+    (m.eco > 0 ? rij('Ecocheques', m.eco) : '') +
+    (m.ar.cap > 0 ? rij('Auteursrechten, na ' + (m.ar.kost > 0 ? 'forfaitaire kosten en ' : '') + '15% roerende voorheffing (' + eur(m.ar.rv) + ')', m.ar.netto) : '') +
+    (s.warrant > 0 ? rij('Warranten, waarde als je ze verkoopt', s.warrant) : '') +
+    (m.bijdrage > 0 ? rij('Eigen bijdrage bedrijfswagen', -m.bijdrage) : '') +
+    (m.vapz > 0 && m.vapzVaa === 0 ? rij('VAPZ premie, gaat naar je pensioen', -m.vapz) : '') +
+    '<tr class="tot"><td>Netto voor jou per jaar</td><td class="num">' + eur(m.netto) + '</td></tr>' +
+    '<tr><td>Per maand</td><td class="num">' + eur(m.netto/12) + '</td></tr>' +
+    '</tbody></table>';
+  t += '<table><tbody>' +
+    rij('Winst van je vennootschap vóór je loonpakket', s.winst) +
+    rij('Wat je loonpakket haar kost', -(s.winst + m.bijdrage - m.R - m.venb - m.dbiVerlies)) +
+    rij('Vennootschapsbelasting', -m.venb) +
+    (m.dbiVerlies > 0 ? rij('Verloren roerende voorheffing DBI bevek', -m.dbiVerlies) : '') +
+    '<tr class="tot"><td>Winst die in je vennootschap blijft</td><td class="num">' + eur(m.R) + '</td></tr>' +
+    rij('Netto als dividend aan ' + CONFIG.divLabel[s.route], m.divNetto) +
+    '</tbody></table>';
+  var gebruikVaa = m.aVaa + m.wVaa + m.tVaa + m.rcVaa;
+  if(gebruikVaa > 0 || s.fiets){
+    var gebruik = [];
+    if(m.aVaa > 0) gebruik.push('een bedrijfswagen');
+    if(s.fiets) gebruik.push('een bedrijfsfiets');
+    if(m.wVaa > 0) gebruik.push('een woning');
+    if(m.tVaa > 0) gebruik.push('toestellen en abonnementen');
+    if(m.rcVaa > 0) gebruik.push('geld dat je leent');
+    t += '<p class="muted" style="font-size:14.5px;margin:10px 0 0">Daarbovenop gebruik je ' + lijst(gebruik) + ' van de zaak. ' +
+      (gebruikVaa > 0 ? 'Je betaalt belasting en bijdragen op een voordeel van ' + eur(gebruikVaa) + ' per jaar, maar je hoeft het niet zelf te betalen.' : 'Een bedrijfsfiets is vrijgesteld: je betaalt er niets op.') + '</p>';
+  }
+  if(m.T > 0) t += '<p class="muted" style="font-size:14.5px;margin:10px 0 0">De tantième is aftrekbaar voor je vennootschap in dit boekjaar. Jij betaalt er pas belasting op in het jaar dat je ze krijgt. De calculator rekent alles in hetzelfde jaar.</p>';
+  if(m.Q > 0.5){
+    var alleen = persoon(m.G, m.h.belastbaar, s.kids, s.gem, { mode: 'alleen' }, s.vapz, m.warVaa);
+    t += '<div class="tip"><b>Huwelijksquotiënt: jullie besparen ' + eur(alleen.pb - m.pb) + ' per jaar.</b> ' + eur(m.Q) + ' van jouw beroepsinkomen wordt bij je partner belast, tegen een lager tarief. De personenbelasting hierboven is wat jullie samen betalen door jouw inkomen.</div>';
+  } else if(s.partner.mode === 'minder'){
+    t += '<div class="tip">Je partner verdient te veel voor het huwelijksquotiënt. Dat kan pas als je partner netto minder verdient dan ongeveer ' + eur(m.I * 3/7 / 12 / CONFIG.pb.partnerFactor) + ' per maand. De calculator rekent dus zonder.</div>';
+  }
+  out += rdet('berekening', 'Bekijk de berekening', t);
+
+  /* 2. verlaagd tarief */
+  var v = '<div class="verdict">' + (m.verlaagd ? 'Ja: 20% op de eerste € 100.000 winst.' : 'Nee: je vennootschap betaalt 25% op alle winst.') + '</div>';
+  if(!m.verlaagd && s.kmo && verschil > 0.5) v += '<p class="lead">Dat kost je vennootschap ' + eur(verschil) + ' extra belasting dit jaar.</p>';
+  v += '<div class="checks">';
+  v += s.kmo
+    ? checkRij('ok', 'Kleine vennootschap, geen holding, niet voor de helft in handen van andere vennootschappen.')
+    : checkRij('bad', 'Je gaf aan dat je vennootschap niet aan de basisvoorwaarden voldoet. Dan geldt altijd 25%.');
+  if(s.starter){
+    v += checkRij('na', '<b>Regel van € 51.000:</b> geldt nog niet, want je vennootschap zit in haar eerste vier boekjaren.');
+  } else if(m.W < CONFIG.venb.minLoon){
+    v += checkRij(m.loonOk ? 'ok' : 'bad', '<b>Helftregel:</b> de belastbare winst van je vennootschap na je loon is ' + eur(m.W) + ', minder dan € 51.000. Dan volstaat een bezoldiging die minstens even hoog is: ' + eur(m.nodig) + '. Jouw bezoldiging: ' + eur(m.G) + '.' + (m.loonOk ? '' : ' Je komt ' + eur(m.nodig - m.G) + ' tekort.'));
+  } else {
+    var delenG = [];
+    if(m.T > 0) delenG.push('tantième');
+    if(m.vaa + m.vapzVaa > 0) delenG.push('voordelen alle aard');
+    if(m.h.herk > 0) delenG.push('geherkwalificeerde huur');
+    if(m.ar.boven > 0) delenG.push('auteursrechten boven het plafond');
+    v += checkRij(m.loonOk ? 'ok' : 'bad', '<b>Regel van € 51.000:</b> jouw bezoldiging is ' + eur(m.G) + (delenG.length ? ' (loon plus ' + lijst(delenG) + ')' : '') + '.' + (m.loonOk ? '' : ' Je komt ' + eur(CONFIG.venb.minLoon - m.G) + ' tekort.'));
+  }
+  if(m.vaa > 0){
+    var maxVaa = CONFIG.venb.vaaMax * m.G;
+    v += checkRij(m.vaaOk ? 'ok' : 'bad', '<b>Regel van 20%:</b> je voordelen alle aard zijn ' + eur(m.vaa) + ', dat is ' + pct(m.G > 0 ? m.vaa / m.G : 1) + ' van je bezoldiging. Maximum: ' + eur(maxVaa) + '.' +
+      (m.vaaOk ? ' Je hebt nog ' + eur(maxVaa - m.vaa) + ' ruimte.' : ' Je zit ' + eur(m.vaa - maxVaa) + ' te hoog. Verhoog je loon, vraag een eigen bijdrage of schrap een voordeel.'));
+  } else {
+    v += checkRij('ok', '<b>Regel van 20%:</b> je hebt geen voordelen alle aard, dus geen risico.');
+  }
+  if(s.dbi > 0){
+    v += s.starter
+      ? checkRij('na', '<b>DBI bevek:</b> in de eerste vier boekjaren krijgt je vennootschap de roerende voorheffing terug, ook zonder minimumbezoldiging.')
+      : m.dbiVerlies > 0
+        ? checkRij('bad', '<b>DBI bevek:</b> je bezoldiging haalt de minimumbezoldiging niet. Je vennootschap verliest ' + eur(m.dbiVerlies) + ' roerende voorheffing op het DBI deel. De calculator trekt dat af van de winst die overblijft.')
+        : checkRij('ok', '<b>DBI bevek:</b> je bezoldiging haalt de minimumbezoldiging, dus je vennootschap krijgt de roerende voorheffing terug.');
+  }
+  if(s.auteur > 0){
+    var a = CONFIG.auteur, ratio = s.auteur / (s.auteur + m.B + m.T);
+    v += checkRij(m.ar.boven > 0 ? 'bad' : 'ok', '<b>Plafond auteursrechten:</b> ' + eur(s.auteur) + ' van maximaal ' + eur(a.plafond) + '.' + (m.ar.boven > 0 ? ' Het deel erboven (' + eur(m.ar.boven) + ') wordt belast als bezoldiging, met sociale bijdragen.' : ''));
+    v += checkRij(ratio > a.ratio + 0.0005 ? 'bad' : 'ok', '<b>Verhouding 30/70:</b> je auteursrechten zijn ' + pct(ratio) + ' van wat je in totaal krijgt (loon plus auteursrechten).' + (ratio > a.ratio + 0.0005 ? ' Dat is meer dan 30%: grote kans dat de fiscus het meerdere herkwalificeert tot loon. Maximaal ongeveer ' + eur((m.B + m.T) * a.ratio / (1 - a.ratio)) + ' bij dit loon.' : ''));
+  }
+  v += '</div>';
+  if(!m.verlaagd && s.kmo && m.vaaOk && !m.loonOk){
+    v += '<div class="tip"><b>Kom je tekort?</b> Een tantième telt mee voor de minimumbezoldiging. Met een tantième van ongeveer ' + eur(Math.max(0, m.nodig - m.G)) + ' op het einde van het boekjaar haal je de grens alsnog. Of klik op <b>Vul het minimum in voor het verlaagd tarief</b>.</div>';
+  }
+  out += rdet('tarief', 'Waarom wel of geen verlaagd tarief?', v, !m.verlaagd && s.kmo);
+
+  /* 3. sociale bijdragen */
+  var plus = persoon(m.G + 1000, m.h.belastbaar, s.kids, s.gem, s.partner, s.vapz, m.warVaa);
+  var extraS = plus.S - m.S, extraPb = plus.pb - m.pb;
+  var sb = '<p style="margin:0">Je betaalt ' + eur(m.S) + ' per jaar, ongeveer ' + eur(m.S/4) + ' per kwartaal, beheerskosten inbegrepen. Ze worden berekend op je netto beroepsinkomen van ' + eur(m.Ir) + ': je loon' + (m.T > 0 ? ' plus tantième' : '') + (m.vaa - m.warVaa > 0 ? ' plus voordelen alle aard' : '') + (m.h.herk > 0 ? ' plus geherkwalificeerde huur' : '') + ', min je beroepskosten (' + eur(m.kost || 0) + ' forfait)' + (m.vapz > 0 ? ', min je VAPZ premie' : '') + ' en min de bijdragen zelf.' + (m.warVaa > 0 ? ' Op het voordeel uit je warranten rekent de calculator geen sociale bijdragen.' : '') + '</p>';
+  var r = CONFIG.rsvz;
+  if(m.Ir <= r.minI + 1){
+    sb += '<div class="tip">Je betaalt de <b>minimumbijdrage</b>. Minder loon verlaagt je sociale bijdragen niet meer. Een beetje extra loon kost je hier dus geen extra bijdragen.</div>';
+  } else if(m.Ir >= r.plafond){
+    sb += '<div class="tip">Je zit <b>boven het plafond</b> van ' + eur(r.plafond) + '. Extra loon kost je geen extra sociale bijdragen meer, alleen personenbelasting.</div>';
+  } else {
+    sb += '<div class="tip">Per extra € 1.000 brutoloon betaal je nu ongeveer <b>' + eur(extraS) + '</b> extra sociale bijdragen en <b>' + eur(extraPb) + '</b> extra belasting. Van die € 1.000 hou je dus ' + eur(1000 - extraS - extraPb) + ' over.</div>';
+  }
+  out += rdet('sociaal', 'Je sociale bijdragen', sb);
+
+  /* 4. impact per keuze */
+  var imp = impactBlok(s, m);
+  if(imp) out += rdet('keuzes', 'Wat levert elke keuze op?', imp);
+
+  /* 5. loon of dividend */
+  out += rdet('dividend', 'Loon of dividend: wat is je beste loon?', dividendBlok(s, m, opt, min));
+
+  /* 6. aandachtspunten */
+  var aan = aandachtBlok(s, m);
+  if(aan) out += rdet('aandacht', 'Waar je nog op let', aan);
+
+  render(out, 'Netto voor jou: ' + eur(m.netto/12) + ' per maand. ' + (m.verlaagd ? 'Je vennootschap houdt het verlaagd tarief.' : 'Je vennootschap verliest het verlaagd tarief.'));
+}
+
+function rij(t, n){ return '<tr><td>' + t + '</td><td class="num">' + eur(n) + '</td></tr>'; }
+function checkRij(kl, t){ return '<div class="chk ' + kl + '"><span class="ic" aria-hidden="true">' + (kl === 'ok' ? '✓' : kl === 'bad' ? '!' : 'i') + '</span><span>' + t + '</span></div>'; }
+function statusRij(kl, t){ return '<div class="status ' + kl + '"><span class="ic" aria-hidden="true">' + (kl === 'ok' ? '✓' : kl === 'bad' ? '!' : '→') + '</span><span>' + t + '</span></div>'; }
+/* inklapbaar onderdeel in het resultaat; wat je open of dicht klikte, blijft zo bij elke herberekening */
+var rdetStaat = {};
+function rdet(k, titel, inhoud, standaardOpen){
+  var open = (k in rdetStaat) ? rdetStaat[k] : !!standaardOpen;
+  return '<details class="rdet" data-k="' + k + '"' + (open ? ' open' : '') + '><summary>' + titel + '</summary><div class="in">' + inhoud + '</div></details>';
+}
+function lijst(a){ return a.length > 1 ? a.slice(0,-1).join(', ') + ' en ' + a[a.length-1] : (a[0] || ''); }
+
+/* wat kost een keuze je vennootschap, wat levert ze jou op, en wat had hetzelfde als loon opgeleverd? */
+function impactBlok(s, m){
+  var delen = [];
+  function zonder(aanpassing){ return model(Object.assign({}, s, aanpassing), s.loon); }
+  if(m.onkTot > 0) delen.push({ t: 'Onkostenvergoedingen', z: zonder({ geenOnkost: true }), soort: 'cash' });
+  if(s.mc > 0 || s.eco) delen.push({ t: 'Maaltijdcheques' + (s.eco ? ' en ecocheques' : ''), z: zonder({ mc:0, eco:false }), soort: 'cash' });
+  if(s.huur > 0) delen.push({ t: 'Huur van je privékantoor', z: zonder({ huur:0 }), soort: 'cash' });
+  if(m.aVaa > 0) delen.push({ t: 'Bedrijfswagen', z: zonder({ wagen:false }), soort: 'vaa' });
+  if(m.wVaa > 0) delen.push({ t: 'Woning van de vennootschap', z: zonder({ woning:false }), soort: 'vaa' });
+  if(m.tVaa > 0) delen.push({ t: 'Toestellen en abonnementen', z: zonder({ laptop:false, gsm:false, tablet:false, netVaa:false, telefoon:false }), soort: 'vaa' });
+  if(s.fiets && s.fietsKost > 0) delen.push({ t: 'Bedrijfsfiets', z: zonder({ fiets:false, fietsKost:0 }), soort: 'fiets' });
+  if(m.rcVaa > 0) delen.push({ t: 'Lening van je vennootschap', z: zonder({ rcSaldo:0 }), soort: 'vaa' });
+  if(m.T > 0) delen.push({ t: 'Tantième', z: zonder({ tantieme:0 }), soort: 'cash' });
+  if(s.auteur > 0) delen.push({ t: 'Auteursrechten', z: zonder({ auteur:0 }), soort: 'cash' });
+  if(s.warrant > 0) delen.push({ t: 'Warranten', z: zonder({ warrant:0, warrantKost:0 }), soort: 'cash' });
+  if(s.vapz > 0) delen.push({ t: 'VAPZ' + (s.vapzDoor === 'vennootschap' ? ', betaald door je vennootschap' : ''), z: zonder({ vapz:0 }), soort: 'vapz' });
+  if(s.ipt > 0) delen.push({ t: 'IPT', z: zonder({ ipt:0 }), soort: 'ipt' });
+  if(!delen.length) return '';
+
+  /* wat kost € 1.000 extra loon je vennootschap na belasting, en wat hou jij ervan over */
+  var plus = model(s, s.loon + 1000);
+  var kostPer = (m.R - plus.R) / 1000, nettoPer = (plus.netto - m.netto) / 1000;
+
+  var h = '<p style="margin:0">Per keuze: wat ze je vennootschap kost na vennootschapsbelasting, en wat er netto bij jou terechtkomt.</p>';
+  delen.forEach(function(d){
+    var kost = d.z.R - m.R, jij = m.netto - d.z.netto;
+    var tarief = (m.verlaagd !== d.z.verlaagd) ? '<div class="d"><b>Let op:</b> ' + (m.verlaagd ? 'zonder deze keuze verliest' : 'deze keuze kost') + ' je vennootschap het verlaagd tarief.</div>' : '';
+    h += '<div class="comp"><div class="t">' + d.t + '</div>';
+    if(d.soort === 'vapz'){
+      var kostJij = -jij;
+      if(s.vapzDoor === 'vennootschap'){
+        h += '<div class="r"><span>Premie naar je pensioen</span><b>' + eur(s.vapz) + '</b></div>' +
+          '<div class="r"><span>Kost voor je vennootschap, na belasting</span><b>' + eur(kost) + '</b></div>' +
+          '<div class="r"><span>Wat het je netto kost</span><b>' + eur(Math.max(0, kostJij)) + '</b></div>' +
+          '<div class="d">Het voordeel alle aard en de aftrek als sociale bijdrage heffen elkaar op. De premie telt wel mee als bezoldiging voor de € 51.000.</div>' + tarief + '</div>';
+        return;
+      }
+      h += '<div class="r"><span>Premie naar je pensioen</span><b>' + eur(s.vapz) + '</b></div>' +
+        '<div class="r"><span>Wat het je netto kost</span><b>' + eur(kostJij) + '</b></div>' +
+        '<div class="d">De premie verlaagt je sociale bijdragen en je belasting met ' + eur(s.vapz - kostJij) + '. Je stort ' + eur(s.vapz) + ' voor je pensioen, maar je netto daalt maar met ' + eur(kostJij) + '.</div></div>';
+      return;
+    }
+    if(d.soort === 'fiets'){
+      h += '<div class="r"><span>Kost voor je vennootschap, na belasting</span><b>' + eur(d.z.R - m.R) + '</b></div>' +
+        '<div class="r"><span>Wat je zelf niet hoeft te betalen</span><b>' + eur(s.fietsKost) + '</b></div>' +
+        '<div class="d">Geen belasting en geen sociale bijdragen voor jou. Had je dit bedrag als extra loon genomen om zelf een fiets te betalen, dan hield je er maar ' + eur(kostPer > 0 ? (d.z.R - m.R) / kostPer * nettoPer : 0) + ' van over.</div></div>';
+      return;
+    }
+    h += '<div class="r"><span>Kost voor je vennootschap, na belasting</span><b>' + eur(kost) + '</b></div>';
+    if(d.soort === 'ipt'){
+      var alsLoonI = kostPer > 0 ? kost / kostPer * nettoPer : 0, alsDiv = kost * CONFIG.div[s.route];
+      h += '<div class="r"><span>Pensioenkapitaal voor jou, netto bij uitbetaling</span><b>' + eur(s.ipt * CONFIG.ipt.nettoUitkering) + '</b></div>' +
+        '<div class="r"><span>Had je dit als dividend uitgekeerd</span><b>' + eur(alsDiv) + '</b></div>' +
+        '<div class="r"><span>Had je dit als extra loon genomen</span><b>' + eur(alsLoonI) + '</b></div>' +
+        '<div class="d">Het pensioenkapitaal is een ruwe schatting zonder beleggingsrendement: ongeveer 16% gaat er bij uitbetaling af aan belasting en bijdragen. Je krijgt het pas bij je pensioen.</div>' + tarief + '</div>';
+      return;
+    }
+    if(d.soort === 'cash'){
+      var alsLoon = kostPer > 0 ? kost / kostPer * nettoPer : 0;
+      h += '<div class="r"><span>Netto voor jou</span><b>' + eur(jij) + '</b></div>' +
+        '<div class="r"><span>Had je dit als extra loon genomen</span><b>' + eur(alsLoon) + '</b></div>' +
+        (jij > alsLoon + 1 ? '<div class="d">Dit levert je ' + eur(jij - alsLoon) + ' meer op dan hetzelfde bedrag als loon.</div>' : '');
+    } else {
+      h += '<div class="r"><span>Extra belasting en bijdragen voor jou</span><b>' + eur(-jij) + '</b></div>' +
+        '<div class="d">Daarvoor hoef je dit niet zelf te betalen uit je netto inkomen.</div>';
+    }
+    h += tarief + '</div>';
+  });
+  return h;
+}
+
+function dividendBlok(s, m, opt, min){
+  var plus = model(s, s.loon + 1000);
+  var viaLoon = plus.netto - m.netto;
+  var viaDiv = (m.R - plus.R) * CONFIG.div[s.route];
+  var label = CONFIG.divLabel[s.route];
+  var h = '';
+  if(m.R > 0.5){
+    h += '<p style="margin:0">Haal je nog € 1.000 extra uit je vennootschap als <b>loon</b>, dan hou je er ' + eur(viaLoon) + ' van over. Laat je dat geld in je vennootschap en keer je het uit als <b>dividend</b> aan ' + label + ', dan hou je ' + eur(viaDiv) + ' over.</p>' +
+      '<div class="verdict">' + (viaLoon >= viaDiv ? 'Extra loon levert je nu meer op.' : 'Dividend levert je nu meer op dan extra loon.') + '</div>';
+  }
+  if(opt){
+    h += '<table><thead><tr><th>Brutoloon</th><th class="num">Netto voor jou</th><th class="num">Netto dividend</th><th class="num">Samen</th></tr></thead><tbody>';
+    var rijen = [{ t: 'Jouw keuze', m: m }];
+    if(min && Math.abs(min.B - m.B) > 50) rijen.push({ t: 'Minimum voor verlaagd tarief', m: min });
+    if(Math.abs(opt.B - m.B) > 50 && (!min || Math.abs(opt.B - min.B) > 50)) rijen.push({ t: 'Beste brutoloon', m: opt });
+    rijen.sort(function(a,b){ return a.m.B - b.m.B; });
+    rijen.forEach(function(r){
+      var beste = Math.abs(r.m.totaal - opt.totaal) < 1;
+      h += '<tr' + (beste ? ' class="win"' : '') + '><td>' + eur(r.m.B) + '<br><span class="muted" style="font-size:12.5px">' + r.t + (beste && r.t !== 'Beste brutoloon' ? ' · beste' : '') + (r.m.verlaagd ? '' : ' · zonder verlaagd tarief') + '</span></td>' +
+        '<td class="num">' + eur(r.m.netto) + '</td><td class="num">' + eur(r.m.divNetto) + '</td><td class="num"><b>' + eur(r.m.totaal) + '</b></td></tr>';
+    });
+    h += '</tbody></table>';
+    if(opt.totaal > m.totaal + 25){
+      h += '<div class="tip"><b>Met een nettoloon van ' + eur(nettoLoon(opt)/12) + ' per maand (' + eur(opt.B) + ' bruto per jaar) hou je ' + eur(opt.totaal - m.totaal) + ' meer over</b>, loon en dividend samen. Klik op <b>Toon mijn beste loon</b> om het in te vullen.' +
+        (opt.B < m.B ? ' Je neemt dan minder loon en keert meer uit als dividend.' : ' Je neemt dan meer loon en laat minder winst in je vennootschap.') + '</div>';
+    } else {
+      h += '<div class="tip"><b>Je zit goed.</b> Met je huidige brutoloon haal je zo goed als het meeste uit je vennootschap, loon en dividend samen.</div>';
+    }
+  }
+  if(s.ipt > 0 && opt && opt.B < m.B - 50){
+    h += '<div class="note"><b>Je hebt een IPT.</b> Een lager loon verkleint de ruimte binnen de grens van 80%. Met ' + eur(opt.B) + ' brutoloon kan je IPT premie van ' + eur(s.ipt) + ' te hoog worden. Check dat bij je verzekeraar voor je je loon verlaagt.</div>';
+  }
+  h += '<div class="note"><b>Vergelijk eerlijk.</b> Dividend is pas van jou als je het uitkeert, en een liquidatiereserve geeft pas na 3 jaar 18%' + (s.route === 'vereffening' ? ', en 10% pas bij de vereffening van je vennootschap' : '') + '. Loon bouwt bovendien pensioen op. Neem je beste brutoloon dus als vertrekpunt, niet als wet: kijk ook naar wat je maandelijks nodig hebt en wat je vennootschap als buffer nodig heeft.</div>';
+  return h;
+}
+
+/* wat je niet mag vergeten: balanstest, meldplicht, fiches */
+function aandachtBlok(s, m){
+  var meld = [];
+  if(m.R > 0.5 || m.T > 0) meld.push('<b>Dubbele balanstest.</b> Een dividend' + (m.T > 0 ? ' en je tantième' : '') + ' mag je vennootschap pas uitkeren als haar eigen vermogen positief blijft en ze de komende 12 maanden haar schulden kan betalen. Het bestuur maakt daar een verslag van. Laat je boekhouder dat nakijken voor je uitkeert.');
+  if(s.huur > 0) meld.push('<b>Meldplicht huur.</b> Je vennootschap moet de huur die ze jou betaalt melden via formulier 270 MLH bij haar aangifte.');
+  if(s.auteur > 0) meld.push('<b>Auteursrechten.</b> Je vennootschap maakt een fiche 281.45 op, geeft de 15% roerende voorheffing aan en stort ze door. Zonder fiche geen gunstregime.');
+  return meld.length ? meld.map(function(x){ return '<div class="note" style="margin-top:8px">' + x + '</div>'; }).join('') : '';
+}
+
+var liveTimer = null;
+function render(html, liveTekst){
+  html += '<div class="vraag no-print"><p>' + CONFIG.vraagTekst + '</p><button type="button" class="naar-trajecten" onclick="naarTrajecten()">' + CONFIG.knopTekst + ' ↓</button></div>';
+  $('result').innerHTML = html;
+  var bp = $('btnPrint'); if(bp) bp.addEventListener('click', drukAf);
+  /* schermlezers krijgen enkel de kern, en pas als je even stopt met typen */
+  clearTimeout(liveTimer);
+  liveTimer = setTimeout(function(){ $('liveStatus').textContent = liveTekst || ''; }, 900);
+  meldHoogte();
+}
+/* afdrukken of als pdf bewaren: alle onderdelen van het resultaat even openklappen */
+var printOpen = [];
+function openVoorPrint(){
+  printOpen = [];
+  document.querySelectorAll('#result details.rdet').forEach(function(d){ if(!d.open){ printOpen.push(d); d.open = true; } });
+}
+function sluitNaPrint(){ printOpen.forEach(function(d){ d.open = false; }); printOpen = []; meldHoogte(); }
+window.addEventListener('beforeprint', openVoorPrint);
+window.addEventListener('afterprint', sluitNaPrint);
+function drukAf(){ openVoorPrint(); window.print(); }
+
+/* ---------- velden tonen, hints en waarschuwingen ---------- */
+/* een vergoeding die niet kan naast een voordeel alle aard: vakje grijs en uitgevinkt, met de reden erbij */
+function zetUit(id, uit, reden){
+  var el = $(id), lbl = el.closest('label');
+  el.disabled = uit;
+  if(uit) el.checked = false;
+  lbl.classList.toggle('uit', uit);
+  var r = lbl.querySelector('.reden');
+  if(!r){ r = document.createElement('span'); r.className = 'reden'; lbl.querySelector('span').appendChild(r); }
+  r.textContent = uit ? reden : '';
+}
+function blokkeer(){
+  zetUit('oPc', chk('vLaptop'), 'Kan niet: je krijgt al een laptop of pc van de zaak.');
+  zetUit('oInternet', chk('vInternet'), 'Kan niet: de zaak betaalt al je internet.');
+  var scherm = $('oScherm');
+  scherm.disabled = chk('oPc');
+  if(scherm.disabled) scherm.value = '0';
+  var wagen = chk('vWagen');
+  $('km').disabled = wagen;
+  if(wagen) $('km').value = '';
+}
+function toonVelden(){
+  blokkeer();
+  $('partnerVeld').hidden = $('gezin').value !== 'samen';
+  $('vapzHint').textContent = 'Maximum in ' + CONFIG.jaar + ': ' + euro2(CONFIG.vapz[$('vapzType').value]) + '. De premie verlaagt je sociale bijdragen en je belasting.';
+  $('wagenBlok').hidden = !chk('vWagen');
+  $('woningBlok').hidden = !chk('vWoning');
+  $('co2Veld').style.display = $('wBrandstof').value === 'e' ? 'none' : '';
+  $('kmWagenVeld').hidden = !(val('km') > 0) || chk('vWagen');
+  $('autoExtraVeld').hidden = !(val('km') > 0 || chk('vWagen'));
+  $('fietsBlok').hidden = !chk('vFiets');
+  $('warrantBlok').hidden = !(val('warrant') > 0);
+  var rcS = val('rcSaldo');
+  $('rcHint').textContent = rcS > 0
+    ? 'Voordeel alle aard: ' + eur(rcS * Math.max(0, CONFIG.rc.rente - parseBedrag($('rcRente').value) / 100)) + ' per jaar. Betaal je minstens ' + pct(CONFIG.rc.rente, 2) + ', dan is er geen voordeel.'
+    : 'Betaal je minder dan ' + pct(CONFIG.rc.rente, 2) + ' (rentevoet 2025), dan krijg je een voordeel alle aard.';
+  $('werkdagenVeld').hidden = !(chk('oKledij') || chk('oGereedschap'));
+  var km = val('km');
+  $('kmHint').textContent = chk('vWagen') ? 'Kan niet: je hebt een bedrijfswagen.' : km > 0 ? 'Vergoeding: ' + eur(Math.min(km, CONFIG.onkost.kmMax) * CONFIG.onkost.km) + ' per jaar, aan ' + euro2(CONFIG.onkost.km, 4) + ' per km.' : 'Enkel verplaatsingen voor je zaak, niet van huis naar je werk. Aan ' + euro2(CONFIG.onkost.km, 4) + ' per km.';
+  var ki = val('huurKi');
+  $('huurHint').textContent = ki > 0 ? 'Maximale huur zonder herkwalificatie: ' + eur(ki * 5/3 * CONFIG.huur.reval) + ' per jaar, ' + eur(ki * 5/3 * CONFIG.huur.reval / 12) + ' per maand.' : 'Vul eerst het kadastraal inkomen in, dan zie je de maximale huur.';
+  zetBadges();
+  meldHoogte();
+}
+function waarschuwingen(s){
+  var o = [];
+  if(val('km') > CONFIG.onkost.kmMax) o.push('De fiscus aanvaardt de kilometervergoeding tot 24.000 km per jaar. De calculator rekent met 24.000 km.');
+  if(chk('oBureau')) o.push('De bureauvergoeding mag enkel als je structureel van thuis uit werkt, gemiddeld minstens één dag per week.');
+  if(chk('oMaaltijd') && val('mcDagen') > 0) o.push('Krijg je maaltijdcheques? Laat dan niet dezelfde maaltijd ook nog eens vergoeden.');
+  if(val('dagenDienstreis') > CONFIG.onkost.dienstreisMax) o.push('De dagvergoeding voor binnenlandse dienstreizen kan voor maximaal 16 dagen per maand. De calculator rekent met 192 dagen per jaar.');
+  if(val('dagenDienstreis') > 0 && val('dagenOnderweg') > 0) o.push('Je vulde zowel dagen onderweg (€ 10) als dagen op dienstreis (' + euro2(CONFIG.onkost.dienstreisNu) + ') in. Tel elke dag maar in één van beide regelingen.');
+  if(val('dagenDienstreis') > 0 && val('mcDagen') > 0) o.push('Dagvergoedingen combineren met maaltijdcheques kan maar beperkt. Laat je adviseren.');
+  if(val('dagenBuitenland') > 0 && val('dagBuitenland') <= 0) o.push('Vul de dagvergoeding van het land in om je buitenlandse dienstreizen mee te tellen.');
+  if(val('oRepr') > 150) o.push('Een representatievergoeding van ' + eur(val('oRepr')) + ' per maand is hoog. Kan je dat niet onderbouwen, dan wordt het belast als loon, met een verhoging tot 50%. Overweeg een ruling.');
+  $('oWarn').innerHTML = o.join('<br>');
+  var a = [];
+  if(s.tantieme > 0) a.push('Een tantième wordt toegekend door de algemene vergadering bij de goedkeuring van de jaarrekening, en moet door de dubbele balanstest.');
+  if(s.auteur > 0) a.push('Auteursrechten vragen een duidelijke overeenkomst over de overdracht van je rechten, een inventaris van je werken en een verdedigbare waardering. Zonder die onderbouwing riskeer je herkwalificatie tot loon. De RSZ kijkt er strenger naar dan de fiscus.');
+  if(s.warrant > 0) a.push('Warranten: aanvaard het aanbod schriftelijk binnen 60 dagen, hou ze minstens een jaar aan en laat een bezoldigingsverslag opmaken. De belasting op het voordeel betaal je zelf, want er is bij toekenning geen cash om voorheffing op in te houden.');
+  $('aWarn').innerHTML = a.join('<br><br>');
+  var v = [];
+  if(s.wagen && s.wBrandstof !== 'e' && s.wBesteld === 'nieuw') v.push('<b>Let op:</b> een wagen op benzine, diesel of hybride besteld vanaf 2026 is <b>niet aftrekbaar</b> voor je vennootschap. Je betaalt wel het volle voordeel alle aard.');
+  if(s.wagen && s.wCat <= 0) v.push('Vul de cataloguswaarde in om je voordeel te berekenen.');
+  if(s.wagen && s.wBrandstof !== 'e' && s.wCo2 <= 0) v.push('Vul de CO2 uitstoot in. Zonder uitstoot rekent de calculator met het minimum van 4%.');
+  if(s.woning && s.wKi <= 0) v.push('Vul het kadastraal inkomen in om het voordeel van je woning te berekenen.');
+  $('vWarn').innerHTML = v.join('<br>');
+  var h = [];
+  if(s.huur > 0 && s.huurKi <= 0) h.push('Zonder kadastraal inkomen wordt alle huur gezien als loon. Vul het KI van je kantoor in.');
+  else if(s.huur > 0){
+    var d = huurDelen(s);
+    if(d.herk > 0.5) h.push('Je huur ligt ' + eur(d.herk) + ' boven de grens. Dat deel wordt belast als loon, met sociale bijdragen. Klik op <b>Vul de maximale huur in</b>.');
+  }
+  $('hWarn').innerHTML = h.join('<br>');
+  var p = [], type = $('vapzType').value, max = CONFIG.vapz[type];
+  if(val('vapz') > max) p.push('Het maximum voor een ' + type + ' VAPZ is ' + euro2(max) + ' in ' + CONFIG.jaar + '. De calculator rekent met dat maximum.');
+  if(val('vapz') > 0) p.push('Je persoonlijk VAPZ maximum is ' + pct(type === 'sociaal' ? CONFIG.vapz.pctSociaal : CONFIG.vapz.pctKlassiek, 2) + ' van je netto beroepsinkomen van drie jaar geleden (geherwaardeerd). Je sociaal verzekeringsfonds of verzekeraar kent het exacte bedrag.');
+  if(s.ipt > 0) p.push('Een IPT moet passen binnen de grens van 80%, en die hangt af van je loon. Verlaag je je loon, laat dan nakijken of je premie nog mag.');
+  $('pWarn').innerHTML = p.join('<br>');
+}
+
+/* ---------- knoppen ---------- */
+$('btnOptimum').addEventListener('click', function(){
+  var s = leesInvoer();
+  if(s.winst <= 0){ $('winst').focus(); return; }
+  var o = zoekOptimum(s);
+  $('loonMelding').textContent = '';
+  if(o){ zetNetto(o); bereken(); $('result').scrollIntoView({behavior:'smooth', block:'start'}); $('result').focus({preventScroll:true}); }
+});
+$('btnMinimum').addEventListener('click', function(){
+  var s = leesInvoer();
+  if(s.winst <= 0){ $('winst').focus(); return; }
+  if(s.starter){ $('loonMelding').textContent = 'Je vennootschap zit in haar eerste vier boekjaren. Dan geldt de regel van € 51.000 nog niet: elk loon houdt het verlaagd tarief, zolang je voordelen alle aard onder 20% van je bezoldiging blijven.'; return; }
+  var m = zoekMinimum(s);
+  if(m){ $('loonMelding').textContent = ''; zetNetto(m); bereken(); }
+  else $('loonMelding').textContent = 'Met deze winst en deze keuzes lukt het niet om het verlaagd tarief te halen. Kijk naar je voordelen alle aard of naar de basisvoorwaarden in blok 1.';
+});
+$('btnVapzMax').addEventListener('click', function(){
+  $('vapz').value = CONFIG.vapz[$('vapzType').value].toLocaleString('nl-BE', { minimumFractionDigits: 2 });
+  bereken();
+});
+$('btnHuurMax').addEventListener('click', function(){
+  var ki = val('huurKi');
+  if(ki <= 0){ $('huurKi').focus(); return; }
+  $('huurJaar').value = Math.floor(ki * 5/3 * CONFIG.huur.reval).toLocaleString('nl-BE');
+  bereken();
+});
+
+/* ---------- vaste teksten en jaartallen uit CONFIG ---------- */
+document.querySelectorAll('.jr').forEach(function(e){ e.textContent = CONFIG.jaar; });
+document.querySelectorAll('.aj').forEach(function(e){ e.textContent = CONFIG.jaar + 1; });
+document.querySelectorAll('.gecontroleerd').forEach(function(e){ e.textContent = CONFIG.gecontroleerd; });
+$('oBureauBedrag').textContent = euro2(CONFIG.onkost.bureauMaand) + ' per maand, ' + euro2(CONFIG.onkost.bureauJaar) + ' voor heel ' + CONFIG.jaar;
+(function(){
+  /* staan we al in een later jaar dan de cijfers? zeg het eerlijk */
+  var nu = new Date().getFullYear();
+  if(nu > CONFIG.jaar + 1 || (nu === CONFIG.jaar + 1 && new Date().getMonth() >= 2)){
+    $('jaarMelding').hidden = false;
+    $('jaarMelding').textContent = 'Let op: we zijn intussen in ' + nu + '. De calculator rekent nog met de cijfers van ' + CONFIG.jaar + '.';
+  }
+})();
+
+/* ---------- invoer: netjes formatteren en onzin opvangen ---------- */
+var LOONHINT = 'Na sociale bijdragen en belastingen. Onkostenvergoedingen, cheques en huur komen er nog bovenop.';
+var GEHEEL = { km:1, kmFiets:1, kmFietsWW:1, dagenOnderweg:1, nachten:1, dagenDienstreis:1, dagenBuitenland:1, werkdagen:1, mcDagen:1 };
+var GRENS = { gemeente: [0, 10, 'De gemeentebelasting ligt in België tussen 0 en 9%.'], rcRente: [0, 30, 'Vul een rentevoet in procent in, bijvoorbeeld 4.'],
+  werkdagen: [0, 366, 'Een jaar heeft maximaal 366 dagen.'], mcDagen: [0, 366, 'Je krijgt maximaal één maaltijdcheque per werkdag.'],
+  dagenOnderweg: [0, 366, 'Een jaar heeft maximaal 366 dagen.'], dagenDienstreis: [0, 366, 'Een jaar heeft maximaal 366 dagen.'], dagenBuitenland: [0, 366, 'Een jaar heeft maximaal 366 dagen.'],
+  nachten: [0, 366, 'Een jaar heeft maximaal 366 nachten.'], wCo2: [0, 500, 'Een CO2 uitstoot boven 500 g/km bestaat niet. Kijk je inschrijvingsbewijs na.'] };
+function foutVoor(el){
+  var id = 'fout_' + el.id, f = $(id);
+  if(!f){
+    f = document.createElement('div'); f.className = 'fout'; f.id = id; f.setAttribute('role', 'alert');
+    var na = el.closest('.money, .unit') || el; na.parentNode.insertBefore(f, na.nextSibling);
+    el.setAttribute('aria-describedby', id);
+  }
+  return f;
+}
+function controleer(el){
+  var v = el.value.trim(), boodschap = '';
+  if(v !== ''){
+    if(/-/.test(v)) boodschap = 'Vul een positief getal in, zonder minteken.';
+    else if(!/^[€%\s\d.,]+$/.test(v)) boodschap = 'Gebruik enkel cijfers, bijvoorbeeld 60.000 of 7,2.';
+    else if(GRENS[el.id] && parseBedrag(v) > GRENS[el.id][1]) boodschap = GRENS[el.id][2];
+  }
+  var f = (boodschap || $('fout_' + el.id)) ? foutVoor(el) : null;
+  if(f) f.textContent = boodschap;
+  el.setAttribute('aria-invalid', boodschap ? 'true' : 'false');
+}
+function formatteer(el){
+  if(el.id === 'gemeente' || el.id === 'rcRente' || el.getAttribute('aria-invalid') === 'true') return;
+  var n = parseBedrag(el.value);
+  if(el.value.trim() === '' || n <= 0) return;
+  el.value = GEHEEL[el.id] ? Math.round(n).toLocaleString('nl-BE') : n.toLocaleString('nl-BE', { maximumFractionDigits: 2 });
+}
+function euro2(n, d){ return '€ ' + n.toLocaleString('nl-BE', { minimumFractionDigits: 2, maximumFractionDigits: d || 2 }); }
+
+/* ---------- blokken: label "ingevuld" ---------- */
+function zetBadges(){
+  document.querySelectorAll('details.blok').forEach(function(d){
+    var iets = false;
+    d.querySelectorAll('input, select').forEach(function(el){
+      if(el.type === 'checkbox'){ if(el.checked !== el.defaultChecked) iets = true; }
+      else if(el.tagName === 'SELECT'){ if(el.selectedIndex !== 0 && !el.disabled) iets = true; }
+      else if(el.id !== 'werkdagen' && parseBedrag(el.value) > 0) iets = true;
+    });
+    d.querySelector('.badge').hidden = !iets;
+  });
+}
+
+/* ---------- voorbeeld en wissen ---------- */
+var VOORBEELD = { winst: '90.000', nettoMaand: '2.800', kinderen: '1', gezin: 'alleen', gemeente: '7,2',
+  oBureau: true, oPc: true, oInternet: true, mcDagen: '220', mcMax: true, huurKi: '225', huurJaar: '2.156' };
+function zetVelden(waarden){
+  document.querySelectorAll('input, select').forEach(function(el){
+    if(el.type === 'checkbox') el.checked = el.defaultChecked;
+    else if(el.tagName === 'SELECT') el.selectedIndex = 0;
+    else el.value = el.defaultValue;
+    el.removeAttribute('aria-invalid');
+  });
+  document.querySelectorAll('.fout').forEach(function(f){ f.textContent = ''; });
+  for(var k in waarden){ var el = $(k); if(el.type === 'checkbox') el.checked = waarden[k]; else el.value = waarden[k]; }
+  $('loonMelding').textContent = '';
+}
+$('btnVoorbeeld').addEventListener('click', function(){
+  zetVelden(VOORBEELD);
+  $('blok4').open = true; $('blok5').open = true; $('blok6').open = true;
+  bereken();
+  $('liveStatus').textContent = 'Voorbeeld ingevuld: een vennootschap met € 90.000 winst, € 2.800 netto per maand, thuiskantoor, maaltijdcheques en huur.';
+});
+$('btnWis').addEventListener('click', function(){
+  zetVelden({});
+  document.querySelectorAll('details.blok').forEach(function(d){ d.open = false; });
+  rdetStaat = {};
+  bereken();
+  $('winst').focus();
+});
+
+/* ---------- hoogte doorgeven aan de website ---------- */
+function meldHoogte(){ try{ window.parent.postMessage({type:'dcc-height', height: document.documentElement.scrollHeight}, '*'); }catch(e){} }
+if(window.ResizeObserver){ new ResizeObserver(meldHoogte).observe(document.body); }
+/* elk openklappen (ook in het resultaat, dat telkens opnieuw opgebouwd wordt) meldt de nieuwe hoogte */
+document.addEventListener('toggle', function(e){
+  var d = e.target;
+  if(d.classList && d.classList.contains('rdet')) rdetStaat[d.getAttribute('data-k')] = d.open;
+  meldHoogte();
+}, true);
+window.addEventListener('load', meldHoogte);
+
+document.querySelectorAll('input, select').forEach(function(el){
+  if(el.type === 'checkbox' || el.tagName === 'SELECT'){ el.addEventListener('change', bereken); return; }
+  el.addEventListener('input', function(){ controleer(el); bereken(); });
+  el.addEventListener('blur', function(){ formatteer(el); });
+});
+bereken();
+
+/* ---------- trajecten ---------- */
+(function(){
+  var h = '<p class="eyebrow">The Financial Academy</p><h2>' + CONFIG.trajectenTitel + '</h2><p class="sub">' + CONFIG.trajectenIntro + '</p><div class="tr-grid">';
+  CONFIG.trajecten.forEach(function(t){
+    h += '<a class="tr ' + t.kleur + '" href="' + t.url + '" target="_top"><span class="voor">' + t.voor + '</span><h3>' + t.naam + '</h3><p>' + t.tekst + '</p><span class="go">Ontdek dit traject →</span></a>';
+  });
+  $('trajecten').innerHTML = h + '</div>';
+  meldHoogte();
+})();
+function naarTrajecten(){ $('trajecten').scrollIntoView({behavior:'smooth', block:'start'}); }
+</script>
+<script>
+/* koppeling met de insluitcode op decijfercoach.be: hoogte op vraag doorgeven en melden dat er een nieuwe pagina geladen is */
+(function(){
+  function hoogte(){ try{ window.parent.postMessage({type:'dcc-height', height: document.documentElement.scrollHeight}, '*'); }catch(e){} }
+  window.addEventListener('message', function(e){ if(e.data && e.data.type === 'dcc-vraag-hoogte') hoogte(); });
+  window.addEventListener('load', function(){ try{ window.parent.postMessage({type:'dcc-nav'}, '*'); }catch(e){} hoogte(); });
+})();
+</script>
+</body>
+</html>
+
+</html>
