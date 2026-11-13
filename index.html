@@ -1,10 +1,111 @@
 <!doctype html>
-<html lang="nl">
+<html lang="nl-BE">
 <head>
 <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex, nofollow">
-<meta http-equiv="refresh" content="0; url=https://www.decijfercoach.be">
-<title>De Cijfercoach</title>
+<title>Gratis calculators voor Vlaamse onderneemsters | De Cijfercoach</title>
+<meta name="description" content="Reken zelf uit wat je cijfers betekenen voor je zaak, met gratis calculators in mensentaal. Voor Vlaamse onderneemsters in eenmanszaak of vennootschap.">
+<style>
+/* Lettertypes van het merk, lokaal geladen */
+@font-face{font-family:'Glitz';src:url('fonts/glitz.woff2') format('woff2');font-weight:400;font-style:normal;font-display:swap}
+@font-face{font-family:'Outfit';src:url('fonts/outfit-400.woff2') format('woff2');font-weight:400;font-style:normal;font-display:swap}
+@font-face{font-family:'Outfit';src:url('fonts/outfit-500.woff2') format('woff2');font-weight:500;font-style:normal;font-display:swap}
+@font-face{font-family:'Outfit';src:url('fonts/outfit-600.woff2') format('woff2');font-weight:600;font-style:normal;font-display:swap}
+@font-face{font-family:'Outfit';src:url('fonts/outfit-700.woff2') format('woff2');font-weight:700;font-style:normal;font-display:swap}
+@font-face{font-family:'Outfit';src:url('fonts/outfit-800.woff2') format('woff2');font-weight:800;font-style:normal;font-display:swap}
+:root{--creme:#feefe5;--perzik:#f9c195;--lila-licht:#b8c5e7;--bordeaux:#b92c52;--oranje:#f3925a;--lila:#93a3d4;--roze:#e62987;--ink:#2b1d22;--muted:#6f565d}
+*{box-sizing:border-box}
+body{margin:0;background:var(--creme);color:var(--ink);font-family:'Outfit',system-ui,-apple-system,'Segoe UI',Arial,sans-serif;line-height:1.55}
+.wrap{max-width:760px;margin:0 auto;padding:20px 16px 36px}
+.hero{background:linear-gradient(180deg,var(--lila-licht) 0%,#dcc3c8 55%,var(--perzik) 100%);border-radius:24px;padding:36px 26px;margin-bottom:20px}
+.eyebrow{font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:var(--bordeaux);font-weight:700;margin:0 0 10px}
+h1{font-size:clamp(30px,6.5vw,46px);line-height:1.05;color:var(--bordeaux);margin:0 0 12px}
+p.intro{margin:0;font-size:16.5px}
+.filter{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 16px}
+.filter button{font:inherit;font-weight:600;font-size:14.5px;border-radius:999px;padding:9px 16px;border:1.5px solid var(--bordeaux);background:transparent;color:var(--bordeaux);cursor:pointer;min-height:44px}
+.filter button[aria-pressed=true]{background:var(--bordeaux);color:var(--creme)}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.card{display:flex;flex-direction:column;border-radius:22px;padding:24px 22px;text-decoration:none;color:var(--creme);transition:transform .15s}
+a.card:hover{transform:translateY(-3px)}
+a.card:focus-visible,.filter button:focus-visible{outline:3px solid var(--lila);outline-offset:3px}
+.card.e{background:var(--oranje)}
+.card.v{background:var(--bordeaux)}
+.card .voor{align-self:flex-start;background:rgba(254,239,229,.22);border-radius:999px;padding:3px 11px;font-size:12.5px;font-weight:600;margin:0 0 12px}
+.card h2{margin:0 0 8px;font-size:24px;line-height:1.1}
+.card p{margin:0 0 18px;font-size:15.5px;flex:1}
+.card .go{align-self:flex-start;display:inline-block;background:var(--creme);color:var(--bordeaux);font-weight:700;border-radius:999px;padding:9px 16px;font-size:14.5px}
+.card.binnenkort{background:#fff;color:var(--muted);border:2px dashed #e9cfc4}
+.card.binnenkort h2{color:var(--bordeaux)}
+.card[hidden]{display:none}
+.brand{text-align:center;margin-top:22px;font-size:13px;color:var(--muted);letter-spacing:.04em}
+@media (max-width:560px){.grid{grid-template-columns:1fr}.hero{padding:28px 20px}}
+h1,h2,h3{font-family:'Glitz','Outfit',system-ui,sans-serif !important;font-weight:400 !important;letter-spacing:.005em !important;word-spacing:.14em}
+</style>
 </head>
-<body></body>
+<body>
+<div class="wrap">
+  <header class="hero">
+    <p class="eyebrow">De Cijfercoach · Calculators</p>
+    <h1>Gratis calculators voor Vlaamse onderneemsters</h1>
+    <p class="intro">Reken zelf uit wat je cijfers betekenen voor je zaak. Kies je vorm van onderneming en open de calculator die bij je vraag past.</p>
+  </header>
+  <div class="filter" role="group" aria-label="Toon calculators voor">
+    <button type="button" data-f="alle" aria-pressed="true">Alle</button>
+    <button type="button" data-f="eenmanszaak" aria-pressed="false">Eenmanszaak</button>
+    <button type="button" data-f="vennootschap" aria-pressed="false">Vennootschap</button>
+  </div>
+  <div class="grid" id="lijst"></div>
+  <div class="brand">de cijfercoach · Kimberley Van Poecke</div>
+</div>
+<script>
+/* ================= OVERZICHT VAN ALLE CALCULATORS =================
+   Nieuwe calculator? Voeg hier een regel toe.
+   url: de map van de calculator binnen deze site (bv. 'vab/'),
+   of een pagina op je website (bv. 'https://decijfercoach.be/voorafbetalingen/').
+   voor: voor wie de calculator is: ['eenmanszaak'], ['vennootschap'] of allebei. */
+var CALCULATORS = [
+  { titel: 'Voorafbetalingen', tekst: 'Wat is jouw ideale voorafbetaling? En hoe vermijd je de vermeerdering?', url: 'vab/', kleur: 'v', voor: ['eenmanszaak','vennootschap'] },
+  { titel: 'Loonpakket bedrijfsleider', tekst: 'Stel je loonpakket samen: loon, onkostenvergoedingen, voordelen alle aard, maaltijdcheques, huur en dividend. Wat blijft er netto over?', url: 'loonpakket/', kleur: 'e', voor: ['vennootschap'] },
+  { titel: 'Huur thuiskantoor', tekst: 'Hoeveel huur mag je vennootschap jou betalen voor je bureau thuis? En levert de bureauvergoeding je niet meer op?', url: 'thuiskantoor/', kleur: 'v', voor: ['vennootschap'] }
+];
+var BINNENKORT = true;   /* false = kaart "Binnenkort meer" verbergen */
+/* ================================================================== */
+function voorTekst(v){
+  if(v.indexOf('eenmanszaak') > -1 && v.indexOf('vennootschap') > -1) return 'Eenmanszaak en vennootschap';
+  return v.indexOf('vennootschap') > -1 ? 'Voor je vennootschap' : 'Voor je eenmanszaak';
+}
+var h = '';
+CALCULATORS.forEach(function(c){
+  var voor = c.voor || ['eenmanszaak','vennootschap'];
+  /* eigen calculator (bv. 'vab/'): blijft in het kader; volledige link naar je website: opent de hele pagina */
+  h += '<a class="card ' + c.kleur + '" data-voor="' + voor.join(' ') + '" href="' + c.url + '" target="' + (/^https?:/.test(c.url) ? '_top' : '_self') + '"><span class="voor">' + voorTekst(voor) + '</span><h2>' + c.titel + '</h2><p>' + c.tekst + '</p><span class="go">Naar de calculator →</span></a>';
+});
+if(BINNENKORT) h += '<div class="card binnenkort"><h2>Binnenkort meer</h2><p>Er komen nog calculators bij. Hou deze pagina in het oog.</p></div>';
+document.getElementById('lijst').innerHTML = h;
+
+/* filter op vorm van onderneming */
+Array.prototype.forEach.call(document.querySelectorAll('.filter button'), function(b){
+  b.addEventListener('click', function(){
+    var f = b.getAttribute('data-f');
+    Array.prototype.forEach.call(document.querySelectorAll('.filter button'), function(x){ x.setAttribute('aria-pressed', x === b ? 'true' : 'false'); });
+    Array.prototype.forEach.call(document.querySelectorAll('#lijst a.card'), function(k){
+      k.hidden = f !== 'alle' && k.getAttribute('data-voor').split(' ').indexOf(f) === -1;
+    });
+    meldHoogte();
+  });
+});
+function meldHoogte(){ try{ window.parent.postMessage({type:'dcc-height', height: document.documentElement.scrollHeight}, '*'); }catch(e){} }
+if(window.ResizeObserver){ new ResizeObserver(meldHoogte).observe(document.body); }
+window.addEventListener('load', meldHoogte);
+</script>
+<script>
+/* koppeling met de insluitcode op decijfercoach.be: hoogte op vraag doorgeven en melden dat er een nieuwe pagina geladen is */
+(function(){
+  function hoogte(){ try{ window.parent.postMessage({type:'dcc-height', height: document.documentElement.scrollHeight}, '*'); }catch(e){} }
+  window.addEventListener('message', function(e){ if(e.data && e.data.type === 'dcc-vraag-hoogte') hoogte(); });
+  window.addEventListener('load', function(){ try{ window.parent.postMessage({type:'dcc-nav'}, '*'); }catch(e){} hoogte(); });
+})();
+</script>
+</body>
 </html>
