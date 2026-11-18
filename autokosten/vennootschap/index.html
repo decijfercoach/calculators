@@ -343,7 +343,7 @@ h1,h2,h3,.big,.vraag p{font-family:'Glitz','Outfit',system-ui,sans-serif !import
       <li>Je vennootschap betaalt er ook iets op: <b>17% van je voordeel alle aard</b> is een verworpen uitgave. Betaalt ze ook je privé brandstof of laden, dan is het <b>40%</b>.</li>
       <li>Een <b>verworpen uitgave</b> is een kost die je vennootschap wel betaalt, maar die ze niet van haar winst mag aftrekken. Ze betaalt er dus vennootschapsbelasting op.</li>
       <li>Je voordeel alle aard is de cataloguswaarde × een CO2 percentage × 6/7 × een percentage voor de ouderdom van de wagen. Een elektrische wagen telt aan 4%, en het minimum is € 1.690 per jaar (2026).</li>
-      <li>Wat jij zelf betaalt op je voordeel alle aard en of je onder de 20% regel voor het verlaagd tarief blijft, zie je in de calculator <a href="../../wagen/">Wagen kopen, leasen of renten</a>.</li>
+      <li data-wagen hidden>Wat jij zelf betaalt op je voordeel alle aard en of je onder de 20% regel voor het verlaagd tarief blijft, zie je in de calculator <a href="../../wagen/">Wagen kopen, leasen of renten</a>.</li>
     </ul>
   </details>
 
@@ -354,7 +354,7 @@ h1,h2,h3,.big,.vraag p{font-family:'Glitz','Outfit',system-ui,sans-serif !import
       <li>De btw die ze niet terugkrijgt, is een gewone autokost. Ze valt onder hetzelfde aftrekpercentage als de rest.</li>
       <li>Op de verzekering, de verkeersbelasting en de interesten staat geen btw.</li>
       <li>Alle bedragen die je invult, zijn zonder btw. De calculator rekent met 21% btw.</li>
-      <li>Twijfel je nog tussen kopen, leasen of renten? Vergelijk het in de calculator <a href="../../wagen/">Wagen kopen, leasen of renten</a>.</li>
+      <li data-wagen hidden>Twijfel je nog tussen kopen, leasen of renten? Vergelijk het in de calculator <a href="../../wagen/">Wagen kopen, leasen of renten</a>.</li>
     </ul>
   </details>
 
@@ -427,6 +427,9 @@ var CONFIG = {
 };
 /* ==================================================================== */
 
+/* Links naar de calculator wagen/: zet WAGEN_ONLINE op true zodra wagen/ op GitHub staat. */
+var WAGEN_ONLINE = false;
+if(WAGEN_ONLINE) Array.prototype.forEach.call(document.querySelectorAll('[data-wagen]'), function(e){ e.hidden = false; });
 var $ = function(id){ return document.getElementById(id); };
 function meldHoogte(){ try{ window.parent.postMessage({type:'dcc-height', height: Math.ceil(document.body.getBoundingClientRect().height)}, '*'); }catch(e){} }
 var HUIDIG = new Date().getFullYear();
@@ -662,7 +665,7 @@ function bereken(){
     '<div class="kpi"><div class="k">Verworpen uitgaven</div><div class="v">' + eur0(verworpen) + '</div><div class="k">per jaar, kost ' + eur0(belVerworpen) + ' belasting</div></div>' +
     '<div class="kpi"><div class="k">Wat je vennootschap bespaart</div><div class="v">' + eur0(besparing) + '</div><div class="k">vennootschapsbelasting per jaar</div></div>' +
     '</div>';
-  if(V && t === 0.2) h += '<div class="note">Je voordeel alle aard is ' + eur0(V.bedrag) + ' per jaar. Zijn je voordelen alle aard samen meer dan 20% van je bezoldiging, dan verliest je vennootschap het verlaagd tarief. Check het in de calculator <a href="../../wagen/">Wagen kopen, leasen of renten</a>.</div>';
+  if(V && t === 0.2) h += '<div class="note">Je voordeel alle aard is ' + eur0(V.bedrag) + ' per jaar. Zijn je voordelen alle aard samen meer dan 20% van je bezoldiging, dan verliest je vennootschap het verlaagd tarief.' + (WAGEN_ONLINE ? ' Check het in de calculator <a href="../../wagen/">Wagen kopen, leasen of renten</a>.' : '') + '</div>';
   if(ph && co2 > CONFIG.aftrek.phevOud.laag && co2 <= 75) h += '<div class="note">Je plug in hybride stoot ' + getal(co2) + ' g/km uit. Is hij niet gekeurd volgens de Euro 6e bis norm, dan is hij fiscaal een valse hybride. Vul dan de uitstoot in van dezelfde wagen met enkel een benzine of dieselmotor.</div>';
 
   /* lange uitleg */
