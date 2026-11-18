@@ -1,0 +1,591 @@
+<!doctype html>
+<html lang="nl-BE">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Sociale bijdragen | De Cijfercoach</title>
+<meta name="description" content="Bereken als startende zelfstandige in hoofdberoep hoeveel sociale bijdragen je in je eerste jaar echt betaalt, en hoeveel je per kwartaal opzij zet.">
+<!--
+  CALCULATOR SOCIALE BIJDRAGEN VOOR STARTERS IN HOOFDBEROEP
+  Alle bedragen staan in CONFIG bovenaan het script.
+  Jaarlijkse update: voeg in CONFIG.jaren een regel toe voor het nieuwe jaar (RSVZ publiceert de bedragen in januari).
+  De calculator kiest zelf het huidige jaar, of het laatste jaar dat in CONFIG staat, en meldt dat op het scherm.
+  Dezelfde schijven staan ook in loonpakket, vorm, loondividend, pensioen en wagen: pas ze daar ook aan.
+-->
+<style>
+@font-face{font-family:'Glitz';src:url('../fonts/glitz.woff2') format('woff2');font-weight:400;font-style:normal;font-display:swap}
+@font-face{font-family:'Outfit';src:url('../fonts/outfit-400.woff2') format('woff2');font-weight:400;font-style:normal;font-display:swap}
+@font-face{font-family:'Outfit';src:url('../fonts/outfit-500.woff2') format('woff2');font-weight:500;font-style:normal;font-display:swap}
+@font-face{font-family:'Outfit';src:url('../fonts/outfit-600.woff2') format('woff2');font-weight:600;font-style:normal;font-display:swap}
+@font-face{font-family:'Outfit';src:url('../fonts/outfit-700.woff2') format('woff2');font-weight:700;font-style:normal;font-display:swap}
+@font-face{font-family:'Outfit';src:url('../fonts/outfit-800.woff2') format('woff2');font-weight:800;font-style:normal;font-display:swap}
+:root{
+  /* brandingpalet (00 Kern/05-merk-en-huisstijl.md): Ivory, Soft Ember, Sky, Rouge, Ember, Midnight, Fuchsia */
+  --creme:#fef0e6;--perzik:#fac196;--lila-licht:#b8c5e6;--bordeaux:#bb2d53;--bordeaux-donker:#9a2344;--oranje:#f3925a;--lila:#94a3d3;--roze:#e72687;--roze-donker:#c81f73;
+  --sky-zacht:#eef1fa;--midnight-donker:#4a5a8f;
+  --ink:#2b1d22;--muted:#6f565d;--line:#f1dccd;--card:#fff;--shadow:0 10px 30px rgba(187,45,83,.08)
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--creme);color:var(--ink);font-family:'Outfit',system-ui,-apple-system,'Segoe UI',Arial,sans-serif;font-size:16px;line-height:1.55;font-weight:400}
+b,strong{font-weight:700}
+.wrap{max-width:760px;margin:0 auto;padding:20px 16px 36px}
+a:focus-visible,button:focus-visible,summary:focus-visible,select:focus-visible,input:focus-visible{outline:3px solid var(--lila);outline-offset:2px}
+.terug{display:inline-block;color:var(--bordeaux);font-weight:600;font-size:14.5px;text-decoration:none;margin:0 0 12px;padding:4px 0}
+.terug:hover{text-decoration:underline}
+.hero{background:linear-gradient(180deg,var(--lila-licht) 0%,#dcc3c8 55%,var(--perzik) 100%);border-radius:24px;padding:32px 26px 30px;margin-bottom:20px}
+.eyebrow{font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:var(--bordeaux);font-weight:700;margin:0 0 10px}
+h1{font-size:clamp(28px,6vw,42px);line-height:1.05;color:var(--bordeaux);margin:0 0 12px}
+.hero-note{margin:14px 0 0;font-size:13.5px;font-weight:600;color:var(--bordeaux)}
+.intro{margin:0;font-size:16.5px}
+.card{background:var(--card);border-radius:20px;box-shadow:var(--shadow);padding:24px 22px;margin-bottom:18px}
+.card.blauw{background:var(--sky-zacht);border:1.5px solid var(--lila-licht);border-left:5px solid var(--lila);box-shadow:none}
+.card.blauw h2{color:var(--midnight-donker)}
+.card.blauw select,.card.blauw input[type=text]{background:#fff;border-color:var(--lila-licht)}
+.card h2{font-size:21px;color:var(--bordeaux);margin:0 0 4px}
+.card .sub{color:var(--muted);font-size:14.5px;margin:0 0 18px}
+label.lbl,.lbl{display:block;font-weight:600;font-size:15px;margin:0 0 7px}
+.field{margin-bottom:16px}
+.hint{font-size:13.5px;color:var(--muted);margin-top:6px}
+.fout{font-size:13.5px;color:var(--bordeaux);font-weight:700;margin-top:6px}
+.fout:empty{display:none}
+select,input[type=text]{width:100%;font:inherit;color:var(--ink);background:#fffaf6;border:1.5px solid var(--line);border-radius:12px;padding:12px 13px;outline:none;transition:border-color .15s,box-shadow .15s;min-height:48px}
+select:focus,input:focus{border-color:var(--lila);box-shadow:0 0 0 3px rgba(147,163,212,.25)}
+input[aria-invalid=true]{border-color:var(--bordeaux);background:#fff1f4}
+.money{position:relative}
+.money span{position:absolute;left:13px;top:50%;transform:translateY(-50%);color:var(--muted);pointer-events:none}
+.money input{padding-left:30px;text-align:right;font-variant-numeric:tabular-nums;font-weight:600}
+.unit{position:relative}
+.unit span{position:absolute;right:13px;top:50%;transform:translateY(-50%);color:var(--muted);pointer-events:none}
+.unit input{padding-right:40px;text-align:right;font-weight:600;font-variant-numeric:tabular-nums}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.keuze{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px}
+.keuze label{display:flex;gap:10px;align-items:flex-start;border:1.5px solid var(--line);border-radius:14px;padding:13px 14px;cursor:pointer;background:#fffaf6;font-size:15px}
+.keuze label:has(input:checked){border-color:var(--roze);background:#fdeef6;box-shadow:0 0 0 2px rgba(231,38,135,.15)}
+.keuze input{margin-top:4px;accent-color:var(--roze)}
+.keuze b{display:block}
+.keuze span.k{font-size:13.5px;color:var(--muted)}
+.btn{display:inline-flex;align-items:center;gap:6px;background:var(--bordeaux);color:var(--creme);border:0;border-radius:999px;font:inherit;font-weight:700;font-size:15px;padding:11px 18px;cursor:pointer;transition:background .15s;min-height:44px}
+.btn:hover{background:var(--bordeaux-donker)}
+.btn.ghost{background:transparent;color:var(--bordeaux);border:1.5px solid var(--bordeaux)}
+.btn.ghost:hover{background:#fff1f4}
+.btn.licht{background:var(--creme);color:var(--bordeaux)}
+.btn.licht:hover{background:#fff}
+.btn.blauw{background:var(--lila-licht);color:var(--ink)}
+.btn.blauw:hover{background:var(--lila)}
+.knoppen{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 18px}
+/* resultaat */
+.result{background:var(--bordeaux);color:var(--creme);box-shadow:0 14px 34px rgba(185,44,82,.25)}
+.result h2{color:var(--creme)}
+.result .label{font-size:14px;font-weight:600;color:rgba(254,239,229,.85);margin:0}
+.big{font-size:clamp(34px,8vw,50px);line-height:1.05;margin:6px 0 4px;font-variant-numeric:tabular-nums;color:var(--creme)}
+.lead{font-size:16px;margin:0 0 6px;color:rgba(254,239,229,.92)}
+.advies{background:var(--creme);color:var(--ink);border-radius:14px;padding:14px 16px;margin:16px 0 0;font-size:16px;border-left:6px solid var(--roze)}
+.advies b{color:var(--bordeaux)}
+.kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:14px 0}
+.kpi{background:rgba(255,255,255,.1);border-radius:14px;padding:13px}
+.kpi .k{font-size:13px;color:rgba(254,239,229,.85);font-weight:500}
+.kpi .v{font-size:21px;font-weight:800;font-variant-numeric:tabular-nums}
+/* elk kerncijfer in een eigen merkkleur */
+.kpis .kpi:nth-child(1){background:var(--lila-licht);color:var(--ink)}
+.kpis .kpi:nth-child(2){background:var(--lila);color:var(--ink)}
+.kpis .kpi:nth-child(3){background:var(--roze);color:#fff}
+.kpis .kpi:nth-child(1) .k,.kpis .kpi:nth-child(2) .k{color:var(--ink);opacity:.8}
+.kpis .kpi:nth-child(3) .k{color:#fff;opacity:.9}
+.note{border-radius:14px;padding:12px 15px;font-size:14.5px;margin:10px 0 0;background:rgba(249,193,149,.2);border-left:4px solid var(--perzik)}
+.tip{border-radius:14px;padding:12px 15px;font-size:14.5px;margin:10px 0 0;background:rgba(255,255,255,.1);border-left:4px solid var(--lila-licht)}
+.result-knoppen{display:flex;flex-wrap:wrap;gap:8px;margin:16px 0 0}
+.meer{margin:16px 0 0;background:rgba(255,255,255,.08);border-radius:14px;padding:0 15px}
+.meer summary{cursor:pointer;font-weight:700;padding:13px 0;list-style:none;display:flex;justify-content:space-between;align-items:center;gap:10px}
+.meer summary::-webkit-details-marker{display:none}
+.meer summary::after{content:'+';font-size:22px;line-height:1}
+.meer[open] summary::after{content:'−'}
+.meer[open]{padding-bottom:12px}
+.stappen{font-size:14.5px;margin:4px 0 14px}
+.stappen .t{font-weight:700;font-size:15.5px;margin-bottom:4px}
+.stappen .r{display:flex;justify-content:space-between;gap:10px;padding:3px 0}
+.stappen .r b{font-variant-numeric:tabular-nums;white-space:nowrap}
+.stappen .r.tot{border-top:1px solid rgba(254,239,229,.35);margin-top:4px;padding-top:7px;font-weight:700}
+.leeg-staat{font-size:16px;margin:4px 0 0;color:rgba(254,239,229,.92)}
+.foutlijst{background:var(--creme);color:var(--ink);border-radius:14px;padding:12px 16px;margin:12px 0 0;font-size:15px}
+.foutlijst ul{margin:6px 0 0;padding-left:20px}
+.disclaimer{font-size:13px;color:var(--muted);margin-top:18px}
+/* uitleg */
+.uitleg{background:#fff;border-radius:20px;box-shadow:var(--shadow);padding:18px 22px;margin-bottom:14px;border-left:5px solid var(--lila)}
+details.uitleg:nth-of-type(3n+2){border-left-color:var(--roze)}
+details.uitleg:nth-of-type(3n){border-left-color:var(--lila-licht)}
+.uitleg summary{cursor:pointer;font-weight:700;color:var(--bordeaux);font-size:16.5px;list-style:none;display:flex;justify-content:space-between;align-items:center;gap:12px}
+.uitleg summary::-webkit-details-marker{display:none}
+.uitleg summary::after{content:'+';font-size:22px;line-height:1;color:var(--bordeaux)}
+.uitleg[open] summary::after{content:'−'}
+.uitleg ol,.uitleg ul{margin:12px 0 0;padding-left:22px}
+.uitleg li{margin:0 0 8px;font-size:15px}
+.uitleg p{font-size:15px;margin:12px 0 0}
+.uitleg .klein{font-size:13.5px;color:var(--muted)}
+.tabel{width:100%;border-collapse:collapse;margin-top:12px;font-size:14.5px}
+.tabel th,.tabel td{padding:7px 6px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+.tabel td.n,.tabel th.n{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+.tabel th{color:var(--midnight-donker)}
+.tabel-wrap{overflow-x:auto;max-width:100%}
+@media (max-width:420px){.tabel{font-size:13px}.tabel th,.tabel td{padding:6px 3px}}
+.tabel tr.nu td{font-weight:700;color:var(--ink);background:var(--lila-licht)}
+/* trajecten */
+.trajecten{margin:26px 0 8px}
+.trajecten h2{font-size:clamp(24px,5vw,32px);line-height:1.1;color:var(--bordeaux);margin:0 0 8px}
+.trajecten .sub{margin:0 0 16px;font-size:16px}
+.tr-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:14px}
+.tr{display:flex;flex-direction:column;border-radius:20px;padding:22px 20px;color:var(--creme);text-decoration:none;transition:transform .15s}
+.tr:hover{transform:translateY(-3px)}
+.tr.oranje{background:var(--oranje)}
+.tr.bordeaux{background:var(--bordeaux)}
+.tr .voor{display:inline-block;align-self:flex-start;background:rgba(254,239,229,.22);border-radius:999px;padding:3px 11px;font-size:12.5px;font-weight:600;margin-bottom:12px}
+.tr h3{font-size:22px;line-height:1.1;margin:0 0 8px}
+.tr p{margin:0 0 18px;font-size:15px;line-height:1.5;flex:1}
+.tr .go{align-self:flex-start;background:var(--creme);color:var(--bordeaux);font-weight:700;border-radius:999px;padding:9px 16px;font-size:14.5px}
+.vraag{margin-top:22px;padding-top:18px;border-top:1px solid rgba(254,239,229,.25);text-align:center}
+.vraag p{margin:0;font-size:clamp(19px,4.5vw,23px);line-height:1.25;color:var(--creme)}
+.naar-trajecten{display:block;width:100%;text-align:center;background:var(--roze);color:#fff;border:0;font:inherit;font-weight:700;font-style:italic;border-radius:999px;padding:15px 20px;margin-top:14px;cursor:pointer;transition:background .15s}
+.naar-trajecten:hover{background:var(--roze-donker)}
+.brand{display:flex;justify-content:center;margin-top:22px;font-size:13px;color:var(--muted);letter-spacing:.04em}
+.print-only{display:none}
+@media (max-width:560px){.two,.keuze{grid-template-columns:1fr}.kpis{grid-template-columns:1fr}.card{padding:20px 16px}.hero{padding:26px 20px}.uitleg{padding:16px 16px}.btn{flex:1 1 auto;justify-content:center}}
+h1,h2,h3,.big,.vraag p{font-family:'Glitz','Outfit',system-ui,sans-serif !important;font-weight:400 !important;letter-spacing:.005em !important;word-spacing:.14em}
+/* afdrukken of bewaren als pdf: je gegevens, je resultaat en alle uitleg open */
+@media print{
+  @page{margin:14mm}
+  html,body{background:#fff;font-size:11.5pt}
+  .wrap{max-width:none;padding:0}
+  .terug,.knoppen,.result-knoppen,.vraag,.trajecten,#invoer,.hero .intro,#gebruik{display:none !important}
+  .hero{background:none;padding:0;margin:0 0 10px;border-radius:0}
+  .print-only{display:block}
+  .card,.result,.uitleg{box-shadow:none;border:1px solid #ccc;background:#fff !important;color:#000 !important;break-inside:avoid}
+  .result *{color:#000 !important}
+  .result .big{color:#bb2d53 !important}
+  .kpi,.meer,.note,.tip,.advies{background:#fff !important;border:1px solid #ddd}
+  .meer summary::after,.uitleg summary::after{content:''}
+  .tabel tr.nu td{background:#eef1fa !important}
+  .disclaimer{color:#333}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="terug" href="../">← Alle calculators</a>
+  <header class="hero">
+    <p class="eyebrow">De Cijfercoach · Calculator</p>
+    <h1>Hoeveel sociale bijdragen betaal je in je eerste jaar?</h1>
+    <p class="intro">Start je als zelfstandige in hoofdberoep, dan rekent je sociaal verzekeringsfonds eerst een voorlopig bedrag aan. Pas twee jaar later volgt de echte rekening, op je echte winst. Vul in wat je dit jaar verwacht te verdienen en je ziet wat je echt betaalt en hoeveel je elk kwartaal opzij zet.</p>
+    <p class="hero-note" id="heroNote"></p>
+  </header>
+
+  <details class="uitleg" id="gebruik">
+    <summary>Zo gebruik je deze calculator</summary>
+    <ol>
+      <li><b>Kies wanneer je start.</b> Het kwartaal waarin je zaak begint, telt al volledig mee.</li>
+      <li><b>Zeg of je een primostarter bent.</b> Ben je de laatste 5 jaar geen zelfstandige in hoofdberoep geweest, dan krijg je het eerste jaar een lagere minimumbijdrage en een korting op je eerste kwartaal.</li>
+      <li><b>Vul je verwachte winst in</b> voor de maanden dat je dit jaar actief bent. Dat is wat je verkoopt min je kosten, zonder btw. Je kent je belastbaar inkomen al? Kies dat dan.</li>
+      <li><b>Lees het advies.</b> Je ziet wat je echt betaalt, wat je fonds je voorlopig aanrekent en hoeveel je per kwartaal opzij zet.</li>
+    </ol>
+    <p class="klein">Eerst eens kijken hoe het werkt? Klik op <b>Probeer met een voorbeeld</b>.</p>
+  </details>
+
+  <div id="invoer">
+  <div class="knoppen">
+    <button type="button" class="btn" id="btnVoorbeeld">Probeer met een voorbeeld</button>
+    <button type="button" class="btn ghost" id="btnWis">Wis alles</button>
+  </div>
+
+  <section class="card" aria-labelledby="h-start">
+    <h2 id="h-start">Je start</h2>
+    <p class="sub">Deze calculator is voor je eerste jaar als zelfstandige in hoofdberoep, met een eenmanszaak of als bedrijfsleider van je vennootschap.</p>
+    <div class="two">
+      <div class="field">
+        <label class="lbl" for="jaar">Jaar waarin je start</label>
+        <select id="jaar"></select>
+      </div>
+      <div class="field">
+        <label class="lbl" for="kwartaal">Je start in</label>
+        <select id="kwartaal">
+          <option value="1">januari, februari of maart</option>
+          <option value="2">april, mei of juni</option>
+          <option value="3">juli, augustus of september</option>
+          <option value="4">oktober, november of december</option>
+        </select>
+      </div>
+    </div>
+    <p class="lbl" id="h-primo">Ben je een primostarter?</p>
+    <div class="keuze" role="radiogroup" aria-labelledby="h-primo">
+      <label><input type="radio" name="primo" value="ja" checked><span><b>Ja</b><span class="k">De laatste 5 jaar was ik geen zelfstandige in hoofdberoep. Ook als ik overstap uit bijberoep of als student.</span></span></label>
+      <label><input type="radio" name="primo" value="nee"><span><b>Nee</b><span class="k">Ik was de laatste 5 jaar al eens zelfstandige in hoofdberoep en begin opnieuw.</span></span></label>
+    </div>
+  </section>
+
+  <section class="card blauw" aria-labelledby="h-inkomen">
+    <h2 id="h-inkomen">Wat verwacht je te verdienen?</h2>
+    <p class="sub">Een schatting is genoeg. Reken enkel de maanden dat je dit jaar actief bent.</p>
+    <div class="field">
+      <label class="lbl" for="soort">Wat vul je in?</label>
+      <select id="soort" aria-describedby="soort-hint">
+        <option value="winst">Mijn winst: verkoop min kosten, nog voor sociale bijdragen</option>
+        <option value="netto">Mijn belastbaar inkomen: al na aftrek van mijn sociale bijdragen</option>
+      </select>
+      <div class="hint" id="soort-hint">Twijfel je? Kies je winst. De calculator trekt je sociale bijdragen er zelf af, want die zijn een beroepskost.</div>
+    </div>
+    <div class="field">
+      <label class="lbl" for="bedrag" id="bedragLbl">Verwachte winst dit jaar</label>
+      <div class="money"><span aria-hidden="true">€</span><input type="text" id="bedrag" inputmode="decimal" placeholder="bv. 25.000" autocomplete="off" aria-describedby="bedrag-hint bedrag-fout"></div>
+      <div class="hint" id="bedrag-hint">Zonder btw. Ben je bedrijfsleider, vul dan het loon in dat je vennootschap je dit jaar geeft.</div>
+      <div class="fout" id="bedrag-fout"></div>
+    </div>
+    <div class="field">
+      <label class="lbl" for="beheer">Beheerskosten van je sociaal verzekeringsfonds</label>
+      <div class="unit"><span aria-hidden="true">%</span><input type="text" id="beheer" inputmode="decimal" value="4" autocomplete="off" aria-describedby="beheer-hint beheer-fout"></div>
+      <div class="hint" id="beheer-hint">Elk fonds rekent een klein percentage bovenop je bijdragen, meestal tussen 3% en 4,5%. Je vindt het op je afrekening.</div>
+      <div class="fout" id="beheer-fout"></div>
+    </div>
+  </section>
+  </div>
+
+  <section class="card result" id="out" aria-live="polite" aria-atomic="false"></section>
+
+  <details class="uitleg">
+    <summary>Hoe werken sociale bijdragen als je start?</summary>
+    <ul>
+      <li>Je betaalt <b>per kwartaal</b>. Het kwartaal waarin je start, telt volledig mee, ook als je op de laatste dag begint.</li>
+      <li>In je eerste jaren kent de overheid je inkomen nog niet. Daarom rekent je fonds je eerst een <b>voorlopige bijdrage</b> aan, op een minimuminkomen. Dat gebeurt in je eerste drie kalenderjaren.</li>
+      <li>Zodra de belastingen je echte inkomen doorgeven, meestal twee jaar later, volgt de <b>afrekening</b>. Verdiende je meer dan het minimum, dan betaal je het verschil in één keer bij.</li>
+      <li>Start je in de loop van het jaar, dan rekent je fonds je inkomen om naar een volledig jaar: <b>× 4 en gedeeld door het aantal kwartalen</b> dat je actief was. Verdien je 15.000 euro in 2 kwartalen, dan telt dat als 30.000 euro per jaar.</li>
+      <li>Als <b>primostarter</b> ligt je minimum de eerste 4 kwartalen een stuk lager. Je vraagt die starterskorting aan bij je fonds, dan betaal je ook voorlopig minder. Vraag je ze niet aan, dan krijg je het verschil later terug. De extra korting op je eerste kwartaal krijg je automatisch.</li>
+      <li>Je mag je voorlopige bijdragen zelf <b>verhogen</b>. Wat je betaalt, trek je af als beroepskost in het jaar dat je betaalt. Zo verlaag je meteen je belastingen en vermijd je een grote rekening later.</li>
+    </ul>
+  </details>
+
+  <details class="uitleg">
+    <summary id="tabelTitel">De bedragen</summary>
+    <p id="tabelIntro"></p>
+    <div class="tabel-wrap"><table class="tabel" id="schijventabel"></table></div>
+    <p class="klein" id="tabelNoot"></p>
+  </details>
+
+  <section class="trajecten" id="trajecten" aria-labelledby="h-trajecten"></section>
+
+  <p class="disclaimer" id="disclaimer"></p>
+  <div class="brand">de cijfercoach · Kimberley Van Poecke</div>
+</div>
+
+<script>
+/* ======================= CONFIG: hier pas je bedragen aan =======================
+   Laatst gecontroleerd: 18 november 2026.
+   Bronnen (fin.belgium.be toont een CAPTCHA, daarom vakbronnen; alles bij minstens twee bronnen nagekeken):
+   - RSVZ, bijdragentabel 2026: minimum € 17.374,08 (€ 890,42 per kwartaal), 20,5% tot € 75.024,54,
+     14,16% tot € 110.562,42, maximum € 5.103,05 per kwartaal, primostarter € 8.972,07, korting eerste kwartaal € 118,52
+     https://socialsecurity.belgium.be/sites/default/files/content/docs/nl/sociaal-beleid-vorm-geven/zelfstandigen/bijdragennota_2026_tabel_nl.pdf
+   - Accountable (2026: € 890,42, 20,5% en 14,16%, grenzen 75.024,54 en 110.562,42):
+     https://www.accountable.eu/nl-be/blog/sociale-bijdragen
+   - OECCBB, sociale bijdragen 2026 (minimum € 890,42 en maximum € 5.103,05 per kwartaal):
+     https://blog.oeccbb.be/nl/article/sociale-bijdragen-2026-voor-zelfstandigen-wat-verandert-wat-bevestigd-wordt-en-wat-je-moet-anticiperen/29760
+   - Xerius, starterskorting: € 8.972,07, € 473,84 per kwartaal en korting € 122,13 (= bedragen RSVZ + 3,05% beheerskosten):
+     https://www.xerius.be/nl-be/zelfstandig-worden/aansluiting-sociaal-verzekeringsfonds/starterskorting
+   - Partena, barema 2026 (korting eerste kwartaal € 123,50 met beheerskosten van Partena):
+     https://www.partena-professional.be/sites/default/files/uploads/Administratieve%20docs%20%26%20forms/ASI/NL-Bareme%202026.pdf
+   - Primostarter: geen hoofdberoep in de 20 voorgaande kwartalen, 4 kwartalen, omrekening × 4 / aantal kwartalen:
+     https://www.securex.be/nl/lex4you/zelfstandige/rechten-plichten/hoofdberoep/plichten/sociale-bijdragen-betalen/hoe-worden-de-sociale-bijdragen-berekend/verlaagde-minimumbijdragen-(primostarters)
+     https://www.accountable.eu/nl-be/blog/primostarter/
+   - Bedragen 2027: nog niet gepubliceerd op 18 november 2026 (RSVZ publiceert ze in januari).
+   Zelfde schijven als de calculators Loonpakket en Vorm (CONFIG.rsvz).
+   ================================================================================ */
+var CONFIG = {
+  gecontroleerd: '18 november 2026',
+  /* per jaar: minI = minimuminkomen hoofdberoep, primoMin = verlaagd minimuminkomen primostarter (eerste 4 kwartalen),
+     t1 tot grens1, t2 tot plafond, daarboven niets; primoKorting = korting op de eerste kwartaalbijdrage van een primostarter.
+     Alle bedragen zonder beheerskosten. voorlopig = true zolang een cijfer nog niet zeker is */
+  jaren: [
+    { jaar: 2026, minI: 17374.08, primoMin: 8972.07, t1: 0.205, grens1: 75024.54, t2: 0.1416, plafond: 110562.42, primoKorting: 118.52, voorlopig: false }
+  ],
+  beheerStandaard: 4,        /* zelfde als de calculator Loonpakket */
+  beheerMax: 10,             /* hoger is zo goed als zeker een tikfout */
+  afrekeningNa: 2,           /* de afrekening komt meestal twee jaar later */
+  verschilKlein: 25,         /* verschil per kwartaal waaronder het advies zegt dat je goed zit */
+  trajecten: [
+    { naam: 'Financial Breakthrough', voor: 'Voor vrouwen die starten of in bijberoep werken', kleur: 'bordeaux', url: 'https://decijfercoach.be/financialbreakthrough/',
+      tekst: 'Je start net met je zaak of je onderneemt naast je job. Je leert je cijfers lezen, weet wat je opzij moet zetten voor belastingen en bouwt een stevige basis.' },
+    { naam: 'Financial Fundamentals', voor: 'Voor vrouwen in hoofdberoep', kleur: 'oranje', url: 'https://decijfercoach.be/financialfundamentals/',
+      tekst: 'Leer je cijfers begrijpen, neem financieel sterke beslissingen en bouw een zaak die niet alleen groeit, maar ook iets oplevert.' }
+  ],
+  trajectenTitel: 'Zo kom je nooit meer voor een verrassing te staan',
+  trajectenIntro: 'De afrekening van je sociale bijdragen is voor veel starters de eerste grote schrik. In mijn trajecten leer je zelf berekenen wat je opzij zet voor je bijdragen en je belastingen, zodat je elke maand weet wat echt van jou is. Mijn trajecten zijn er exclusief voor vrouwelijke ondernemers.',
+  vraagTekst: 'Wil je weten hoeveel je ook voor je belastingen opzij zet?',
+  knopTekst: 'Ontdek mijn trajecten',
+  voorbeeld: { kwartaal: '2', primo: 'ja', soort: 'winst', bedrag: '24.000', beheer: '4' }
+};
+/* ================================================================================ */
+
+var $ = function(id){ return document.getElementById(id); };
+var HUIDIG = new Date().getFullYear();
+var KW_NAAM = ['', 'januari', 'april', 'juli', 'oktober'];
+
+/* leest een bedrag zoals mensen het typen: 1.500 / 1500 / 1.500,50 / 12,5
+   geeft null bij een leeg veld en NaN bij onzin of een negatief getal */
+function leesGetal(v){
+  v = String(v == null ? '' : v).replace(/[€%\s ]/g,'');
+  if(v === '') return null;
+  if(/^[-−]/.test(v)) return NaN;
+  if(!/^[0-9.,]+$/.test(v)) return NaN;
+  if(v.indexOf(',') > -1){ v = v.replace(/\./g,'').replace(',', '.'); }
+  else if((v.match(/\./g)||[]).length > 1 || /\.\d{3}$/.test(v)){ v = v.replace(/\./g,''); }
+  var n = parseFloat(v);
+  return isFinite(n) ? n : NaN;
+}
+/* met een harde spatie, zodat € en het bedrag nooit over twee regels gaan */
+function eur(n){ return (n < -0.005 ? '− ' : '') + '€ ' + Math.abs(n||0).toLocaleString('nl-BE',{minimumFractionDigits:2,maximumFractionDigits:2}); }
+function eur0(n){ return (n < -0.5 ? '− ' : '') + '€ ' + Math.abs(Math.round(n||0)).toLocaleString('nl-BE'); }
+function pct(n){ return (n*100).toLocaleString('nl-BE',{maximumFractionDigits:2}) + '%'; }
+function meldHoogte(){ try{ window.parent.postMessage({type:'dcc-height', height: Math.ceil(document.body.getBoundingClientRect().height)}, '*'); }catch(e){} }
+function zetFout(id, tekst){
+  var el = $(id), f = $(id + '-fout');
+  if(f) f.textContent = tekst || '';
+  if(el){ if(tekst) el.setAttribute('aria-invalid','true'); else el.removeAttribute('aria-invalid'); }
+}
+
+/* jaarkeuze: het huidige jaar, of het laatste jaar dat in CONFIG staat */
+var JAREN = CONFIG.jaren.slice().sort(function(a,b){ return b.jaar - a.jaar; });
+var LAATSTE = JAREN[0];
+(function(){
+  var h = '', gekozen = null;
+  JAREN.forEach(function(j){ if(gekozen === null && j.jaar <= HUIDIG) gekozen = j.jaar; });
+  if(gekozen === null) gekozen = JAREN[JAREN.length-1].jaar;
+  JAREN.forEach(function(j){ h += '<option value="' + j.jaar + '"' + (j.jaar === gekozen ? ' selected' : '') + '>' + j.jaar + (j.voorlopig ? ' (voorlopige cijfers)' : '') + '</option>'; });
+  /* nieuwer jaar dan in CONFIG: toon het met de laatst gekende bedragen */
+  if(HUIDIG > LAATSTE.jaar) h = '<option value="' + HUIDIG + '" selected>' + HUIDIG + ' (met de bedragen van ' + LAATSTE.jaar + ')</option>' + h;
+  $('jaar').innerHTML = h;
+})();
+function jaarInfo(){
+  var jaar = parseInt($('jaar').value, 10);
+  var j = CONFIG.jaren.filter(function(x){ return x.jaar === jaar; })[0];
+  return { jaar: jaar, r: j || LAATSTE, terugval: !j };
+}
+
+/* ---------- de rekenregels ---------- */
+/* bijdrage per jaar zonder beheerskosten, op een jaarinkomen (al omgerekend naar 4 kwartalen) */
+function jaarBijdrage(Iann, r, primo){
+  var min = primo ? r.primoMin : r.minI;
+  var basis = Math.max(Iann, min);
+  return Math.min(basis, r.grens1) * r.t1 + Math.max(0, Math.min(basis, r.plafond) - r.grens1) * r.t2;
+}
+/* volledige berekening
+   o.bedrag, o.soort ('winst' of 'netto'), o.q (aantal kwartalen), o.primo, o.beheer (bv. 0.04), r = cijfers van het jaar */
+function rekenSociale(o, r){
+  var b = 1 + o.beheer, korting = o.primo ? r.primoKorting : 0;
+  function totaal(I){
+    var Iann = I * 4 / o.q, jb = jaarBijdrage(Iann, r, o.primo), kw = jb / 4;
+    return { I: I, Iann: Iann, jb: jb, kw: kw, excl: kw * o.q - korting, tot: (kw * o.q - korting) * b };
+  }
+  var x;
+  if(o.soort === 'netto'){ x = totaal(o.bedrag); }
+  else {
+    /* de bijdragen zijn een beroepskost: belastbaar inkomen = winst min bijdragen, tot het stabiel is */
+    var S = 0;
+    for(var n = 0; n < 100; n++){
+      x = totaal(Math.max(0, o.bedrag - S));
+      if(Math.abs(x.tot - S) < 0.001) break;
+      S = x.tot;
+    }
+  }
+  x.korting = korting;
+  x.kwTot = x.kw * b;                                   /* echte bijdrage per kwartaal met beheerskosten */
+  x.voorlopigKw = r.minI * r.t1 / 4 * b;                /* wat het fonds standaard aanrekent per kwartaal */
+  x.voorlopigTot = x.voorlopigKw * o.q - korting * b;   /* standaard voorlopig voor dit jaar */
+  x.primoVoorlopigKw = Math.max(Math.min(x.Iann, r.minI), r.primoMin) * r.t1 / 4 * b; /* met de starterskorting aangevraagd */
+  x.perKwartaal = [];
+  for(var k = 0; k < o.q; k++){ x.perKwartaal.push(x.kwTot - (k === 0 ? korting * b : 0)); }
+  return x;
+}
+
+/* ---------- scherm ---------- */
+function primo(){ return document.querySelector('input[name=primo]:checked').value === 'ja'; }
+
+function tekenTabel(r, jaar, terugval, Iann, isPrimo){
+  var rij = function(van, tot, wat, nu){ return '<tr' + (nu ? ' class="nu"' : '') + '><td>' + van + '</td><td>' + tot + '</td><td class="n">' + wat + '</td></tr>'; };
+  var min = isPrimo ? r.primoMin : r.minI, heeft = Iann !== null;
+  var h = '<thead><tr><th>Jaarinkomen vanaf</th><th>tot</th><th class="n">Bijdrage</th></tr></thead><tbody>';
+  h += rij(eur(0), eur(min), 'minimum: ' + eur(min * r.t1 / 4) + ' per kwartaal', heeft && Iann <= min);
+  h += rij(eur(min), eur(r.grens1), pct(r.t1), heeft && Iann > min && Iann <= r.grens1);
+  h += rij(eur(r.grens1), eur(r.plafond), pct(r.t2), heeft && Iann > r.grens1 && Iann <= r.plafond);
+  h += rij(eur(r.plafond), 'en meer', 'niets meer: maximum ' + eur(jaarBijdrage(r.plafond, r, false) / 4) + ' per kwartaal', heeft && Iann > r.plafond);
+  $('schijventabel').innerHTML = h + '</tbody>';
+  $('tabelTitel').textContent = 'De bedragen voor ' + jaar;
+  $('tabelIntro').textContent = (isPrimo ? 'Als primostarter, de eerste 4 kwartalen. ' : 'Zelfstandige in hoofdberoep. ') + 'Je betaalt ' + pct(r.t1) + ' op je inkomen tot ' + eur(r.grens1) + ' en ' + pct(r.t2) + ' op het stuk daarboven. ' + (heeft ? 'Je eigen schijf is aangeduid.' : '');
+  $('tabelNoot').textContent = 'Bedragen per kwartaal, zonder beheerskosten.' + (isPrimo ? ' Gewone minimumbijdrage na je eerste 4 kwartalen: ' + eur(r.minI * r.t1 / 4) + ' per kwartaal, op een inkomen van ' + eur(r.minI) + '. Korting op je eerste kwartaal als primostarter: ' + eur(r.primoKorting) + '.' : '') + (terugval ? ' Dit zijn de bedragen van ' + r.jaar + '. Die van ' + jaar + ' zijn nog niet bekend.' : '');
+}
+
+function bereken(){
+  var ji = jaarInfo(), r = ji.r, jaar = ji.jaar, isPrimo = primo();
+  var soort = $('soort').value;
+  $('bedragLbl').textContent = soort === 'winst' ? 'Verwachte winst dit jaar' : 'Verwacht belastbaar inkomen dit jaar';
+  $('heroNote').textContent = 'Bedragen voor ' + jaar + (ji.terugval ? ', met de cijfers van ' + r.jaar + ' omdat die van ' + jaar + ' nog niet bekend zijn' : '') + '. Deze calculator vervangt geen persoonlijk advies.';
+  $('disclaimer').textContent = 'Deze calculator geeft een schatting van de sociale bijdragen voor je eerste jaar als zelfstandige in hoofdberoep, met de bedragen van het RSVZ voor ' + r.jaar + (r.voorlopig ? ', die nog bevestigd moeten worden' : '') + '. Je echte bijdragen hangen af van het inkomen dat de belastingen later doorgeven en van de beheerskosten van je fonds. Speciale gevallen, zoals een kunstenaarsstatuut, een meewerkende partner of een start na je pensioenleeftijd, zitten er niet in. Bedragen laatst nagekeken op ' + CONFIG.gecontroleerd + '.';
+
+  var fouten = [];
+  var NAMEN = { bedrag: soort === 'winst' ? 'Verwachte winst' : 'Belastbaar inkomen', beheer: 'Beheerskosten' };
+  function fout(id, tekst){ zetFout(id, tekst); fouten.push('<a href="#' + id + '" onclick="document.getElementById(\'' + id + '\').focus();return false" style="color:inherit"><b>' + NAMEN[id] + ':</b></a> ' + tekst); }
+  var bedrag = leesGetal($('bedrag').value), beheer = leesGetal($('beheer').value);
+  zetFout('bedrag',''); zetFout('beheer','');
+  if(bedrag !== null && isNaN(bedrag)) fout('bedrag', 'Vul een positief bedrag in, zonder letters of minteken. Bijvoorbeeld 25.000.');
+  else if(bedrag > 10000000) fout('bedrag', 'Dat bedrag lijkt te hoog. Kijk even na of er geen nul te veel staat.');
+  if(beheer !== null && isNaN(beheer)) fout('beheer', 'Vul een percentage in, bijvoorbeeld 4 of 3,05.');
+  else if(beheer > CONFIG.beheerMax) fout('beheer', 'Dat lijkt te hoog. Beheerskosten liggen meestal tussen 3% en 4,5%.');
+
+  var h = '<h2>Jouw resultaat</h2>';
+  if(fouten.length){
+    tekenTabel(r, jaar, ji.terugval, null, isPrimo);
+    h += '<div class="foutlijst"><b>Kijk dit even na:</b><ul>' + fouten.map(function(f){ return '<li>' + f + '</li>'; }).join('') + '</ul></div>';
+    $('out').innerHTML = h; meldHoogte(); return;
+  }
+  if(bedrag === null){
+    tekenTabel(r, jaar, ji.terugval, null, isPrimo);
+    h += '<p class="leeg-staat">Vul in hoeveel je dit jaar verwacht te verdienen. Dan zie je hier meteen wat je echt aan sociale bijdragen betaalt en hoeveel je per kwartaal opzij zet.</p><div class="result-knoppen"><button type="button" class="btn licht" onclick="vulVoorbeeld()">Probeer met een voorbeeld</button></div>';
+    $('out').innerHTML = h; meldHoogte(); return;
+  }
+
+  var kwStart = parseInt($('kwartaal').value, 10), q = 5 - kwStart;
+  var bh = (beheer === null ? CONFIG.beheerStandaard : beheer) / 100;
+  var x = rekenSociale({ bedrag: bedrag, soort: soort, q: q, primo: isPrimo, beheer: bh }, r);
+  tekenTabel(r, jaar, ji.terugval, x.Iann, isPrimo);
+
+  var verschilKw = x.kwTot - x.voorlopigKw;
+  var afrekening = jaar + CONFIG.afrekeningNa;
+  var opMinimum = x.Iann <= (isPrimo ? r.primoMin : r.minI);
+
+  h += '<p class="label">Sociale bijdragen voor ' + jaar + ', met beheerskosten</p>';
+  h += '<div class="big">' + eur0(x.tot) + '</div>';
+  h += '<p class="lead">Voor ' + q + (q === 1 ? ' kwartaal' : ' kwartalen') + ', vanaf ' + KW_NAAM[kwStart] + '. Dat is ' + eur(x.kwTot) + ' per kwartaal' + (x.korting ? ', met ' + eur(x.korting * (1 + bh)) + ' korting op je eerste kwartaal' : '') + '.</p>';
+
+  var advies;
+  if(verschilKw > CONFIG.verschilKlein){
+    advies = '<b>Zet elk kwartaal ' + eur0(verschilKw) + ' extra opzij</b>, of vraag je fonds om je voorlopige bijdrage te verhogen tot ' + eur0(x.kwTot) + ' per kwartaal. Anders krijg je in ' + afrekening + ' een rekening van ongeveer ' + eur0(verschilKw * q) + ' in één keer.';
+  } else if(isPrimo && x.kwTot < x.voorlopigKw - CONFIG.verschilKlein){
+    advies = '<b>Vraag de starterskorting aan bij je fonds.</b> Dan betaal je voorlopig ' + eur0(x.primoVoorlopigKw) + ' per kwartaal in plaats van ' + eur0(x.voorlopigKw) + '. Vraag je ze niet aan, dan krijg je het verschil pas in ' + afrekening + ' terug.';
+  } else if(opMinimum){
+    advies = '<b>Je betaalt de minimumbijdrage.</b> Daar kan je als zelfstandige in hoofdberoep niet onder, ook al verdien je minder. Wat je fonds je aanrekent, klopt dus.';
+  } else {
+    advies = '<b>Je voorlopige bijdrage zit goed.</b> Wat je fonds je aanrekent, ligt dicht bij wat je echt betaalt. Hou je schatting in het oog: verdien je meer, verhoog dan je bijdrage.';
+  }
+  h += '<p class="advies">' + advies + '</p>';
+
+  h += '<div class="kpis">' +
+    '<div class="kpi"><div class="k">Echte bijdrage per kwartaal</div><div class="v">' + eur0(x.kwTot) + '</div></div>' +
+    '<div class="kpi"><div class="k">Wat je fonds je voorlopig aanrekent</div><div class="v">' + eur0(x.voorlopigKw) + '</div></div>' +
+    '<div class="kpi"><div class="k">' + (verschilKw >= 0 ? 'Opzij te zetten per kwartaal' : 'Later terug per kwartaal') + '</div><div class="v">' + eur0(Math.abs(verschilKw)) + '</div></div>' +
+    '</div>';
+
+  if(q < 4) h += '<div class="note">Je start in de loop van het jaar. Je fonds rekent je inkomen om naar een volledig jaar: ' + eur0(x.I) + ' × 4 / ' + q + ' = ' + eur0(x.Iann) + '. Daarop berekent het je bijdrage per kwartaal.</div>';
+  if(ji.terugval) h += '<div class="note">De bedragen voor ' + jaar + ' zijn nog niet bekend. De calculator rekent met die van ' + r.jaar + '.</div>';
+
+  /* meer uitleg */
+  h += '<details class="meer" id="meerUitleg"><summary>Meer uitleg: zo komt de calculator aan dit bedrag</summary>';
+  h += '<div class="stappen"><div class="t">Je inkomen</div>';
+  if(soort === 'winst'){
+    h += '<div class="r"><span>Je verwachte winst</span><b>' + eur(bedrag) + '</b></div>' +
+         '<div class="r"><span>Min je sociale bijdragen (een beroepskost)</span><b>' + eur(-(bedrag - x.I)) + '</b></div>';
+  }
+  h += '<div class="r"><span>Belastbaar inkomen voor ' + q + (q === 1 ? ' kwartaal' : ' kwartalen') + '</span><b>' + eur(x.I) + '</b></div>' +
+       '<div class="r tot"><span>Omgerekend naar een volledig jaar (× 4 / ' + q + ')</span><b>' + eur(x.Iann) + '</b></div></div>';
+  var min = isPrimo ? r.primoMin : r.minI, basis = Math.max(x.Iann, min);
+  h += '<div class="stappen"><div class="t">De bijdrage op jaarbasis</div>';
+  if(x.Iann < min) h += '<div class="r"><span>Je inkomen ligt onder het minimum' + (isPrimo ? ' voor primostarters' : '') + ', dus telt</span><b>' + eur(min) + '</b></div>';
+  h += '<div class="r"><span>' + pct(r.t1) + ' op ' + eur(Math.min(basis, r.grens1)) + '</span><b>' + eur(Math.min(basis, r.grens1) * r.t1) + '</b></div>';
+  if(basis > r.grens1) h += '<div class="r"><span>' + pct(r.t2) + ' op ' + eur(Math.min(basis, r.plafond) - r.grens1) + '</span><b>' + eur((Math.min(basis, r.plafond) - r.grens1) * r.t2) + '</b></div>';
+  if(basis > r.plafond) h += '<div class="r"><span>Op ' + eur(basis - r.plafond) + ' boven ' + eur(r.plafond) + '</span><b>' + eur(0) + '</b></div>';
+  h += '<div class="r tot"><span>Bijdrage per jaar, zonder beheerskosten</span><b>' + eur(x.jb) + '</b></div></div>';
+  h += '<div class="stappen"><div class="t">Wat je betaalt in ' + jaar + '</div>' +
+       '<div class="r"><span>Per kwartaal (een vierde)</span><b>' + eur(x.kw) + '</b></div>' +
+       '<div class="r"><span>× ' + q + (q === 1 ? ' kwartaal' : ' kwartalen') + '</span><b>' + eur(x.kw * q) + '</b></div>' +
+       (x.korting ? '<div class="r"><span>Korting primostarter op je eerste kwartaal</span><b>' + eur(-x.korting) + '</b></div>' : '') +
+       '<div class="r"><span>Beheerskosten van je fonds (' + pct(bh) + ')</span><b>' + eur(x.excl * bh) + '</b></div>' +
+       '<div class="r tot"><span>Totaal voor ' + jaar + '</span><b>' + eur(x.tot) + '</b></div></div>';
+  h += '<div class="stappen"><div class="t">Per kwartaal</div>';
+  x.perKwartaal.forEach(function(v, i){ h += '<div class="r"><span>Kwartaal ' + (kwStart + i) + ' van ' + jaar + '</span><b>' + eur(v) + '</b></div>'; });
+  h += '</div>';
+  h += '<div class="tip">Ook in ' + (jaar + 1) + ' en ' + (jaar + 2) + ' rekent je fonds je voorlopig op het minimum, want je echte inkomen is dan nog niet bekend. Verdien je meer, vraag dan ook die jaren een hogere voorlopige bijdrage of zet het verschil opzij.</div>';
+  if(isPrimo && q < 4) h += '<div class="tip">Je eerste 4 kwartalen lopen door tot in ' + (jaar + 1) + '. Ook voor die kwartalen geldt nog het lagere minimum voor primostarters.</div>';
+  if(isPrimo) h += '<div class="tip">Blijkt je inkomen later hoger dan je opgaf toen je de starterskorting vroeg, dan betaal je het verschil bij en kan je fonds er een verhoging op aanrekenen. Schat dus eerlijk.</div>';
+  h += '<div class="tip">Wat je aan sociale bijdragen betaalt, trek je af van je inkomen in het jaar dat je betaalt. Betaal je meer dan het minimum, dan daalt je personenbelasting dus ook al dat jaar.</div>';
+  h += '</details>';
+
+  /* afdrukversie: je gegevens */
+  h += '<div class="print-only stappen" style="margin-top:14px"><div class="t">Jouw gegevens</div>' +
+    '<div class="r"><span>Start</span><b>' + KW_NAAM[kwStart] + ' ' + jaar + ' (' + q + (q === 1 ? ' kwartaal' : ' kwartalen') + ')</b></div>' +
+    '<div class="r"><span>Primostarter</span><b>' + (isPrimo ? 'ja' : 'nee') + '</b></div>' +
+    '<div class="r"><span>' + (soort === 'winst' ? 'Verwachte winst' : 'Verwacht belastbaar inkomen') + '</span><b>' + eur(bedrag) + '</b></div>' +
+    '<div class="r"><span>Beheerskosten</span><b>' + pct(bh) + '</b></div></div>';
+
+  h += '<div class="result-knoppen"><button type="button" class="btn licht" onclick="drukAf()">Bewaar als pdf of druk af</button></div>';
+  h += '<div class="vraag"><p>' + CONFIG.vraagTekst + '</p><button type="button" class="naar-trajecten" onclick="naarTrajecten()">' + CONFIG.knopTekst + ' ↓</button></div>';
+
+  var wasOpen = $('meerUitleg') && $('meerUitleg').open;
+  $('out').innerHTML = h;
+  if(wasOpen) $('meerUitleg').open = true;
+  $('meerUitleg').addEventListener('toggle', meldHoogte);
+  meldHoogte();
+}
+
+/* bedragen netjes tonen als je een veld verlaat */
+function formatteer(id){
+  var el = $(id), n = leesGetal(el.value);
+  if(n === null || isNaN(n)) return;
+  el.value = n.toLocaleString('nl-BE', {maximumFractionDigits:2});
+}
+
+function vulVoorbeeld(){
+  var v = CONFIG.voorbeeld;
+  $('kwartaal').value = v.kwartaal; $('soort').value = v.soort; $('bedrag').value = v.bedrag; $('beheer').value = v.beheer;
+  document.querySelector('input[name=primo][value=' + v.primo + ']').checked = true;
+  bereken();
+  $('out').scrollIntoView({behavior:'smooth', block:'start'});
+}
+function wisAlles(){
+  $('kwartaal').value = '1'; $('soort').value = 'winst'; $('bedrag').value = ''; $('beheer').value = String(CONFIG.beheerStandaard);
+  document.querySelector('input[name=primo][value=ja]').checked = true;
+  bereken();
+  $('bedrag').focus();
+}
+function drukAf(){
+  Array.prototype.forEach.call(document.querySelectorAll('details'), function(d){ if(d.id !== 'gebruik') d.open = true; });
+  window.print();
+}
+function naarTrajecten(){ $('trajecten').scrollIntoView({behavior:'smooth', block:'start'}); }
+
+['jaar','kwartaal','soort','bedrag','beheer'].forEach(function(id){ $(id).addEventListener('input', bereken); $(id).addEventListener('change', bereken); });
+['bedrag','beheer'].forEach(function(id){ $(id).addEventListener('blur', function(){ formatteer(id); }); });
+Array.prototype.forEach.call(document.querySelectorAll('input[name=primo]'), function(r){ r.addEventListener('change', bereken); });
+$('btnVoorbeeld').addEventListener('click', vulVoorbeeld);
+$('btnWis').addEventListener('click', wisAlles);
+Array.prototype.forEach.call(document.querySelectorAll('details'), function(d){ d.addEventListener('toggle', meldHoogte); });
+window.addEventListener('beforeprint', function(){ Array.prototype.forEach.call(document.querySelectorAll('details'), function(d){ if(d.id !== 'gebruik') d.open = true; }); });
+bereken();
+
+(function(){
+  var h = '<p class="eyebrow">The Financial Academy</p><h2 id="h-trajecten">' + CONFIG.trajectenTitel + '</h2><p class="sub">' + CONFIG.trajectenIntro + '</p><div class="tr-grid">';
+  CONFIG.trajecten.forEach(function(t){
+    h += '<a class="tr ' + t.kleur + '" href="' + t.url + '" target="_top"><span class="voor">' + t.voor + '</span><h3>' + t.naam + '</h3><p>' + t.tekst + '</p><span class="go">Ontdek dit traject →</span></a>';
+  });
+  $('trajecten').innerHTML = h + '</div>';
+  meldHoogte();
+})();
+</script>
+<script>
+function meldHoogte(){ try{ window.parent.postMessage({type:'dcc-height', height: Math.ceil(document.body.getBoundingClientRect().height)}, '*'); }catch(e){} }
+if(window.ResizeObserver){ new ResizeObserver(meldHoogte).observe(document.body); }
+document.addEventListener('toggle', meldHoogte, true);   /* ook bij openklappen van details */
+window.addEventListener('load', meldHoogte);
+</script>
+<script>
+/* koppeling met de insluitcode op decijfercoach.be: hoogte op vraag doorgeven en melden dat er een nieuwe pagina geladen is */
+(function(){
+  function hoogte(){ try{ window.parent.postMessage({type:'dcc-height', height: Math.ceil(document.body.getBoundingClientRect().height)}, '*'); }catch(e){} }
+  window.addEventListener('message', function(e){ if(e.data && e.data.type === 'dcc-vraag-hoogte') hoogte(); });
+  window.addEventListener('load', function(){ try{ window.parent.postMessage({type:'dcc-nav'}, '*'); }catch(e){} hoogte(); });
+})();
+</script>
+</body>
+</html>
