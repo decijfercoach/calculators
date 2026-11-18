@@ -1,0 +1,637 @@
+<!doctype html>
+<html lang="nl-BE">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Dagvergoeding binnenland | De Cijfercoach</title>
+<meta name="description" content="Bereken hoeveel je vennootschap jou belastingvrij mag betalen voor je middagmaal en je overnachting als je in België voor je werk op pad bent, en maak er meteen een onkostennota van.">
+<!--
+  CALCULATOR FORFAITAIRE BINNENLANDSE DAGVERGOEDING
+  Alle bedragen staan in CONFIG bovenaan het script.
+  Bij een nieuwe indexering: voeg in CONFIG.tarieven een regel toe met de startdatum en de twee bedragen.
+  De calculator kiest per verplaatsing zelf het tarief dat gold op de vertrekdatum.
+-->
+<style>
+@font-face{font-family:'Glitz';src:url('../fonts/glitz.woff2') format('woff2');font-weight:400;font-style:normal;font-display:swap}
+@font-face{font-family:'Outfit';src:url('../fonts/outfit-400.woff2') format('woff2');font-weight:400;font-style:normal;font-display:swap}
+@font-face{font-family:'Outfit';src:url('../fonts/outfit-500.woff2') format('woff2');font-weight:500;font-style:normal;font-display:swap}
+@font-face{font-family:'Outfit';src:url('../fonts/outfit-600.woff2') format('woff2');font-weight:600;font-style:normal;font-display:swap}
+@font-face{font-family:'Outfit';src:url('../fonts/outfit-700.woff2') format('woff2');font-weight:700;font-style:normal;font-display:swap}
+@font-face{font-family:'Outfit';src:url('../fonts/outfit-800.woff2') format('woff2');font-weight:800;font-style:normal;font-display:swap}
+:root{
+  --creme:#feefe5;--perzik:#f9c195;--lila-licht:#b8c5e7;--bordeaux:#b92c52;--bordeaux-donker:#9a2344;--oranje:#f3925a;--lila:#93a3d4;--roze:#e62987;--roze-donker:#c81f73;
+  --ink:#2b1d22;--muted:#6f565d;--line:#f1dccd;--card:#fff;--shadow:0 10px 30px rgba(185,44,82,.08)
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--creme);color:var(--ink);font-family:'Outfit',system-ui,-apple-system,'Segoe UI',Arial,sans-serif;font-size:16px;line-height:1.55;font-weight:400}
+b,strong{font-weight:700}
+.wrap{max-width:760px;margin:0 auto;padding:20px 16px 36px}
+a:focus-visible,button:focus-visible,summary:focus-visible,select:focus-visible,input:focus-visible{outline:3px solid var(--lila);outline-offset:2px}
+.terug{display:inline-block;color:var(--bordeaux);font-weight:600;font-size:14.5px;text-decoration:none;margin:0 0 12px;padding:4px 0}
+.terug:hover{text-decoration:underline}
+.hero{background:linear-gradient(180deg,var(--lila-licht) 0%,#dcc3c8 55%,var(--perzik) 100%);border-radius:24px;padding:32px 26px 30px;margin-bottom:20px}
+.eyebrow{font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:var(--bordeaux);font-weight:700;margin:0 0 10px}
+h1{font-size:clamp(28px,6vw,42px);line-height:1.05;color:var(--bordeaux);margin:0 0 12px}
+.hero-note{margin:14px 0 0;font-size:13.5px;font-weight:600;color:var(--bordeaux)}
+.intro{margin:0;font-size:16.5px}
+.card{background:var(--card);border-radius:20px;box-shadow:var(--shadow);padding:24px 22px;margin-bottom:18px}
+.card h2{font-size:21px;color:var(--bordeaux);margin:0 0 4px}
+.card .sub{color:var(--muted);font-size:14.5px;margin:0 0 18px}
+label.lbl,.lbl{display:block;font-weight:600;font-size:15px;margin:0 0 7px}
+.field{margin-bottom:16px}
+.hint{font-size:13.5px;color:var(--muted);margin-top:6px}
+.fout{font-size:13.5px;color:var(--bordeaux);font-weight:700;margin-top:6px}
+.fout:empty{display:none}
+select,input[type=text],input[type=date],input[type=month]{width:100%;font:inherit;color:var(--ink);background:#fffaf6;border:1.5px solid var(--line);border-radius:12px;padding:12px 13px;outline:none;transition:border-color .15s,box-shadow .15s;min-height:48px}
+select:focus,input:focus{border-color:var(--lila);box-shadow:0 0 0 3px rgba(147,163,212,.25)}
+input[aria-invalid=true]{border-color:var(--bordeaux);background:#fff1f4}
+input.num{text-align:right;font-weight:600;font-variant-numeric:tabular-nums}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.keuze{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.keuze label{display:flex;gap:10px;align-items:flex-start;border:1.5px solid var(--line);border-radius:14px;padding:13px 14px;cursor:pointer;background:#fffaf6;font-size:15px}
+.keuze label:has(input:checked){border-color:var(--bordeaux);background:#fff1f4}
+.keuze input{margin-top:4px;accent-color:var(--bordeaux)}
+.keuze b{display:block}
+.keuze span.k{font-size:13.5px;color:var(--muted)}
+.btn{display:inline-flex;align-items:center;gap:6px;background:var(--bordeaux);color:var(--creme);border:0;border-radius:999px;font:inherit;font-weight:700;font-size:15px;padding:11px 18px;cursor:pointer;transition:background .15s;min-height:44px}
+.btn:hover{background:var(--bordeaux-donker)}
+.btn.ghost{background:transparent;color:var(--bordeaux);border:1.5px solid var(--bordeaux)}
+.btn.ghost:hover{background:#fff1f4}
+.btn.licht{background:var(--creme);color:var(--bordeaux)}
+.btn.licht:hover{background:#fff}
+.btn.klein{font-size:14px;padding:8px 14px;min-height:40px}
+.knoppen{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 18px}
+/* verplaatsingen */
+.rit{border:1.5px solid var(--line);border-radius:16px;padding:14px 14px 4px;margin-bottom:12px;background:#fffdfb}
+.rit-kop{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:10px}
+.rit-kop b{color:var(--bordeaux)}
+.rit-weg{background:none;border:0;color:var(--muted);font:inherit;font-size:14px;cursor:pointer;text-decoration:underline;padding:6px 4px}
+.rit-weg:hover{color:var(--bordeaux)}
+.rit-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.rit-grid .breed{grid-column:1 / -1}
+.rit .field{margin-bottom:12px}
+.rit .lbl{font-size:14px}
+.rit .tarief{font-size:13px;color:var(--muted);margin:-4px 0 10px}
+/* resultaat */
+.result{background:var(--bordeaux);color:var(--creme);box-shadow:0 14px 34px rgba(185,44,82,.25)}
+.result h2{color:var(--creme)}
+.result .label{font-size:14px;font-weight:600;color:rgba(254,239,229,.85);margin:0}
+.big{font-size:clamp(34px,8vw,50px);line-height:1.05;margin:6px 0 4px;font-variant-numeric:tabular-nums;color:var(--creme)}
+.lead{font-size:16px;margin:0 0 6px;color:rgba(254,239,229,.92)}
+.advies{background:var(--creme);color:var(--ink);border-radius:14px;padding:14px 16px;margin:16px 0 0;font-size:16px}
+.advies b{color:var(--bordeaux)}
+.kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:14px 0}
+.kpi{background:rgba(255,255,255,.1);border-radius:14px;padding:13px}
+.kpi .k{font-size:13px;color:rgba(254,239,229,.85);font-weight:500}
+.kpi .v{font-size:21px;font-weight:800;font-variant-numeric:tabular-nums}
+.note{border-radius:14px;padding:12px 15px;font-size:14.5px;margin:10px 0 0;background:rgba(249,193,149,.2);border-left:4px solid var(--perzik)}
+.tip{border-radius:14px;padding:12px 15px;font-size:14.5px;margin:10px 0 0;background:rgba(255,255,255,.1);border-left:4px solid var(--lila-licht)}
+.result-knoppen{display:flex;flex-wrap:wrap;gap:8px;margin:16px 0 0}
+.meer{margin:16px 0 0;background:rgba(255,255,255,.08);border-radius:14px;padding:0 15px}
+.meer summary{cursor:pointer;font-weight:700;padding:13px 0;list-style:none;display:flex;justify-content:space-between;align-items:center;gap:10px}
+.meer summary::-webkit-details-marker{display:none}
+.meer summary::after{content:'+';font-size:22px;line-height:1}
+.meer[open] summary::after{content:'−'}
+.meer[open]{padding-bottom:12px}
+.stappen{font-size:14.5px;margin:4px 0 14px}
+.stappen .t{font-weight:700;font-size:15.5px;margin-bottom:4px}
+.stappen .r{display:flex;justify-content:space-between;gap:10px;padding:3px 0}
+.stappen .r b{font-variant-numeric:tabular-nums;white-space:nowrap}
+.stappen .r.tot{border-top:1px solid rgba(254,239,229,.35);margin-top:4px;padding-top:7px;font-weight:700}
+.leeg-staat{font-size:16px;margin:4px 0 0;color:rgba(254,239,229,.92)}
+.foutlijst{background:var(--creme);color:var(--ink);border-radius:14px;padding:12px 16px;margin:12px 0 0;font-size:15px}
+.foutlijst ul{margin:6px 0 0;padding-left:20px}
+.disclaimer{font-size:13px;color:var(--muted);margin-top:18px}
+/* uitleg */
+.uitleg{background:#fff;border-radius:20px;box-shadow:var(--shadow);padding:18px 22px;margin-bottom:14px;border-left:5px solid var(--lila)}
+.uitleg summary{cursor:pointer;font-weight:700;color:var(--bordeaux);font-size:16.5px;list-style:none;display:flex;justify-content:space-between;align-items:center;gap:12px}
+.uitleg summary::-webkit-details-marker{display:none}
+.uitleg summary::after{content:'+';font-size:22px;line-height:1;color:var(--bordeaux)}
+.uitleg[open] summary::after{content:'−'}
+.uitleg ol,.uitleg ul{margin:12px 0 0;padding-left:22px}
+.uitleg li{margin:0 0 8px;font-size:15px}
+.uitleg p{font-size:15px;margin:12px 0 0}
+.uitleg .klein{font-size:13.5px;color:var(--muted)}
+.tabel{width:100%;border-collapse:collapse;margin-top:12px;font-size:14.5px}
+.tabel th,.tabel td{padding:7px 6px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+.tabel td.n,.tabel th.n{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+.tabel tr.nu td{font-weight:700;color:var(--bordeaux)}
+/* trajecten */
+.trajecten{margin:26px 0 8px}
+.trajecten h2{font-size:clamp(24px,5vw,32px);line-height:1.1;color:var(--bordeaux);margin:0 0 8px}
+.trajecten .sub{margin:0 0 16px;font-size:16px}
+.tr-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:14px}
+.tr{display:flex;flex-direction:column;border-radius:20px;padding:22px 20px;color:var(--creme);text-decoration:none;transition:transform .15s}
+.tr:hover{transform:translateY(-3px)}
+.tr.oranje{background:var(--oranje)}
+.tr.bordeaux{background:var(--bordeaux)}
+.tr .voor{display:inline-block;align-self:flex-start;background:rgba(254,239,229,.22);border-radius:999px;padding:3px 11px;font-size:12.5px;font-weight:600;margin-bottom:12px}
+.tr h3{font-size:22px;line-height:1.1;margin:0 0 8px}
+.tr p{margin:0 0 18px;font-size:15px;line-height:1.5;flex:1}
+.tr .go{align-self:flex-start;background:var(--creme);color:var(--bordeaux);font-weight:700;border-radius:999px;padding:9px 16px;font-size:14.5px}
+.vraag{margin-top:22px;padding-top:18px;border-top:1px solid rgba(254,239,229,.25);text-align:center}
+.vraag p{margin:0;font-size:clamp(19px,4.5vw,23px);line-height:1.25;color:var(--creme)}
+.naar-trajecten{display:block;width:100%;text-align:center;background:var(--roze);color:#fff;border:0;font:inherit;font-weight:700;font-style:italic;border-radius:999px;padding:15px 20px;margin-top:14px;cursor:pointer;transition:background .15s}
+.naar-trajecten:hover{background:var(--roze-donker)}
+.brand{display:flex;justify-content:center;margin-top:22px;font-size:13px;color:var(--muted);letter-spacing:.04em}
+.print-only{display:none}
+@media (max-width:560px){.two,.keuze,.rit-grid{grid-template-columns:1fr}.kpis{grid-template-columns:1fr}.card{padding:20px 16px}.hero{padding:26px 20px}.uitleg{padding:16px 16px}.btn{flex:1 1 auto;justify-content:center}}
+h1,h2,h3,.big,.vraag p{font-family:'Glitz','Outfit',system-ui,sans-serif !important;font-weight:400 !important;letter-spacing:.005em !important;word-spacing:.14em}
+/* afdrukken: een nette onkostennota */
+@media print{
+  @page{margin:14mm}
+  html,body{background:#fff;font-size:11pt}
+  .wrap{max-width:none;padding:0}
+  .terug,.knoppen,.result-knoppen,.vraag,.trajecten,#invoer,.uitleg,.hero,.result .kpis,.result .advies,.result .note,.result .tip,.result .meer,.result .lead,.result .label,.result .big,.result>h2,.brand{display:none !important}
+  .print-only{display:block}
+  .result{box-shadow:none;border:0;background:#fff !important;color:#000 !important;padding:0}
+  .result *{color:#000 !important}
+  .nota h2{font-family:'Glitz','Outfit',sans-serif;color:#b92c52 !important;font-size:22pt;margin:0 0 4px}
+  .nota table{width:100%;border-collapse:collapse;margin:12px 0;font-size:10pt}
+  .nota th,.nota td{border:1px solid #bbb;padding:5px 6px;text-align:left;vertical-align:top}
+  .nota td.n,.nota th.n{text-align:right;white-space:nowrap}
+  .nota tr.tot td{font-weight:700}
+  .nota .handtekening{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-top:22px;font-size:10.5pt}
+  .nota .handtekening div{border-top:1px solid #999;padding-top:6px;min-height:60px}
+  .disclaimer{color:#333;font-size:8.5pt}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="terug" href="../">← Alle calculators</a>
+  <header class="hero">
+    <p class="eyebrow">De Cijfercoach · Calculator</p>
+    <h1>Hoeveel mag je vennootschap je betalen als je in België op pad bent?</h1>
+    <p class="intro">Ga je voor je werk naar een klant, een beurs of een opleiding, dan mag je vennootschap je een vast bedrag geven voor je middagmaal en je overnachting. Zonder bonnetjes en zonder belastingen. Vul je verplaatsingen in en je ziet meteen wat je mag uitbetalen. Je onkostennota maakt de calculator er gratis bij.</p>
+    <p class="hero-note" id="heroNote"></p>
+  </header>
+
+  <details class="uitleg" id="gebruik">
+    <summary>Zo gebruik je deze calculator</summary>
+    <ol>
+      <li><b>Kies voor wie je rekent.</b> Voor jezelf als bedrijfsleider of voor een werknemer. Heb je een eenmanszaak, dan zegt de calculator je wat je in de plaats doet.</li>
+      <li><b>Kies je manier.</b> Per verplaatsing als je af en toe op pad bent. Een vast bedrag per maand als je bijna elke dag onderweg bent.</li>
+      <li><b>Vul je verplaatsingen in.</b> Tel enkel middagmalen van dagen waarop je minstens 6 uur weg was en niemand anders je eten betaalde.</li>
+      <li><b>Druk je onkostennota af</b> of bewaar ze als pdf. Teken ze en steek ze bij je boekhouding. Bij een controle is dat je bewijs.</li>
+    </ol>
+    <p class="klein">Eerst eens kijken hoe het werkt? Klik op <b>Probeer met een voorbeeld</b>.</p>
+  </details>
+
+  <div id="invoer">
+  <div class="knoppen">
+    <button type="button" class="btn" id="btnVoorbeeld">Probeer met een voorbeeld</button>
+    <button type="button" class="btn ghost" id="btnWis">Alles wissen</button>
+  </div>
+
+  <section class="card" aria-labelledby="h-wie">
+    <h2 id="h-wie">Voor wie reken je?</h2>
+    <p class="sub">De regels zijn dezelfde voor jou als bedrijfsleider en voor je werknemers.</p>
+    <div class="field">
+      <label class="lbl" for="wie">Wie gaat op pad?</label>
+      <select id="wie">
+        <option value="bl">Ikzelf, als bedrijfsleider van mijn vennootschap</option>
+        <option value="wn">Een werknemer van mijn zaak</option>
+        <option value="ez">Ikzelf, ik heb een eenmanszaak</option>
+      </select>
+    </div>
+    <div class="field" id="naamWrap">
+      <label class="lbl" for="naam">Naam op de onkostennota (niet verplicht)</label>
+      <input type="text" id="naam" placeholder="bv. An Peeters" autocomplete="off" maxlength="80">
+      <div class="hint">Komt enkel op je afdruk. De calculator bewaart of verstuurt niets.</div>
+    </div>
+  </section>
+
+  <section class="card" aria-labelledby="h-manier" id="manierKaart">
+    <h2 id="h-manier">Hoe wil je het uitbetalen?</h2>
+    <p class="sub">Je kiest per maand voor de ene of de andere manier, niet allebei.</p>
+    <div class="keuze" role="radiogroup" aria-labelledby="h-manier">
+      <label><input type="radio" name="manier" value="rit" checked><span><b>Per verplaatsing</b><span class="k">Voor elke dag van minstens 6 uur onderweg.</span></span></label>
+      <label><input type="radio" name="manier" value="maand"><span><b>Vast bedrag per maand</b><span class="k">Als je bijna elke dag op pad bent. Dan telt de 6 uur niet.</span></span></label>
+    </div>
+  </section>
+
+  <section class="card" aria-labelledby="h-ritten" id="kaartRit">
+    <h2 id="h-ritten">Je verplaatsingen</h2>
+    <p class="sub">Eén blok per verplaatsing. Blijf je meerdere dagen weg, vul dan het aantal middagmalen en nachten in.</p>
+    <div id="ritten"></div>
+    <button type="button" class="btn ghost klein" id="btnRit">+ Verplaatsing toevoegen</button>
+  </section>
+
+  <section class="card" aria-labelledby="h-maand" id="kaartMaand" hidden>
+    <h2 id="h-maand">Je maand</h2>
+    <p class="sub">Het vaste bedrag is maximaal 16 keer de dagvergoeding, ook als je meer dagen onderweg bent.</p>
+    <div class="field">
+      <label class="lbl" for="maand">Maand</label>
+      <input type="month" id="maand" aria-describedby="maand-fout">
+      <div class="fout" id="maand-fout"></div>
+    </div>
+    <div class="two">
+      <div class="field"><label class="lbl" for="dagen">Dagen op pad in die maand</label><input type="text" class="num" id="dagen" inputmode="numeric" placeholder="bv. 18" autocomplete="off" aria-describedby="dagen-fout"><div class="fout" id="dagen-fout"></div></div>
+      <div class="field"><label class="lbl" for="nachten">Overnachtingen (niet verplicht)</label><input type="text" class="num" id="nachten" inputmode="numeric" placeholder="0" autocomplete="off" aria-describedby="nachten-hint nachten-fout"><div class="hint" id="nachten-hint">Enkel als je zelf je hotel betaalde.</div><div class="fout" id="nachten-fout"></div></div>
+    </div>
+  </section>
+  </div>
+
+  <section class="card result" id="out" aria-live="polite" aria-atomic="false"></section>
+
+  <details class="uitleg">
+    <summary>Wanneer mag je een dagvergoeding geven?</summary>
+    <ul>
+      <li>Je bent voor je werk <b>minstens 6 uur onderweg</b> in België. Bijvoorbeeld naar een klant, een leverancier, een beurs of een opleiding. Je gewone rit naar je eigen kantoor telt niet.</li>
+      <li><b>Niemand anders betaalt je eten.</b> Trakteert je klant op de lunch, of betaalt je vennootschap het restaurant al, dan valt die dag weg.</li>
+      <li><b>Werk je 40 dagen of meer per jaar op dezelfde plek,</b> bijvoorbeeld altijd bij dezelfde klant, dan ziet de fiscus dat als je vaste werkplek. Voor die dagen krijg je geen dagvergoeding meer.</li>
+      <li>De vergoeding voor een <b>overnachting</b> dekt je avondmaal, je hotel en je ontbijt. Ze mag naast die voor je middagmaal. Enkel als je zelf voor je hotel betaalde.</li>
+      <li>Kies je het <b>vaste bedrag per maand</b>, dan telt de 6 uur niet, maar je moet wel echt regelmatig op pad zijn. Je krijgt dan geen aparte maaltijdvergoeding meer. Krijg je maaltijdcheques, dan trek je voor elke dag met een cheque het deel van de werkgever af.</li>
+      <li>Je vennootschap trekt de vergoeding <b>volledig af</b> als kost. Ze komt op je fiche 281.20 (voor werknemers de 281.10) bij de kosten eigen aan de werkgever.</li>
+    </ul>
+  </details>
+
+  <details class="uitleg">
+    <summary>Alle bedragen sinds 2022</summary>
+    <p>De bedragen volgen die van de ambtenaren en stijgen mee met de index. De calculator neemt voor elke verplaatsing het bedrag dat gold op de dag van vertrek.</p>
+    <table class="tabel" id="tarieftabel"></table>
+  </details>
+
+  <section class="trajecten" id="trajecten" aria-labelledby="h-trajecten"></section>
+
+  <p class="disclaimer" id="disclaimer"></p>
+  <div class="brand">de cijfercoach · Kimberley Van Poecke</div>
+</div>
+
+<script>
+/* ======================= CONFIG: hier pas je bedragen aan =======================
+   Laatst gecontroleerd: 18 november 2026.
+   Bronnen (fin.belgium.be toont een CAPTCHA, daarom vakbronnen):
+   - Vanaf 1/9/2026: € 22,08 per dag, € 353,28 per maand (16 x 22,08), € 165,60 per nacht
+     https://www.propay.be/news/verhoging-van-de-fiscaal-aanvaarde-forfaitaire-vergoedingen-voor-binnenlandse-dienstreizen-vanaf-1-september-2026/
+     https://www.boekhouder123.be/kennis/bedrijfsbeheer_thema-s_loon-bedrijfsleider_forfaitaire-onkostenvergoeding/
+     https://www.attentia.be/nl/nieuws/indexatie-dagvergoedingen-voor-binnenlandse-dienstreizen-september-2026
+     https://www.partena-professional.be/nl/onze-inzichten/infoflashes/nieuwe-bedragen-voor-binnenlandse-verblijfskosten-vanaf-1-september-2026
+   - Vanaf 1/3/2026: € 21,64 per dag, € 346,24 per maand, € 162,35 per nacht (circulaire 2026/C/35)
+     https://www.acerta.be/nl/inspiratie/kostenvergoedingen-binnenlandse-dienstreizen-aanpassing-fiscale-forfaits-7
+     https://www.lwb-info.be/nieuws/vergoeding-binnenlandse-dienstreizen-nieuwe-fiscale-maximumforfaits-vanaf-1-maart-2026-364/
+   - Oudere bedragen: tarieventabel uit de Excel van Kimberley (stand 22/9/2026).
+   - Voorwaarden (6 uur, 16 dagen, 40 dagen vaste plaats, fiche 281.20, niet voor eenmanszaak): boekhouder123, Propay.
+   - RSZ (enkel werknemers): de RSZ volgt eigen, soms lagere bedragen. Bronnen spreken elkaar tegen,
+     daarom rekent de calculator dat niet uit en verwijst hij naar het sociaal secretariaat.
+   ================================================================================ */
+var CONFIG = {
+  /* vanaf = eerste dag waarop het bedrag geldt (JJJJ-MM-DD), middag = per dag, nacht = per overnachting */
+  tarieven: [
+    { vanaf: '2022-02-01', middag: 18.11, nacht: 135.85 },
+    { vanaf: '2022-04-01', middag: 18.47, nacht: 138.57 },
+    { vanaf: '2022-06-01', middag: 18.84, nacht: 141.33 },
+    { vanaf: '2022-09-01', middag: 19.22, nacht: 144.16 },
+    { vanaf: '2022-12-01', middag: 19.60, nacht: 147.05 },
+    { vanaf: '2023-01-01', middag: 19.99, nacht: 149.99 },
+    { vanaf: '2023-12-01', middag: 20.39, nacht: 152.99 },
+    { vanaf: '2024-06-01', middag: 20.80, nacht: 156.05 },
+    { vanaf: '2025-03-01', middag: 21.22, nacht: 159.17 },
+    { vanaf: '2026-03-01', middag: 21.64, nacht: 162.35 },
+    { vanaf: '2026-09-01', middag: 22.08, nacht: 165.60 }
+  ],
+  maandDagen: 16,             /* vast bedrag per maand = maximaal 16 x de dagvergoeding */
+  vastePlaatsDagen: 40,       /* 40 dagen of meer op dezelfde plek = vaste werkplek */
+  maxRitten: 31,
+  gecontroleerd: '18 november 2026',
+  trajecten: [
+    { naam: 'Financial Fundamentals', voor: 'Voor vrouwen in hoofdberoep', kleur: 'oranje', url: 'https://decijfercoach.be/financialfundamentals/',
+      tekst: 'Leer je cijfers begrijpen, neem financieel sterke beslissingen en bouw een zaak die niet alleen groeit, maar ook iets oplevert.' },
+    { naam: 'Financial Co-Pilot', voor: 'Voor vrouwen met omzet boven € 200.000', kleur: 'bordeaux', url: 'https://decijfercoach.be/financialcopilot/',
+      tekst: 'Zes maanden 1 op 1, met mij als je financiële rechterhand. Voor gevestigde ondernemers die strategisch willen sturen op hun cijfers.' }
+  ],
+  trajectenTitel: 'Zo haal je meer uit je vennootschap',
+  trajectenIntro: 'Een dagvergoeding hier, een bureauvergoeding daar: kleine bedragen die je elk jaar laat liggen als niemand je erop wijst. In mijn trajecten leer je zelf zien wat je vennootschap jou netto kan geven. Mijn trajecten zijn er exclusief voor vrouwelijke ondernemers.',
+  vraagTekst: 'Wil je weten wat je nog meer laat liggen?',
+  knopTekst: 'Ontdek mijn trajecten',
+  /* voorbeeld: datums worden relatief aan vandaag gezet */
+  voorbeeld: [
+    { dagenTerug: 40, waar: 'Klant in Hasselt, jaarafsluiting bespreken', middag: '1', nacht: '0' },
+    { dagenTerug: 25, waar: 'Beurs in Kortrijk, twee dagen', middag: '2', nacht: '1' },
+    { dagenTerug: 9, waar: 'Opleiding in Brussel', middag: '1', nacht: '0' }
+  ]
+};
+/* ================================================================================ */
+
+var $ = function(id){ return document.getElementById(id); };
+var ritten = [];
+var volgnr = 0;
+
+function vandaagISO(){ var d = new Date(); return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0'); }
+function isoMinDagen(n){ var d = new Date(); d.setDate(d.getDate() - n); return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0'); }
+var VANDAAG = vandaagISO();
+
+function leesAantal(v){
+  v = String(v == null ? '' : v).replace(/\s/g,'');
+  if(v === '') return null;
+  if(!/^\d+$/.test(v)) return NaN;
+  return parseInt(v, 10);
+}
+function eur(n){ return '€ ' + (n||0).toLocaleString('nl-BE',{minimumFractionDigits:2,maximumFractionDigits:2}); }
+function datumNL(iso){ var p = iso.split('-'); return parseInt(p[2],10) + '/' + parseInt(p[1],10) + '/' + p[0]; }
+var MAANDEN = ['januari','februari','maart','april','mei','juni','juli','augustus','september','oktober','november','december'];
+function datumLang(iso){ var p = iso.split('-'); return parseInt(p[2],10) + ' ' + MAANDEN[parseInt(p[1],10)-1] + ' ' + p[0]; }
+function esc(s){ return String(s).replace(/[&<>"]/g,function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
+function meldHoogte(){ try{ window.parent.postMessage({type:'dcc-height', height: Math.ceil(document.body.getBoundingClientRect().height)}, '*'); }catch(e){} }
+
+var LIJST = CONFIG.tarieven.slice().sort(function(a,b){ return a.vanaf < b.vanaf ? -1 : 1; });
+var LAATSTE = LIJST[LIJST.length-1];
+/* het tarief dat gold op een datum (JJJJ-MM-DD); null als de datum voor het eerste tarief ligt */
+function tariefOp(iso){
+  var t = null;
+  LIJST.forEach(function(x){ if(x.vanaf <= iso) t = x; });
+  return t;
+}
+var NU = tariefOp(VANDAAG) || LAATSTE;
+
+/* tarieventabel */
+(function(){
+  var h = '<thead><tr><th>Vanaf</th><th class="n">Middagmaal</th><th class="n">Overnachting</th><th class="n">Per maand</th></tr></thead><tbody>';
+  LIJST.slice().reverse().forEach(function(t){
+    h += '<tr' + (t === NU ? ' class="nu"' : '') + '><td>' + datumNL(t.vanaf) + (t === NU ? ' (nu)' : '') + '</td><td class="n">' + eur(t.middag) + '</td><td class="n">' + eur(t.nacht) + '</td><td class="n">' + eur(t.middag * CONFIG.maandDagen) + '</td></tr>';
+  });
+  $('tarieftabel').innerHTML = h + '</tbody>';
+})();
+
+/* ---------- verplaatsingen ---------- */
+function nieuweRit(d){ volgnr++; return { id: volgnr, datum: d && d.datum || '', waar: d && d.waar || '', middag: d && d.middag != null ? d.middag : '1', nacht: d && d.nacht != null ? d.nacht : '0' }; }
+
+function tekenRitten(){
+  var h = '';
+  ritten.forEach(function(r, i){
+    var p = 'r' + r.id;
+    h += '<div class="rit" data-id="' + r.id + '">' +
+      '<div class="rit-kop"><b>Verplaatsing ' + (i+1) + '</b>' + (ritten.length > 1 ? '<button type="button" class="rit-weg" data-weg="' + r.id + '" aria-label="Verplaatsing ' + (i+1) + ' verwijderen">Verwijderen</button>' : '') + '</div>' +
+      '<div class="rit-grid">' +
+        '<div class="field"><label class="lbl" for="' + p + 'd">Vertrekdatum</label><input type="date" id="' + p + 'd" data-veld="datum" value="' + esc(r.datum) + '" min="' + LIJST[0].vanaf + '" aria-describedby="' + p + 'd-fout"><div class="fout" id="' + p + 'd-fout"></div></div>' +
+        '<div class="field"><label class="lbl" for="' + p + 'w">Waarheen en waarom</label><input type="text" id="' + p + 'w" data-veld="waar" value="' + esc(r.waar) + '" placeholder="bv. klant in Gent" maxlength="120" autocomplete="off"></div>' +
+        '<div class="field"><label class="lbl" for="' + p + 'm">Middagmalen</label><input type="text" class="num" id="' + p + 'm" data-veld="middag" value="' + esc(r.middag) + '" inputmode="numeric" autocomplete="off" aria-describedby="' + p + 'm-fout"><div class="fout" id="' + p + 'm-fout"></div></div>' +
+        '<div class="field"><label class="lbl" for="' + p + 'n">Overnachtingen</label><input type="text" class="num" id="' + p + 'n" data-veld="nacht" value="' + esc(r.nacht) + '" inputmode="numeric" autocomplete="off" aria-describedby="' + p + 'n-fout"><div class="fout" id="' + p + 'n-fout"></div></div>' +
+      '</div><div class="tarief" id="' + p + 't"></div></div>';
+  });
+  $('ritten').innerHTML = h;
+  $('btnRit').hidden = ritten.length >= CONFIG.maxRitten;
+}
+
+$('ritten').addEventListener('input', function(e){
+  var veld = e.target.getAttribute('data-veld'); if(!veld) return;
+  var id = parseInt(e.target.closest('.rit').getAttribute('data-id'), 10);
+  ritten.forEach(function(r){ if(r.id === id) r[veld] = e.target.value; });
+  bereken();
+});
+$('ritten').addEventListener('change', function(e){ if(e.target.getAttribute('data-veld')) bereken(); });
+$('ritten').addEventListener('click', function(e){
+  var w = e.target.getAttribute('data-weg'); if(!w) return;
+  ritten = ritten.filter(function(r){ return r.id !== parseInt(w,10); });
+  tekenRitten(); bereken();
+});
+$('btnRit').addEventListener('click', function(){
+  if(ritten.length >= CONFIG.maxRitten) return;
+  ritten.push(nieuweRit()); tekenRitten(); bereken();
+  var laatste = ritten[ritten.length-1]; $('r' + laatste.id + 'd').focus();
+});
+
+function zetFout(id, tekst){
+  var el = $(id), f = $(id + '-fout');
+  if(f) f.textContent = tekst || '';
+  if(el){ if(tekst) el.setAttribute('aria-invalid','true'); else el.removeAttribute('aria-invalid'); }
+}
+
+function manier(){ return document.querySelector('input[name=manier]:checked').value; }
+
+/* ---------- berekenen ---------- */
+function bereken(){
+  var wie = $('wie').value, m = manier();
+  var ez = wie === 'ez';
+  $('manierKaart').hidden = ez; $('naamWrap').hidden = ez;
+  $('kaartRit').hidden = ez || m !== 'rit';
+  $('kaartMaand').hidden = ez || m !== 'maand';
+
+  $('heroNote').textContent = 'Bedragen sinds ' + datumLang(NU.vanaf) + ': ' + eur(NU.middag) + ' per dag en ' + eur(NU.nacht) + ' per nacht. Deze calculator vervangt geen persoonlijk advies.';
+  $('disclaimer').textContent = 'Deze calculator geeft de maximale bedragen die de fiscus aanvaardt voor binnenlandse dienstreizen, met de tarieven die golden op de dag van vertrek. Hij houdt geen rekening met je persoonlijke situatie en vervangt geen advies van je boekhouder. Bedragen laatst nagekeken op ' + CONFIG.gecontroleerd + '.';
+
+  if(ez){ toonEenmanszaak(); return; }
+  if(m === 'rit') berekenRitten(wie); else berekenMaand(wie);
+}
+
+function toonEenmanszaak(){
+  var h = '<h2>Jouw resultaat</h2>';
+  h += '<p class="label">Met een eenmanszaak</p><div class="big" style="font-size:clamp(28px,6vw,38px)">Geen vast bedrag</div>';
+  h += '<p class="lead">Een dagvergoeding bestaat enkel voor bedrijfsleiders van een vennootschap en voor werknemers. Jij kan jezelf geen vast bedrag betalen, want je zaak en jij zijn dezelfde persoon.</p>';
+  h += '<p class="advies"><b>Hou je bonnetjes bij.</b> Je trekt je echte kosten af als beroepskost: je lunch onderweg, je hotel, je parking. Vraag je boekhouder welk deel van elke kost aftrekbaar is.</p>';
+  h += '<div class="tip">Rij je veel voor je werk? Noteer dan ook je kilometers, met datum, bestemming en reden. Dat heb je nodig voor je autokosten.</div>';
+  h += vraagBlok();
+  $('out').innerHTML = h; meldHoogte();
+}
+
+function vraagBlok(){ return '<div class="vraag"><p>' + CONFIG.vraagTekst + '</p><button type="button" class="naar-trajecten" onclick="naarTrajecten()">' + CONFIG.knopTekst + ' ↓</button></div>'; }
+
+function wieTekst(wie){ return wie === 'wn' ? 'je werknemer' : 'jou'; }
+
+function berekenRitten(wie){
+  var fouten = [], regels = [], totM = 0, totN = 0, nM = 0, nN = 0, toekomst = false, perMaand = {};
+  ritten.forEach(function(r, i){
+    var p = 'r' + r.id, nr = i + 1;
+    zetFout(p + 'd',''); zetFout(p + 'm',''); zetFout(p + 'n','');
+    $(p + 't').textContent = '';
+    var mi = leesAantal(r.middag), na = leesAantal(r.nacht);
+    if(mi !== null && isNaN(mi)){ zetFout(p + 'm','Vul een positief heel getal in, bijvoorbeeld 1 of 3.'); fouten.push({id:p+'m', t:'Verplaatsing ' + nr + ', middagmalen: vul een positief heel getal in.'}); }
+    if(na !== null && isNaN(na)){ zetFout(p + 'n','Vul een positief heel getal in, bijvoorbeeld 0 of 2.'); fouten.push({id:p+'n', t:'Verplaatsing ' + nr + ', overnachtingen: vul een positief heel getal in.'}); }
+    if(mi > 31){ zetFout(p + 'm','Dat zijn veel middagmalen voor één verplaatsing. Splits ze per maand.'); fouten.push({id:p+'m', t:'Verplaatsing ' + nr + ': meer dan 31 middagmalen. Splits ze per maand.'}); }
+    if(na > 31){ zetFout(p + 'n','Dat zijn veel nachten voor één verplaatsing. Splits ze per maand.'); fouten.push({id:p+'n', t:'Verplaatsing ' + nr + ': meer dan 31 overnachtingen. Splits ze per maand.'}); }
+    var heeftIets = (mi > 0) || (na > 0);
+    if(!r.datum){
+      /* een nieuw, leeg blok negeren; een blok waar al iets in staat, vraagt een datum */
+      if(heeftIets && (r.waar || ritten.length > 1)){ zetFout(p + 'd','Vul de vertrekdatum in. Het bedrag hangt ervan af.'); fouten.push({id:p+'d', t:'Verplaatsing ' + nr + ': vul de vertrekdatum in.'}); }
+      return;
+    }
+    if(!/^\d{4}-\d{2}-\d{2}$/.test(r.datum)){ zetFout(p + 'd','Vul een geldige datum in.'); fouten.push({id:p+'d', t:'Verplaatsing ' + nr + ': vul een geldige datum in.'}); return; }
+    var t = tariefOp(r.datum);
+    if(!t){ zetFout(p + 'd','Voor ' + datumNL(LIJST[0].vanaf) + ' kent deze calculator de bedragen niet.'); fouten.push({id:p+'d', t:'Verplaatsing ' + nr + ': kies een datum vanaf ' + datumNL(LIJST[0].vanaf) + '.'}); return; }
+    if(isNaN(mi) || isNaN(na) || mi > 31 || na > 31) return;
+    mi = mi || 0; na = na || 0;
+    if(r.datum > VANDAAG) toekomst = true;
+    $(p + 't').textContent = 'Bedragen op ' + datumNL(r.datum) + ': ' + eur(t.middag) + ' per middagmaal, ' + eur(t.nacht) + ' per nacht.';
+    if(!heeftIets) return;
+    var bm = mi * t.middag, bn = na * t.nacht;
+    totM += bm; totN += bn; nM += mi; nN += na;
+    var mk = r.datum.slice(0,7); perMaand[mk] = (perMaand[mk] || 0) + mi;
+    regels.push({ nr: nr, datum: r.datum, waar: r.waar, mi: mi, na: na, t: t, bm: bm, bn: bn });
+  });
+
+  var h = '<h2>Jouw resultaat</h2>';
+  if(fouten.length){
+    h += '<div class="foutlijst"><b>Kijk dit even na:</b><ul>' + fouten.map(function(f){ return '<li><a href="#' + f.id + '" onclick="document.getElementById(\'' + f.id + '\').focus();return false" style="color:inherit">' + esc(f.t) + '</a></li>'; }).join('') + '</ul></div>';
+    $('out').innerHTML = h; meldHoogte(); return;
+  }
+  if(!regels.length){
+    h += '<p class="leeg-staat">Vul de datum en het aantal middagmalen of overnachtingen van je eerste verplaatsing in. Dan zie je hier meteen wat je vennootschap mag uitbetalen.</p><div class="result-knoppen"><button type="button" class="btn licht" onclick="vulVoorbeeld()">Probeer met een voorbeeld</button></div>';
+    $('out').innerHTML = h; meldHoogte(); return;
+  }
+
+  var tot = totM + totN;
+  h += '<p class="label">Belastingvrij uit te betalen aan ' + wieTekst(wie) + '</p>';
+  h += '<div class="big">' + eur(tot) + '</div>';
+  h += '<p class="lead">Voor ' + regels.length + (regels.length === 1 ? ' verplaatsing' : ' verplaatsingen') + '. Je vennootschap trekt dat volledig af, en ' + (wie === 'wn' ? 'je werknemer betaalt' : 'jij betaalt') + ' er geen belastingen op.</p>';
+  h += '<p class="advies"><b>Druk je onkostennota af</b>, laat ze tekenen en steek ze bij je boekhouding. Betaal het bedrag dan over van de rekening van je vennootschap.</p>';
+  h += '<div class="kpis">' +
+    '<div class="kpi"><div class="k">' + nM + (nM === 1 ? ' middagmaal' : ' middagmalen') + '</div><div class="v">' + eur(totM) + '</div></div>' +
+    '<div class="kpi"><div class="k">' + nN + (nN === 1 ? ' overnachting' : ' overnachtingen') + '</div><div class="v">' + eur(totN) + '</div></div>' +
+    '<div class="kpi"><div class="k">Per dag sinds ' + datumNL(NU.vanaf) + '</div><div class="v">' + eur(NU.middag) + '</div></div>' +
+    '</div>';
+
+  var vol = Object.keys(perMaand).filter(function(k){ return perMaand[k] > CONFIG.maandDagen; });
+  if(vol.length) h += '<div class="tip">In ' + vol.map(function(k){ var p = k.split('-'); return MAANDEN[parseInt(p[1],10)-1] + ' ' + p[0]; }).join(' en ') + ' tel je meer dan ' + CONFIG.maandDagen + ' middagmalen. Per verplaatsing is dan meestal voordeliger dan het vaste bedrag per maand, zolang elke dag minstens 6 uur duurt.</div>';
+  if(toekomst) h += '<div class="note">Een of meer datums liggen na vandaag. De calculator rekent met het laatst gekende bedrag. Komt er nog een indexering, dan kan het bedrag nog stijgen.</div>';
+  if(wie === 'wn') h += '<div class="note">Voor de RSZ gelden soms lagere bedragen dan voor de fiscus. Vraag je sociaal secretariaat welk bedrag ook vrij is van RSZ, anders betaal je op het verschil sociale bijdragen.</div>';
+
+  /* meer uitleg */
+  h += '<details class="meer" id="meerUitleg"><summary>Meer uitleg: zo komt de calculator aan dit bedrag</summary><div class="stappen">';
+  regels.forEach(function(x){
+    h += '<div class="t" style="margin-top:8px">Verplaatsing ' + x.nr + ' op ' + datumNL(x.datum) + (x.waar ? ': ' + esc(x.waar) : '') + '</div>';
+    if(x.mi) h += '<div class="r"><span>' + x.mi + ' × middagmaal à ' + eur(x.t.middag) + '</span><b>' + eur(x.bm) + '</b></div>';
+    if(x.na) h += '<div class="r"><span>' + x.na + ' × overnachting à ' + eur(x.t.nacht) + '</span><b>' + eur(x.bn) + '</b></div>';
+  });
+  h += '<div class="r tot"><span>Totaal</span><b>' + eur(tot) + '</b></div></div>';
+  h += '<div class="tip">Het bedrag hangt af van de dag van vertrek. Vertrek je op 31 augustus 2026 en kom je terug op 2 september, dan geldt voor die hele verplaatsing het bedrag van 31 augustus.</div>';
+  h += '<div class="tip">Werk je ' + CONFIG.vastePlaatsDagen + ' dagen of meer per jaar bij dezelfde klant? Dan is dat je vaste werkplek en mag je voor die dagen geen dagvergoeding meer geven. Hou dus per klant bij hoeveel dagen je er was.</div>';
+  h += '</details>';
+
+  h += notaHTML(wie, regels, tot, 'rit');
+  h += '<div class="result-knoppen"><button type="button" class="btn licht" onclick="drukAf()">Druk je onkostennota af of bewaar als pdf</button></div>';
+  h += vraagBlok();
+  zetUit(h);
+}
+
+function berekenMaand(wie){
+  ['maand','dagen','nachten'].forEach(function(id){ zetFout(id,''); });
+  var mv = $('maand').value, d = leesAantal($('dagen').value), n = leesAantal($('nachten').value), fouten = [];
+  if(d !== null && isNaN(d)) { zetFout('dagen','Vul een positief heel getal in, bijvoorbeeld 18.'); fouten.push({id:'dagen', t:'Dagen op pad: vul een positief heel getal in.'}); }
+  if(d > 31) { zetFout('dagen','Een maand heeft hooguit 31 dagen.'); fouten.push({id:'dagen', t:'Dagen op pad: een maand heeft hooguit 31 dagen.'}); }
+  if(n !== null && isNaN(n)) { zetFout('nachten','Vul een positief heel getal in, bijvoorbeeld 0 of 2.'); fouten.push({id:'nachten', t:'Overnachtingen: vul een positief heel getal in.'}); }
+  if(n > 31) { zetFout('nachten','Een maand heeft hooguit 31 nachten.'); fouten.push({id:'nachten', t:'Overnachtingen: een maand heeft hooguit 31 nachten.'}); }
+  var t = null;
+  if(mv){
+    if(!/^\d{4}-\d{2}$/.test(mv)){ zetFout('maand','Kies een maand.'); fouten.push({id:'maand', t:'Kies een geldige maand.'}); }
+    else { t = tariefOp(mv + '-01'); if(!t){ zetFout('maand','Voor ' + datumNL(LIJST[0].vanaf) + ' kent deze calculator de bedragen niet.'); fouten.push({id:'maand', t:'Kies een maand vanaf februari 2022.'}); } }
+  }
+  var h = '<h2>Jouw resultaat</h2>';
+  if(fouten.length){
+    h += '<div class="foutlijst"><b>Kijk dit even na:</b><ul>' + fouten.map(function(f){ return '<li><a href="#' + f.id + '" onclick="document.getElementById(\'' + f.id + '\').focus();return false" style="color:inherit">' + esc(f.t) + '</a></li>'; }).join('') + '</ul></div>';
+    $('out').innerHTML = h; meldHoogte(); return;
+  }
+  if(!mv || d === null){
+    h += '<p class="leeg-staat">Kies de maand en vul in hoeveel dagen je op pad was. Dan zie je hier het vaste bedrag dat je vennootschap mag uitbetalen.</p><div class="result-knoppen"><button type="button" class="btn licht" onclick="vulVoorbeeld()">Probeer met een voorbeeld</button></div>';
+    $('out').innerHTML = h; meldHoogte(); return;
+  }
+  n = n || 0;
+  var telt = Math.min(d, CONFIG.maandDagen), bm = telt * t.middag, bn = n * t.nacht, tot = bm + bn;
+  var p = mv.split('-'), maandNaam = MAANDEN[parseInt(p[1],10)-1] + ' ' + p[0];
+
+  h += '<p class="label">Vast bedrag voor ' + maandNaam + ', belastingvrij</p>';
+  h += '<div class="big">' + eur(tot) + '</div>';
+  h += '<p class="lead">' + (d > CONFIG.maandDagen ? 'Je was ' + d + ' dagen op pad, maar het vaste bedrag stopt bij ' + CONFIG.maandDagen + ' dagen.' : 'Voor ' + d + (d === 1 ? ' dag' : ' dagen') + ' op pad.') + (n ? ' Met ' + n + (n === 1 ? ' overnachting' : ' overnachtingen') + ' erbij.' : '') + '</p>';
+  if(d === 0) h += '<p class="advies"><b>Geen dagen op pad, geen vergoeding.</b> Het vaste bedrag mag enkel voor maanden waarin je echt onderweg was.</p>';
+  else h += '<p class="advies"><b>Betaal dit bedrag uit voor ' + maandNaam + '.</b> Je hoeft niet te tonen dat elke dag 6 uur duurde, maar hou wel een lijstje bij van je dagen op pad. Een aparte maaltijdvergoeding komt er niet meer bij.</p>';
+  h += '<div class="kpis">' +
+    '<div class="kpi"><div class="k">Middagmalen (' + telt + ' × ' + eur(t.middag) + ')</div><div class="v">' + eur(bm) + '</div></div>' +
+    '<div class="kpi"><div class="k">Overnachtingen</div><div class="v">' + eur(bn) + '</div></div>' +
+    '<div class="kpi"><div class="k">Maximum per maand</div><div class="v">' + eur(CONFIG.maandDagen * t.middag) + '</div></div>' +
+    '</div>';
+  if(d > CONFIG.maandDagen) h += '<div class="tip">Duren je dagen meestal 6 uur of langer? Per verplaatsing levert ' + d + ' × ' + eur(t.middag) + ' = ' + eur(d * t.middag) + ' op, ' + eur((d - CONFIG.maandDagen) * t.middag) + ' meer. Dan moet je wel elke dag kunnen aantonen.</div>';
+  h += '<div class="note">Krijg ' + (wie === 'wn' ? 'je werknemer' : 'je') + ' maaltijdcheques? Trek dan voor elke dag met een cheque het deel dat de vennootschap betaalt af van het bedrag voor de middagmalen.</div>';
+  if(wie === 'wn') h += '<div class="note">Voor de RSZ gelden soms lagere bedragen dan voor de fiscus. Vraag je sociaal secretariaat welk bedrag ook vrij is van RSZ.</div>';
+  h += '<details class="meer" id="meerUitleg"><summary>Meer uitleg: zo komt de calculator aan dit bedrag</summary><div class="stappen">' +
+    '<div class="r"><span>Bedrag per dag op 1 ' + maandNaam + '</span><b>' + eur(t.middag) + '</b></div>' +
+    '<div class="r"><span>Dagen die meetellen (maximaal ' + CONFIG.maandDagen + ')</span><b>' + telt + '</b></div>' +
+    '<div class="r"><span>Middagmalen</span><b>' + eur(bm) + '</b></div>' +
+    (n ? '<div class="r"><span>' + n + ' × overnachting à ' + eur(t.nacht) + '</span><b>' + eur(bn) + '</b></div>' : '') +
+    '<div class="r tot"><span>Totaal</span><b>' + eur(tot) + '</b></div></div>' +
+    '<div class="tip">Ben je deeltijds aan het werk, dan ligt het maximum lager: het daalt mee met je werkuren.</div></details>';
+  h += notaHTML(wie, [{ nr: 1, datum: mv + '-01', waar: 'Vast bedrag ' + maandNaam + ' (' + d + ' dagen op pad)', mi: telt, na: n, t: t, bm: bm, bn: bn }], tot, 'maand');
+  h += '<div class="result-knoppen"><button type="button" class="btn licht" onclick="drukAf()">Druk je onkostennota af of bewaar als pdf</button></div>';
+  h += vraagBlok();
+  zetUit(h);
+}
+
+function notaHTML(wie, regels, tot, soort){
+  var naam = $('naam').value.trim();
+  var h = '<div class="print-only nota"><h2>Onkostennota binnenlandse dienstreizen</h2>';
+  h += '<div>' + (wie === 'wn' ? 'Werknemer' : 'Bedrijfsleider') + ': <b>' + (naam ? esc(naam) : '..............................................') + '</b></div>';
+  h += '<table><thead><tr><th>Nr.</th><th>' + (soort === 'maand' ? 'Maand' : 'Vertrek') + '</th><th>Waarheen en waarom</th><th class="n">Middagmalen</th><th class="n">Overnachtingen</th><th class="n">Bedrag</th></tr></thead><tbody>';
+  regels.forEach(function(x, i){
+    h += '<tr><td>' + (i+1) + '</td><td>' + (soort === 'maand' ? x.datum.slice(5,7) + '/' + x.datum.slice(0,4) : datumNL(x.datum)) + '</td><td>' + esc(x.waar || '') + '</td>' +
+      '<td class="n">' + x.mi + ' × ' + eur(x.t.middag) + '</td><td class="n">' + x.na + ' × ' + eur(x.t.nacht) + '</td><td class="n">' + eur(x.bm + x.bn) + '</td></tr>';
+  });
+  h += '<tr class="tot"><td colspan="5">Totaal te betalen</td><td class="n">' + eur(tot) + '</td></tr></tbody></table>';
+  h += '<div style="font-size:9.5pt">Forfaitaire vergoeding voor kosten eigen aan de werkgever, volgens de bedragen die de fiscus aanvaardt voor binnenlandse dienstreizen. Opgemaakt op ' + datumNL(VANDAAG) + '.</div>';
+  h += '<div class="handtekening"><div>Datum en handtekening aanvrager</div><div>Datum en handtekening voor goedkeuring</div></div></div>';
+  return h;
+}
+
+function zetUit(h){
+  var wasOpen = $('meerUitleg') && $('meerUitleg').open;
+  $('out').innerHTML = h;
+  if(wasOpen) $('meerUitleg').open = true;
+  if($('meerUitleg')) $('meerUitleg').addEventListener('toggle', meldHoogte);
+  meldHoogte();
+}
+
+function vulVoorbeeld(){
+  $('wie').value = 'bl';
+  if(manier() === 'maand'){
+    var d = new Date(); d.setDate(1); d.setMonth(d.getMonth() - 1);
+    $('maand').value = d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0');
+    $('dagen').value = '18'; $('nachten').value = '1';
+  } else {
+    ritten = CONFIG.voorbeeld.map(function(v){ return nieuweRit({ datum: isoMinDagen(v.dagenTerug), waar: v.waar, middag: v.middag, nacht: v.nacht }); });
+    tekenRitten();
+  }
+  bereken();
+  $('out').scrollIntoView({behavior:'smooth', block:'start'});
+}
+function wisAlles(){
+  ritten = [nieuweRit()]; tekenRitten();
+  $('naam').value = ''; $('maand').value = ''; $('dagen').value = ''; $('nachten').value = '';
+  bereken();
+  if(manier() === 'maand') $('maand').focus(); else $('r' + ritten[0].id + 'd').focus();
+}
+function drukAf(){ window.print(); }
+function naarTrajecten(){ $('trajecten').scrollIntoView({behavior:'smooth', block:'start'}); }
+
+['wie','naam','maand','dagen','nachten'].forEach(function(id){ $(id).addEventListener('input', bereken); $(id).addEventListener('change', bereken); });
+Array.prototype.forEach.call(document.querySelectorAll('input[name=manier]'), function(r){ r.addEventListener('change', bereken); });
+$('btnVoorbeeld').addEventListener('click', vulVoorbeeld);
+$('btnWis').addEventListener('click', wisAlles);
+Array.prototype.forEach.call(document.querySelectorAll('details'), function(d){ d.addEventListener('toggle', meldHoogte); });
+
+ritten = [nieuweRit()]; tekenRitten();
+bereken();
+
+(function(){
+  var h = '<p class="eyebrow">The Financial Academy</p><h2 id="h-trajecten">' + CONFIG.trajectenTitel + '</h2><p class="sub">' + CONFIG.trajectenIntro + '</p><div class="tr-grid">';
+  CONFIG.trajecten.forEach(function(t){
+    h += '<a class="tr ' + t.kleur + '" href="' + t.url + '" target="_top"><span class="voor">' + t.voor + '</span><h3>' + t.naam + '</h3><p>' + t.tekst + '</p><span class="go">Ontdek dit traject →</span></a>';
+  });
+  $('trajecten').innerHTML = h + '</div>';
+  meldHoogte();
+})();
+</script>
+<script>
+function meldHoogte(){ try{ window.parent.postMessage({type:'dcc-height', height: Math.ceil(document.body.getBoundingClientRect().height)}, '*'); }catch(e){} }
+if(window.ResizeObserver){ new ResizeObserver(meldHoogte).observe(document.body); }
+document.addEventListener('toggle', meldHoogte, true);
+window.addEventListener('load', meldHoogte);
+</script>
+<script>
+/* koppeling met de insluitcode op decijfercoach.be: hoogte op vraag doorgeven en melden dat er een nieuwe pagina geladen is */
+(function(){
+  function hoogte(){ try{ window.parent.postMessage({type:'dcc-height', height: Math.ceil(document.body.getBoundingClientRect().height)}, '*'); }catch(e){} }
+  window.addEventListener('message', function(e){ if(e.data && e.data.type === 'dcc-vraag-hoogte') hoogte(); });
+  window.addEventListener('load', function(){ try{ window.parent.postMessage({type:'dcc-nav'}, '*'); }catch(e){} hoogte(); });
+})();
+</script>
+</body>
+</html>
