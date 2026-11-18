@@ -65,10 +65,13 @@ h1,h2,h3{font-family:'Glitz','Outfit',system-ui,sans-serif !important;font-weigh
       <span>Naar de calculator →</span>
     </a>
   </div>
-  <p class="weetje"><b>Een nieuwe wagen kiezen voor je vennootschap?</b> Vergelijk kopen, leasen en renten in de calculator <a href="../wagen/">Wagen kopen, leasen of renten</a>.</p>
+  <p class="weetje" data-wagen hidden><b>Een nieuwe wagen kiezen voor je vennootschap?</b> Vergelijk kopen, leasen en renten in de calculator <a href="../wagen/">Wagen kopen, leasen of renten</a>.</p>
   <div class="brand">de cijfercoach · Kimberley Van Poecke</div>
 </div>
 <script>
+/* Links naar de calculator wagen/: zet WAGEN_ONLINE op true zodra wagen/ op GitHub staat. */
+var WAGEN_ONLINE = false;
+if(WAGEN_ONLINE) Array.prototype.forEach.call(document.querySelectorAll('[data-wagen]'), function(e){ e.hidden = false; });
 function meldHoogte(){ try{ window.parent.postMessage({type:'dcc-height', height: Math.ceil(document.body.getBoundingClientRect().height)}, '*'); }catch(e){} }
 if(window.ResizeObserver){ new ResizeObserver(meldHoogte).observe(document.body); }
 document.addEventListener('toggle', meldHoogte, true);   /* ook bij openklappen van details */
