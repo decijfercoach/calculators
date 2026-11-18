@@ -20,8 +20,10 @@
 @font-face{font-family:'Outfit';src:url('../fonts/outfit-700.woff2') format('woff2');font-weight:700;font-style:normal;font-display:swap}
 @font-face{font-family:'Outfit';src:url('../fonts/outfit-800.woff2') format('woff2');font-weight:800;font-style:normal;font-display:swap}
 :root{
-  --creme:#feefe5;--perzik:#f9c195;--lila-licht:#b8c5e7;--bordeaux:#b92c52;--bordeaux-donker:#9a2344;--oranje:#f3925a;--lila:#93a3d4;--roze:#e62987;--roze-donker:#c81f73;
-  --ink:#2b1d22;--muted:#6f565d;--line:#f1dccd;--card:#fff;--shadow:0 10px 30px rgba(185,44,82,.08)
+  /* brandingpalet (00 Kern/05-merk-en-huisstijl.md): Ivory, Soft Ember, Sky, Rouge, Ember, Midnight, Fuchsia */
+  --creme:#fef0e6;--perzik:#fac196;--lila-licht:#b8c5e6;--bordeaux:#bb2d53;--bordeaux-donker:#9a2344;--oranje:#f3925a;--lila:#94a3d3;--roze:#e72687;--roze-donker:#c81f73;
+  --sky-zacht:#eef1fa;--midnight-donker:#4a5a8f;
+  --ink:#2b1d22;--muted:#6f565d;--line:#f1dccd;--card:#fff;--shadow:0 10px 30px rgba(187,45,83,.08)
 }
 *{box-sizing:border-box}
 html,body{margin:0;background:var(--creme);color:var(--ink);font-family:'Outfit',system-ui,-apple-system,'Segoe UI',Arial,sans-serif;font-size:16px;line-height:1.55;font-weight:400}
@@ -50,8 +52,8 @@ input.num{text-align:right;font-weight:600;font-variant-numeric:tabular-nums}
 .two{display:grid;grid-template-columns:1fr 1fr;gap:14px}
 .keuze{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .keuze label{display:flex;gap:10px;align-items:flex-start;border:1.5px solid var(--line);border-radius:14px;padding:13px 14px;cursor:pointer;background:#fffaf6;font-size:15px}
-.keuze label:has(input:checked){border-color:var(--bordeaux);background:#fff1f4}
-.keuze input{margin-top:4px;accent-color:var(--bordeaux)}
+.keuze label:has(input:checked){border-color:var(--roze);background:#fdeef6;box-shadow:0 0 0 2px rgba(231,38,135,.15)}
+.keuze input{margin-top:4px;accent-color:var(--roze)}
 .keuze b{display:block}
 .keuze span.k{font-size:13.5px;color:var(--muted)}
 .btn{display:inline-flex;align-items:center;gap:6px;background:var(--bordeaux);color:var(--creme);border:0;border-radius:999px;font:inherit;font-weight:700;font-size:15px;padding:11px 18px;cursor:pointer;transition:background .15s;min-height:44px}
@@ -61,11 +63,14 @@ input.num{text-align:right;font-weight:600;font-variant-numeric:tabular-nums}
 .btn.licht{background:var(--creme);color:var(--bordeaux)}
 .btn.licht:hover{background:#fff}
 .btn.klein{font-size:14px;padding:8px 14px;min-height:40px}
+.btn.blauw{background:var(--lila-licht);color:var(--ink)}
+.btn.blauw:hover{background:var(--lila)}
 .knoppen{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 18px}
 /* verplaatsingen */
-.rit{border:1.5px solid var(--line);border-radius:16px;padding:14px 14px 4px;margin-bottom:12px;background:#fffdfb}
+.rit{border:1.5px solid var(--lila-licht);border-left:5px solid var(--lila);border-radius:16px;padding:14px 14px 4px;margin-bottom:12px;background:var(--sky-zacht)}
 .rit-kop{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:10px}
-.rit-kop b{color:var(--bordeaux)}
+.rit-kop b{color:var(--midnight-donker)}
+.rit select,.rit input[type=text],.rit input[type=date]{background:#fff;border-color:var(--lila-licht)}
 .rit-weg{background:none;border:0;color:var(--muted);font:inherit;font-size:14px;cursor:pointer;text-decoration:underline;padding:6px 4px}
 .rit-weg:hover{color:var(--bordeaux)}
 .rit-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
@@ -79,12 +84,18 @@ input.num{text-align:right;font-weight:600;font-variant-numeric:tabular-nums}
 .result .label{font-size:14px;font-weight:600;color:rgba(254,239,229,.85);margin:0}
 .big{font-size:clamp(34px,8vw,50px);line-height:1.05;margin:6px 0 4px;font-variant-numeric:tabular-nums;color:var(--creme)}
 .lead{font-size:16px;margin:0 0 6px;color:rgba(254,239,229,.92)}
-.advies{background:var(--creme);color:var(--ink);border-radius:14px;padding:14px 16px;margin:16px 0 0;font-size:16px}
+.advies{background:var(--creme);color:var(--ink);border-radius:14px;padding:14px 16px;margin:16px 0 0;font-size:16px;border-left:6px solid var(--roze)}
 .advies b{color:var(--bordeaux)}
 .kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:14px 0}
 .kpi{background:rgba(255,255,255,.1);border-radius:14px;padding:13px}
 .kpi .k{font-size:13px;color:rgba(254,239,229,.85);font-weight:500}
 .kpi .v{font-size:21px;font-weight:800;font-variant-numeric:tabular-nums}
+/* elk kerncijfer in een eigen merkkleur */
+.kpis .kpi:nth-child(1){background:var(--lila-licht);color:var(--ink)}
+.kpis .kpi:nth-child(2){background:var(--lila);color:var(--ink)}
+.kpis .kpi:nth-child(3){background:var(--roze);color:#fff}
+.kpis .kpi:nth-child(1) .k,.kpis .kpi:nth-child(2) .k{color:var(--ink);opacity:.8}
+.kpis .kpi:nth-child(3) .k{color:#fff;opacity:.9}
 .note{border-radius:14px;padding:12px 15px;font-size:14.5px;margin:10px 0 0;background:rgba(249,193,149,.2);border-left:4px solid var(--perzik)}
 .tip{border-radius:14px;padding:12px 15px;font-size:14.5px;margin:10px 0 0;background:rgba(255,255,255,.1);border-left:4px solid var(--lila-licht)}
 .result-knoppen{display:flex;flex-wrap:wrap;gap:8px;margin:16px 0 0}
@@ -105,6 +116,8 @@ input.num{text-align:right;font-weight:600;font-variant-numeric:tabular-nums}
 .disclaimer{font-size:13px;color:var(--muted);margin-top:18px}
 /* uitleg */
 .uitleg{background:#fff;border-radius:20px;box-shadow:var(--shadow);padding:18px 22px;margin-bottom:14px;border-left:5px solid var(--lila)}
+details.uitleg:nth-of-type(3n+2){border-left-color:var(--roze)}
+details.uitleg:nth-of-type(3n){border-left-color:var(--lila-licht)}
 .uitleg summary{cursor:pointer;font-weight:700;color:var(--bordeaux);font-size:16.5px;list-style:none;display:flex;justify-content:space-between;align-items:center;gap:12px}
 .uitleg summary::-webkit-details-marker{display:none}
 .uitleg summary::after{content:'+';font-size:22px;line-height:1;color:var(--bordeaux)}
@@ -116,7 +129,11 @@ input.num{text-align:right;font-weight:600;font-variant-numeric:tabular-nums}
 .tabel{width:100%;border-collapse:collapse;margin-top:12px;font-size:14.5px}
 .tabel th,.tabel td{padding:7px 6px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
 .tabel td.n,.tabel th.n{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
-.tabel tr.nu td{font-weight:700;color:var(--bordeaux)}
+.tabel th{color:var(--midnight-donker)}
+.tabel th.n{white-space:normal}
+.tabel-wrap{overflow-x:auto;max-width:100%}
+@media (max-width:420px){.tabel{font-size:13px}.tabel th,.tabel td{padding:6px 3px}}
+.tabel tr.nu td{font-weight:700;color:var(--ink);background:var(--lila-licht)}
 /* trajecten */
 .trajecten{margin:26px 0 8px}
 .trajecten h2{font-size:clamp(24px,5vw,32px);line-height:1.1;color:var(--bordeaux);margin:0 0 8px}
@@ -216,7 +233,7 @@ h1,h2,h3,.big,.vraag p{font-family:'Glitz','Outfit',system-ui,sans-serif !import
     <h2 id="h-ritten">Je verplaatsingen</h2>
     <p class="sub">Eén blok per verplaatsing. Blijf je meerdere dagen weg, vul dan het aantal middagmalen en nachten in.</p>
     <div id="ritten"></div>
-    <button type="button" class="btn ghost klein" id="btnRit">+ Verplaatsing toevoegen</button>
+    <button type="button" class="btn blauw klein" id="btnRit">+ Verplaatsing toevoegen</button>
   </section>
 
   <section class="card" aria-labelledby="h-maand" id="kaartMaand" hidden>
@@ -251,7 +268,7 @@ h1,h2,h3,.big,.vraag p{font-family:'Glitz','Outfit',system-ui,sans-serif !import
   <details class="uitleg">
     <summary>Alle bedragen sinds 2022</summary>
     <p>De bedragen volgen die van de ambtenaren en stijgen mee met de index. De calculator neemt voor elke verplaatsing het bedrag dat gold op de dag van vertrek.</p>
-    <table class="tabel" id="tarieftabel"></table>
+    <div class="tabel-wrap"><table class="tabel" id="tarieftabel"></table></div>
   </details>
 
   <section class="trajecten" id="trajecten" aria-labelledby="h-trajecten"></section>
