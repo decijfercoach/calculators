@@ -1,9 +1,54 @@
 <!doctype html>
-<html lang="nl-BE"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="robots" content="noindex, nofollow">
-<title>Deze calculator zit nu in de Beroepskostenbijbel | De Cijfercoach</title>
-<style>@font-face{font-family:'Outfit';src:url('../fonts/outfit-400.woff2') format('woff2')}@font-face{font-family:'Glitz';src:url('../fonts/glitz.woff2') format('woff2')}
-body{margin:0;background:#FEF0E6;color:#2b1d22;font-family:'Outfit',system-ui,sans-serif;line-height:1.55}.w{max-width:620px;margin:0 auto;padding:28px 18px}
-.c{background:linear-gradient(28deg,#4A5A8F,#94A3D3);color:#FEF0E6;border-radius:24px;padding:30px 26px}h1{font-family:'Glitz',system-ui,sans-serif;font-weight:400;margin:0 0 10px;font-size:30px;line-height:1.1}
-a{display:inline-block;margin-top:14px;background:#FEF0E6;color:#4A5A8F;font-weight:700;border-radius:999px;padding:9px 16px;text-decoration:none}</style></head>
-<body><div class="w"><div class="c"><h1>Deze calculator zit nu in de Beroepskostenbijbel</h1><p>Je vindt hem bij de calculators in de Beroepskostenbijbel. De gratis calculators staan nog altijd in het overzicht.</p><a href="../">Naar de gratis calculators</a></div></div>
-<script>function h(){var b=document.body.getBoundingClientRect().height;parent.postMessage({type:'dcc-height',height:Math.ceil(b)+20},'*')}window.addEventListener('load',function(){h();parent.postMessage({type:'dcc-nav'},'*')});window.addEventListener('message',function(e){if(e.data&&e.data.type==='dcc-vraag-hoogte')h()});</script></body></html>
+<html lang="nl-BE">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Huur thuiskantoor | De Cijfercoach</title>
+<style>
+@font-face{font-family:'Glitz';src:url('../fonts/glitz.woff2') format('woff2');font-weight:400;font-style:normal;font-display:swap}
+@font-face{font-family:'Outfit';src:url('../fonts/outfit-400.woff2') format('woff2');font-weight:400;font-style:normal;font-display:swap}
+@font-face{font-family:'Outfit';src:url('../fonts/outfit-700.woff2') format('woff2');font-weight:700;font-style:normal;font-display:swap}
+:root{--creme:#fef0e6;--perzik:#fac196;--lila-licht:#b8c5e6;--bordeaux:#bb2d53;--roze:#e72687;--ink:#2b1d22;--muted:#6f565d}
+*{box-sizing:border-box}
+body{margin:0;background:var(--creme);color:var(--ink);font-family:'Outfit',system-ui,-apple-system,'Segoe UI',Arial,sans-serif;line-height:1.55}
+.wrap{max-width:760px;margin:0 auto;padding:20px 16px 36px}
+.terug{display:inline-block;color:var(--bordeaux);font-weight:700;font-size:14.5px;text-decoration:none;margin:0 0 12px}
+.terug:hover{text-decoration:underline}
+.hero{background:linear-gradient(180deg,var(--lila-licht) 0%,var(--perzik) 100%);border-radius:24px;padding:36px 26px}
+.eyebrow{font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:var(--bordeaux);font-weight:700;margin:0 0 10px}
+h1{font-family:'Glitz','Outfit',system-ui,sans-serif;font-weight:400;font-size:clamp(30px,6.5vw,44px);line-height:1.08;word-spacing:.14em;color:var(--bordeaux);margin:0 0 14px}
+p{margin:0 0 12px;font-size:16.5px}
+.knop{display:inline-block;margin-top:8px;background:var(--roze);color:#fff;font-weight:700;text-decoration:none;border-radius:999px;padding:13px 22px;font-size:16px}
+.knop:hover{background:var(--bordeaux)}
+a:focus-visible{outline:3px solid var(--roze);outline-offset:3px}
+.brand{text-align:center;margin-top:22px;font-size:13px;color:var(--muted);letter-spacing:.04em}
+@media (max-width:560px){.hero{padding:28px 20px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="terug" href="../">← Alle gratis calculators</a>
+  <header class="hero">
+    <p class="eyebrow">De Cijfercoach · Calculators</p>
+    <h1>Huur thuiskantoor zit nu in de Beroepskostenbijbel</h1>
+    <p>Deze calculator staat sinds november 2026 in de Beroepskostenbijbel, samen met de andere calculators over je kosten en de regels voor 190 kosten, van A tot Z.</p>
+    <p>Heb je de Beroepskostenbijbel al? Dan vind je de calculator daar in het tabblad Calculators.</p>
+    <a class="knop" href="https://decijfercoach.plugandpay.nl/checkout/beroepskostenbijbel" target="_top">Naar de Beroepskostenbijbel →</a>
+  </header>
+  <div class="brand">de cijfercoach · Kimberley Van Poecke</div>
+</div>
+<script>
+function meldHoogte(){ try{ window.parent.postMessage({type:'dcc-height', height: Math.ceil(document.body.getBoundingClientRect().height)}, '*'); }catch(e){} }
+if(window.ResizeObserver){ new ResizeObserver(meldHoogte).observe(document.body); }
+window.addEventListener('load', meldHoogte);
+</script>
+<script>
+(function(){
+  function hoogte(){ try{ window.parent.postMessage({type:'dcc-height', height: Math.ceil(document.body.getBoundingClientRect().height)}, '*'); }catch(e){} }
+  window.addEventListener('message', function(e){ if(e.data && e.data.type === 'dcc-vraag-hoogte') hoogte(); });
+  window.addEventListener('load', function(){ try{ window.parent.postMessage({type:'dcc-nav'}, '*'); }catch(e){} hoogte(); });
+})();
+</script>
+</body>
+</html>
