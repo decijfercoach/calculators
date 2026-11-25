@@ -31,15 +31,15 @@
 @font-face{font-family:'Outfit';src:url('../../fonts/outfit-800.woff2') format('woff2');font-weight:800;font-style:normal;font-display:swap}
 :root{
   /* Merkkleuren De Cijfercoach (studio sa'qia) */
-  --creme:#feefe5;--perzik:#f9c195;--lila-licht:#b8c5e7;--bordeaux:#b92c52;--bordeaux-donker:#9a2344;--oranje:#f3925a;--lila:#93a3d4;--roze:#e62987;--roze-donker:#c81f73;
-  --ink:#2b1d22;--muted:#6e565d;--line:#f1dccd;--card:#fff;--shadow:0 10px 30px rgba(185,44,82,.08)
+  --creme:#fef0e6;--perzik:#fac196;--lila-licht:#b8c5e6;--bordeaux:#bb2d53;--bordeaux-donker:#e72687;--oranje:#f3925a;--lila:#94a3d3;--roze:#e72687;--sky-zacht:#fef0e6;--midnight-donker:#bb2d53;--roze-donker:#bb2d53;
+  --ink:#2b1d22;--muted:#6f565d;--line:#fac196;--card:#fff;--shadow:0 10px 30px rgba(187,45,83,.08)
 }
 *{box-sizing:border-box}
 html,body{margin:0;background:var(--creme);color:var(--ink);font-family:'Outfit',system-ui,-apple-system,'Segoe UI',Arial,sans-serif;font-size:16px;line-height:1.55;font-weight:400}
 b,strong{font-weight:700}
 .wrap{max-width:760px;margin:0 auto;padding:20px 16px 36px}
 .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
-.hero{background:linear-gradient(180deg,var(--lila-licht) 0%,#dcc3c8 55%,var(--perzik) 100%);border-radius:24px;padding:32px 26px 30px;margin-bottom:20px}
+.hero{background:linear-gradient(180deg,var(--lila-licht) 0%,var(--perzik) 100%);border-radius:24px;padding:32px 26px 30px;margin-bottom:20px}
 .eyebrow{font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:var(--bordeaux);font-weight:700;margin:0 0 10px}
 h1{font-size:clamp(28px,6vw,42px);line-height:1.05;letter-spacing:-.02em;font-weight:800;color:var(--bordeaux);margin:0 0 12px}
 .hero-note{margin:14px 0 0;font-size:13.5px;font-weight:600;color:var(--bordeaux)}
@@ -52,9 +52,9 @@ label.lbl{display:block;font-weight:600;font-size:15px;margin:0 0 7px}
 .hint{font-size:13.5px;color:var(--muted);margin-top:6px}
 .fout{font-size:13.5px;color:var(--bordeaux);font-weight:600;margin-top:6px}
 .fout:empty{display:none}
-select,input[type=text]{width:100%;font:inherit;color:var(--ink);background:#fffaf6;border:1.5px solid var(--line);border-radius:12px;padding:12px 13px;outline:none;transition:border-color .15s,box-shadow .15s}
+select,input[type=text]{width:100%;font:inherit;color:var(--ink);background:#fef0e6;border:1.5px solid var(--line);border-radius:12px;padding:12px 13px;outline:none;transition:border-color .15s,box-shadow .15s}
 select:focus,input[type=text]:focus{border-color:var(--lila);box-shadow:0 0 0 3px rgba(147,163,212,.35)}
-input[aria-invalid=true]{border-color:var(--bordeaux);background:#fff5f7}
+input[aria-invalid=true]{border-color:var(--bordeaux);background:#fef0e6}
 a:focus-visible,button:focus-visible,summary:focus-visible,.check input:focus-visible{outline:3px solid var(--lila);outline-offset:2px;border-radius:6px}
 .money{position:relative}
 .money span{position:absolute;left:13px;top:50%;transform:translateY(-50%);color:var(--muted);pointer-events:none}
@@ -66,50 +66,50 @@ a:focus-visible,button:focus-visible,summary:focus-visible,.check input:focus-vi
 .check{display:flex;gap:10px;align-items:flex-start;font-size:15px;cursor:pointer;margin-bottom:12px}
 .check input{margin-top:4px;width:18px;height:18px;flex:0 0 18px;accent-color:var(--bordeaux)}
 .toggle{background:none;border:0;color:var(--bordeaux);font:inherit;font-size:14px;font-weight:600;padding:0;cursor:pointer;text-decoration:underline;text-underline-offset:3px;text-align:left}
-.helper{background:#fff6f0;border:1px solid var(--line);border-radius:14px;padding:16px;margin-top:12px}
+.helper{background:#fef0e6;border:1px solid var(--line);border-radius:14px;padding:16px;margin-top:12px}
 .va-row{display:grid;grid-template-columns:1fr 170px;gap:12px;align-items:center;padding:13px 0;border-top:1px solid var(--line)}
 .va-row:first-child{border-top:0}
 .va-name{font-weight:700;display:block}
 .va-meta{font-size:13.5px;color:var(--muted)}
 .tag{display:inline-block;font-size:11.5px;font-weight:600;border-radius:999px;padding:2px 10px;margin-left:6px;vertical-align:1px}
-.tag.past{background:#f3ece8;color:#76646a}
-.tag.open{background:var(--perzik);color:#7a3510}
+.tag.past{background:#fef0e6;color:#6f565d}
+.tag.open{background:var(--perzik);color:#2b1d22}
 .tag.nu{background:var(--roze);color:#fff}
 .knoppen{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
 .btn{display:inline-block;background:var(--bordeaux);color:var(--creme);border:1.5px solid var(--bordeaux);border-radius:999px;font:inherit;font-weight:700;font-size:15px;padding:11px 19px;cursor:pointer;transition:background .15s}
 .btn:hover{background:var(--bordeaux-donker)}
 .btn.ghost{background:transparent;color:var(--bordeaux)}
-.btn.ghost:hover{background:#fff1f4}
+.btn.ghost:hover{background:#fef0e6}
 .btn.klein{font-size:14px;padding:8px 15px}
 .vb{margin-top:14px}
 /* resultaat: bordeaux vlak met creme tekst */
-.result{background:var(--bordeaux);color:var(--creme);box-shadow:0 14px 34px rgba(185,44,82,.25)}
+.result{background:var(--bordeaux);color:var(--creme);box-shadow:0 14px 34px rgba(187,45,83,.25)}
 .result h2{color:var(--creme)}
-.result .muted{color:rgba(254,239,229,.82)}
-.result .label{font-weight:600;color:rgba(254,239,229,.85);margin:8px 0 0}
+.result .muted{color:rgba(254,240,230,.82)}
+.result .label{font-weight:600;color:rgba(254,240,230,.85);margin:8px 0 0}
 .result .lead{color:var(--creme)}
 .big{font-size:clamp(36px,9vw,54px);font-weight:800;letter-spacing:-.02em;line-height:1.05;margin:4px 0 8px;font-variant-numeric:tabular-nums;color:var(--creme)}
 .big.bad{color:var(--perzik)}
 .lead{font-size:16.5px;margin:0 0 16px}
-.opt{border:1.5px solid rgba(254,239,229,.3);border-radius:16px;padding:15px 17px;margin:14px 0 0;background:rgba(255,255,255,.06)}
+.opt{border:1.5px solid rgba(254,240,230,.3);border-radius:16px;padding:15px 17px;margin:14px 0 0;background:rgba(255,255,255,.06)}
 .opt .t{font-weight:700;margin-bottom:2px}
 .opt .n{font-size:26px;font-weight:800;letter-spacing:-.01em;font-variant-numeric:tabular-nums}
 .opt .d{font-size:14.5px;opacity:.92}
 .pill{display:inline-block;font-size:11.5px;font-weight:700;background:var(--roze);color:#fff;border-radius:999px;padding:2px 10px;margin-left:6px;vertical-align:2px}
 .kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:4px 0 16px}
 .kpi{background:rgba(255,255,255,.1);border-radius:14px;padding:13px}
-.kpi .k{font-size:13px;color:rgba(254,239,229,.85);font-weight:500}
+.kpi .k{font-size:13px;color:rgba(254,240,230,.85);font-weight:500}
 .kpi .v{font-size:21px;font-weight:800;font-variant-numeric:tabular-nums}
 table{width:100%;border-collapse:collapse;font-size:15px;margin-top:14px}
-th,td{padding:10px 6px;border-bottom:1px solid rgba(254,239,229,.2);text-align:left;vertical-align:top}
-th{font-size:12px;color:rgba(254,239,229,.8);text-transform:uppercase;letter-spacing:.06em;font-weight:600}
+th,td{padding:10px 6px;border-bottom:1px solid rgba(254,240,230,.2);text-align:left;vertical-align:top}
+th{font-size:12px;color:rgba(254,240,230,.8);text-transform:uppercase;letter-spacing:.06em;font-weight:600}
 td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
 td.num{white-space:nowrap}
 .note,.tip{border-radius:14px;padding:13px 15px;font-size:14.5px;margin:14px 0 0}
-.note{background:rgba(249,193,149,.18);border-left:4px solid var(--perzik)}
+.note{background:rgba(250,193,150,.18);border-left:4px solid var(--perzik)}
 .tip{background:rgba(255,255,255,.1);border-left:4px solid var(--lila-licht)}
 .tip p,.note p{margin:0 0 8px}.tip p:last-child,.note p:last-child{margin:0}
-.meer{margin-top:6px;border-top:1px solid rgba(254,239,229,.25);padding-top:12px}
+.meer{margin-top:6px;border-top:1px solid rgba(254,240,230,.25);padding-top:12px}
 .meer > summary{cursor:pointer;font-weight:700;list-style:none;display:flex;justify-content:space-between;align-items:center;gap:12px;padding:4px 0}
 .meer > summary::-webkit-details-marker{display:none}
 .meer > summary::after{content:'+';font-size:22px;line-height:1}
@@ -130,31 +130,31 @@ td.num{white-space:nowrap}
 .tr.lila{background:var(--lila)}
 .tr.oranje{background:var(--oranje)}
 .tr.bordeaux{background:var(--bordeaux)}
-.tr .voor{display:inline-block;align-self:flex-start;background:rgba(254,239,229,.22);border-radius:999px;padding:3px 11px;font-size:12.5px;font-weight:600;margin-bottom:12px}
+.tr .voor{display:inline-block;align-self:flex-start;background:rgba(254,240,230,.22);border-radius:999px;padding:3px 11px;font-size:12.5px;font-weight:600;margin-bottom:12px}
 .tr h3{font-size:22px;font-weight:800;letter-spacing:-.01em;line-height:1.1;margin:0 0 8px}
 .tr p{margin:0 0 18px;font-size:15px;line-height:1.5;flex:1}
 .tr .go{align-self:flex-start;background:var(--creme);color:var(--bordeaux);font-weight:700;border-radius:999px;padding:9px 16px;font-size:14.5px}
-.vraag{margin-top:24px;padding-top:20px;border-top:1px solid rgba(254,239,229,.25);text-align:center}
+.vraag{margin-top:24px;padding-top:20px;border-top:1px solid rgba(254,240,230,.25);text-align:center}
 .vraag p{margin:0;font-size:clamp(19px,4.5vw,23px);font-weight:800;letter-spacing:-.01em;line-height:1.25;color:var(--creme)}
 .vraag .naar-trajecten{margin-top:14px}
 .naar-trajecten{display:block;width:100%;text-align:center;background:var(--roze);color:#fff;border:0;font:inherit;font-weight:700;font-style:italic;border-radius:999px;padding:15px 20px;margin-top:22px;cursor:pointer;transition:background .15s}
 .naar-trajecten:hover{background:var(--roze-donker)}
-.crit{background:#fff6f0;border:1px solid var(--line);border-radius:14px;padding:12px 16px;margin:0 0 14px;font-size:14.5px}
+.crit{background:#fef0e6;border:1px solid var(--line);border-radius:14px;padding:12px 16px;margin:0 0 14px;font-size:14.5px}
 .crit summary{cursor:pointer;font-weight:600;color:var(--bordeaux)}
 .crit p{margin:10px 0 0}.crit ul{margin:8px 0 0;padding-left:20px}.crit li{margin:2px 0}
 .vs3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:14px 0 4px}
-.vs3 .tile{border-radius:16px;padding:16px;border:2px solid transparent;background:#f6efe9}
-.vs3 .tile.a{background:#e3e9f7}
-.vs3 .tile.b{background:#fde3cf}
-.vs3 .tile.c{background:#f7dfe6}
+.vs3 .tile{border-radius:16px;padding:16px;border:2px solid transparent;background:#fef0e6}
+.vs3 .tile.a{background:#b8c5e6}
+.vs3 .tile.b{background:#fac196}
+.vs3 .tile.c{background:#fef0e6}
 .vs3 .tile.win{border-color:var(--bordeaux)}
 .vs3 .tile .t{font-weight:700;font-size:15px;margin-bottom:8px;line-height:1.3}
 .vs3 .tile .r{display:flex;justify-content:space-between;gap:8px;font-size:14px;padding:3px 0}
 .vs3 .tile .r b{font-variant-numeric:tabular-nums;white-space:nowrap}
 .vs3 .tile .tot{border-top:1px solid rgba(43,29,34,.15);margin-top:6px;padding-top:8px;font-size:15.5px}
 .verdict{font-size:clamp(20px,4.5vw,26px);font-weight:800;letter-spacing:-.01em;color:var(--bordeaux);line-height:1.2;margin:14px 0 4px}
-.krediet .tip{background:#f5f7fd;border-left-color:var(--lila)}
-.krediet .note{background:#fff4ea;border-left-color:var(--oranje)}
+.krediet .tip{background:#fef0e6;border-left-color:var(--lila)}
+.krediet .note{background:#fef0e6;border-left-color:var(--oranje)}
 .krediet a{color:var(--bordeaux);font-weight:600}
 .uitleg{background:#fff;border-radius:20px;box-shadow:var(--shadow);padding:18px 22px;margin-bottom:18px;border-left:5px solid var(--lila)}
 .uitleg summary{cursor:pointer;font-weight:700;color:var(--bordeaux);font-size:16.5px;list-style:none;display:flex;justify-content:space-between;align-items:center;gap:12px}
@@ -178,17 +178,29 @@ h1,h2,h3,.big,.verdict,.vraag p,.opt .n{font-family:'Glitz','Outfit',system-ui,s
   .hero{background:none;padding:0 0 8px;margin:0 0 10px;border-bottom:2px solid var(--bordeaux);border-radius:0}
   .hero .intro,.hero-note,.uitleg,.toggle,.knoppen,.vb,.acties,.vraag,.trajecten,.crit,.hint,.brand,#helper[hidden]{display:none !important}
   .printkop{display:block;font-size:12px;color:var(--muted);margin:0 0 10px}
-  .card,.result{box-shadow:none !important;border:1px solid #d9c9c0;border-radius:10px;padding:12px 14px;margin:0 0 10px;break-inside:avoid}
+  .card,.result{box-shadow:none !important;border:1px solid #fac196;border-radius:10px;padding:12px 14px;margin:0 0 10px;break-inside:avoid}
   .result{background:#fff !important;color:var(--ink) !important;border:2px solid var(--bordeaux)}
-  .result *{color:var(--ink) !important;background:transparent !important;border-color:#e5d6cd !important}
+  .result *{color:var(--ink) !important;background:transparent !important;border-color:#fac196 !important}
   .result h2,.result .big{color:var(--bordeaux) !important}
-  .kpi{border:1px solid #e5d6cd !important}
+  .kpi{border:1px solid #fac196 !important}
   .meer > summary{display:none}
-  .vs3 .tile{border:1px solid #e5d6cd !important;background:#fff !important}
+  .vs3 .tile{border:1px solid #fac196 !important;background:#fff !important}
   select,input[type=text]{border:1px solid #ccc;background:#fff;padding:6px 8px}
   a{color:var(--ink);text-decoration:none}
 }
 @media (prefers-reduced-motion:reduce){*{transition:none !important;scroll-behavior:auto !important}}
+/* brandingpalet (00 Kern/05-merk-en-huisstijl.md): ook Fuchsia, Midnight en Sky als accent (18/11/2026) */
+.kpis .kpi:nth-child(3n+1){background:var(--lila-licht);color:var(--ink)}
+.kpis .kpi:nth-child(3n+2){background:var(--lila);color:var(--ink)}
+.kpis .kpi:nth-child(3n){background:var(--roze);color:#fff}
+.kpis .kpi:nth-child(3n+1) .k,.kpis .kpi:nth-child(3n+2) .k,.kpis .kpi:nth-child(3n+1) .w,.kpis .kpi:nth-child(3n+2) .w{color:var(--ink);opacity:.8}
+.kpis .kpi:nth-child(3n) .k,.kpis .kpi:nth-child(3n) .w{color:#fff;opacity:.9}
+.keuze label:has(input:checked){border-color:var(--roze);background:#fef0e6;box-shadow:0 0 0 2px rgba(231,38,135,.15)}
+input[type=radio],input[type=checkbox]{accent-color:var(--roze)}
+.advies{border-left:6px solid var(--roze)}
+details.uitleg:nth-of-type(3n+2){border-left-color:var(--roze)}
+details.uitleg:nth-of-type(3n){border-left-color:var(--lila-licht)}
+.groep{color:var(--midnight-donker)}
 </style>
 </head>
 <body>
