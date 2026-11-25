@@ -14,13 +14,13 @@
 @font-face{font-family:'Outfit';src:url('../fonts/outfit-600.woff2') format('woff2');font-weight:600;font-style:normal;font-display:swap}
 @font-face{font-family:'Outfit';src:url('../fonts/outfit-700.woff2') format('woff2');font-weight:700;font-style:normal;font-display:swap}
 @font-face{font-family:'Outfit';src:url('../fonts/outfit-800.woff2') format('woff2');font-weight:800;font-style:normal;font-display:swap}
-:root{--creme:#feefe5;--perzik:#f9c195;--lila-licht:#b8c5e7;--bordeaux:#b92c52;--oranje:#f3925a;--lila:#93a3d4;--roze:#e62987;--ink:#2b1d22;--muted:#7a6168}
+:root{--creme:#fef0e6;--perzik:#fac196;--lila-licht:#b8c5e6;--bordeaux:#bb2d53;--oranje:#f3925a;--lila:#94a3d3;--roze:#e72687;--sky-zacht:#fef0e6;--midnight-donker:#bb2d53;--ink:#2b1d22;--muted:#6f565d}
 *{box-sizing:border-box}
 body{margin:0;background:var(--creme);color:var(--ink);font-family:'Outfit',system-ui,-apple-system,'Segoe UI',Arial,sans-serif;line-height:1.55}
 .wrap{max-width:760px;margin:0 auto;padding:20px 16px 36px}
 .terug{display:inline-block;color:var(--bordeaux);font-weight:600;font-size:14.5px;text-decoration:none;margin:0 0 12px}
 .terug:hover{text-decoration:underline}
-.hero{background:linear-gradient(180deg,var(--lila-licht) 0%,#dcc3c8 55%,var(--perzik) 100%);border-radius:24px;padding:36px 26px;margin-bottom:20px}
+.hero{background:linear-gradient(180deg,var(--lila-licht) 0%,var(--perzik) 100%);border-radius:24px;padding:36px 26px;margin-bottom:20px}
 .eyebrow{font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:var(--bordeaux);font-weight:700;margin:0 0 10px}
 h1{font-size:clamp(30px,6.5vw,46px);line-height:1.05;letter-spacing:-.02em;font-weight:800;color:var(--bordeaux);margin:0 0 12px}
 p.intro{margin:0;font-size:16.5px}
@@ -36,6 +36,11 @@ a.card span{display:inline-block;background:var(--creme);color:var(--bordeaux);f
 a:focus-visible{outline:3px solid var(--lila);outline-offset:3px}
 @media (max-width:560px){.grid{grid-template-columns:1fr}.hero{padding:28px 20px}}
 h1,h2,h3,.big,.verdict,.vraag p,.opt .n{font-family:'Glitz','Outfit',system-ui,sans-serif !important;font-weight:400 !important;letter-spacing:.005em !important;word-spacing:.14em}
+/* brandingpalet: ook Fuchsia, Midnight en Sky (18/11/2026) */
+a.card.e{color:var(--ink)}
+a.card{border:3px solid transparent}
+a.card:hover{border-color:var(--roze);box-shadow:0 10px 26px rgba(231,38,135,.2)}
+a:focus-visible{outline:3px solid var(--roze);outline-offset:3px}
 </style>
 </head>
 <body>
